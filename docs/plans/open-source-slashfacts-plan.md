@@ -227,3 +227,10 @@ On itère jusqu'à obtenir un build vert.
 | 3 bis | CNAME dans la zone DNS OVH, et `.htaccess` sur `proto.fish` |
 | 4 | `eas login`, puis installer l'APK sur un appareil pour valider |
 | 5 bis | Décider de passer le repo en public, créer le compte GitLab et ouvrir la MR fdroiddata |
+
+## Progress log
+
+- **2026-09-24 — Steps 1–2 done.** Renamed to SlashFacts (`/ FACTS` wordmark, bundle id
+  `fish.proto.slashfacts`), relicensed GPL-3.0, fresh-history repo `cpoisson/slashfacts`
+  (private). Railway project `slashfacts` created: `slashfacts.up.railway.app`, custom
+  domain `slashfacts.proto.fish` awaiting OVH DNS records.
