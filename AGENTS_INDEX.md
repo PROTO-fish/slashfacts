@@ -79,7 +79,8 @@ When matching the mobile look to the web, read the relevant rules in
 
 | Path | What |
 |---|---|
-| `app.json` | Expo config: name, bundle ids (`fish.proto.slashfacts`), icons, splash, plugins |
+| `app.json` | Expo config: name, bundle ids (`fish.proto.slashfacts`), icons, splash, plugins, Android permissions (release asks for `VIBRATE` only) |
+| `plugins/withDebugInternet.js` | Re-adds `INTERNET` to the debug manifest only, so debug builds reach Metro while release stays offline |
 | `eas.json` | EAS Build profiles (development / preview / production) |
 | `metro.config.js` | Monorepo resolution + `.js`→`.ts` import fallback for `@slash/core` — touch with care |
 | `babel.config.js` | `babel-preset-expo` + worklets plugin |
