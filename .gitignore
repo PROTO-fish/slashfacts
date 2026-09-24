@@ -1,0 +1,19 @@
+node_modules
+dist
+.DS_Store
+*.local
+.expo
+
+# AI coding tool configs/skills (local, per-developer)
+.agent/
+.agents/
+.claude/
+.codex/
+.gemini/
+.opencode/
+.pi/
+.vibe/
+
+# Expo prebuild output (continuous native generation)
+apps/mobile/android/
+apps/mobile/ios/
