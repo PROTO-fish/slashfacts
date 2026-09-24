@@ -234,3 +234,13 @@ On itère jusqu'à obtenir un build vert.
   `fish.proto.slashfacts`), relicensed GPL-3.0, fresh-history repo `cpoisson/slashfacts`
   (private). Railway project `slashfacts` created: `slashfacts.up.railway.app`, custom
   domain `slashfacts.proto.fish` awaiting OVH DNS records.
+- **2026-09-24 — Steps 3–5 bis prepared.** Web live on `slashfacts.up.railway.app`
+  (railpack install step fixed to copy sources first). EAS project `@cpoisson/slashfacts`
+  linked; iOS simulator build finished, Android preview APK queued. Local
+  `expo prebuild` + `gradlew assembleRelease` succeeds; release APK asks for `VIBRATE` only,
+  `fdroid scanner` clean — see `docs/licensing-audit.md`. F-Droid recipe draft in
+  `docs/fdroid/` uses a custom `build:`/`output:` (the `android/` dir only exists after
+  prebuild, and fdroidserver requires `subdir` to exist at checkout) and strips debug
+  signing from release. fastlane metadata (en-US, fr-FR) added; screenshots still missing.
+  Remaining: OVH DNS records, Railway GitHub access for auto-deploy, device test of the
+  APK, screenshots, `v1.0.0` tag, repo public, fdroiddata MR.
