@@ -47,6 +47,12 @@
         }
       ],
       "./plugins/withDebugInternet"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "89163167-a546-4523-9be3-5aa3898f7b84"
+      }
+    },
+    "owner": "cpoisson"
   }
 }
