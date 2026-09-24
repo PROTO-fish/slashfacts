@@ -1,0 +1,8 @@
+<p>SlashFacts fait réviser les tables de multiplication (de 2 à 9) avec un seul geste : on répond en traçant un trait continu à travers les chiffres du résultat. Pas de boutons, pas de récompenses, pas d'écran entre deux questions — <b>voir → retenir → tracer → suivant</b>.</p>
+<ul>
+<li>Choisissez les tables à travailler ; chaque série s'adapte aux calculs ratés ou trop lents.</li>
+<li>Un calcul raté affiche sa réponse et revient aussitôt, jusqu'à être réussi.</li>
+<li>La carte des calculs coche chaque résultat trouvé du premier coup — une seule marque, lisible d'un coup d'œil par un enfant.</li>
+<li>Retour haptique à chaque réponse, mode sombre, fonctionne entièrement hors ligne.</li>
+</ul>
+<p>Conçu pour les enfants : pas de compte, aucun accès réseau, aucune statistique d'usage, aucune publicité. Tout reste sur l'appareil.</p>

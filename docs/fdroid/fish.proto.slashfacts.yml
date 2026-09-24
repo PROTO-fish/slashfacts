@@ -1,0 +1,39 @@
+# Draft recipe for gitlab.com/fdroid/fdroiddata → metadata/fish.proto.slashfacts.yml
+Categories:
+  - Science & Education
+License: GPL-3.0-only
+AuthorName: PROTO/fish
+WebSite: https://slashfacts.proto.fish
+SourceCode: https://github.com/cpoisson/slashfacts
+IssueTracker: https://github.com/cpoisson/slashfacts/issues
+Changelog: https://github.com/cpoisson/slashfacts/releases
+
+AutoName: SlashFacts
+
+RepoType: git
+Repo: https://github.com/cpoisson/slashfacts.git
+
+Builds:
+  - versionName: 1.0.0
+    versionCode: 1
+    commit: v1.0.0
+    subdir: apps/mobile
+    sudo:
+      - apt-get update
+      - apt-get install -y xz-utils
+      - curl -Lo node.tar.xz https://nodejs.org/dist/v22.20.0/node-v22.20.0-linux-x64.tar.xz
+      - echo "00bbd05e306ea68b6e13e17360d0e2f680b493ef95f2fea1c4296ff7437530bc node.tar.xz"
+        | sha256sum -c -
+      - tar xJf node.tar.xz --strip-components=1 -C /usr/local
+    init: cd ../.. && npm ci
+    output: android/app/build/outputs/apk/release/app-release-unsigned.apk
+    prebuild:
+      - EXPO_NO_TELEMETRY=1 npx expo prebuild -p android --no-install --clean
+      - sed -i '/release {/,/}/{/signingConfig signingConfigs.debug/d}' android/app/build.gradle
+    build: cd android && gradle assembleRelease
+    ndk: 27.1.12297006
+
+AutoUpdateMode: Version
+UpdateCheckMode: Tags
+CurrentVersion: 1.0.0
+CurrentVersionCode: 1
