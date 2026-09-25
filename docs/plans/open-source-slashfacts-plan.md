@@ -244,3 +244,7 @@ On itère jusqu'à obtenir un build vert.
   signing from release. fastlane metadata (en-US, fr-FR) added; screenshots still missing.
   Remaining: OVH DNS records, Railway GitHub access for auto-deploy, device test of the
   APK, screenshots, `v1.0.0` tag, repo public, fdroiddata MR.
+- **2026-09-25 — Repo moved to the `PROTO-fish` GitHub organization** (`PROTO-fish/slashfacts`).
+  The F-Droid recipe points there; the Railway service source must be reconnected to the new
+  path. `slashfacts.proto.fish` is live with its own certificate. The PROTO/fish landing page
+  lives in `PROTO-fish/proto.fish`, deployed by OVH web hosting's Git integration.
