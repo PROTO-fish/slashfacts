@@ -7,9 +7,10 @@ coding agent, and for humans too. It is plain Markdown with no tool-specific syn
 - **Don't add tool-specific instruction files or config directories to the repo.** If your
   tool doesn't read `AGENTS.md` natively, point it here from your own local setup: a local
   setting, or an untracked symlink listed in `.git/info/exclude`.
-- **Don't mention or credit any particular agent or AI tool** in tracked files, commit
-  messages, trailers or pull requests. The history reads the same whoever, or whatever,
-  wrote a change.
+- **Never name a coding agent or AI tool** (Claude, Claude Code, Codex, Copilot, Cursor,
+  Gemini, …) in commit messages, commit trailers (`Co-Authored-By`, "Generated with …"),
+  code comments, docs, tracked files, pull requests or review comments. The history reads the
+  same whoever, or whatever, wrote a change.
 - **Nested files are allowed.** Per the AGENTS.md convention, an `AGENTS.md` inside a
   workspace (`apps/web`, `apps/mobile`, `packages/core`) takes precedence for that subtree.
   None exist yet, so everything below applies repo-wide.
