@@ -248,3 +248,8 @@ On itère jusqu'à obtenir un build vert.
   The F-Droid recipe points there; the Railway service source must be reconnected to the new
   path. `slashfacts.proto.fish` is live with its own certificate. The PROTO/fish landing page
   lives in `PROTO-fish/proto.fish`, deployed by OVH web hosting's Git integration.
+- **2026-09-25 — Railway auto-deploy fixed.** The service now builds from
+  `PROTO-fish/slashfacts` on every push to `main`. Its Root Directory must stay empty: the
+  web build needs the repo root (`railpack.json`, `package-lock.json`, the `@slash/core`
+  workspace), and pointing it at `/apps/web` breaks `npm install` with a 404 on `@slash/core`.
+  The PROTO/fish landing page is live at https://proto.fish (GitHub Pages).
