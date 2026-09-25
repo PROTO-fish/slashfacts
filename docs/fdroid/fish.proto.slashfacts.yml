@@ -4,14 +4,14 @@ Categories:
 License: GPL-3.0-only
 AuthorName: PROTO/fish
 WebSite: https://slashfacts.proto.fish
-SourceCode: https://github.com/cpoisson/slashfacts
-IssueTracker: https://github.com/cpoisson/slashfacts/issues
-Changelog: https://github.com/cpoisson/slashfacts/releases
+SourceCode: https://github.com/PROTO-fish/slashfacts
+IssueTracker: https://github.com/PROTO-fish/slashfacts/issues
+Changelog: https://github.com/PROTO-fish/slashfacts/releases
 
 AutoName: SlashFacts
 
 RepoType: git
-Repo: https://github.com/cpoisson/slashfacts.git
+Repo: https://github.com/PROTO-fish/slashfacts.git
 
 Builds:
   - versionName: 1.0.0
