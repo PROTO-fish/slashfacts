@@ -14,7 +14,9 @@ npm workspaces monorepo (`package.json`: `packages/*`, `apps/*`).
 | `apps/mobile` | Expo / React Native app for iOS and Android. |
 | `docs/plans/` | Implementation plans, current and past (`mobile-port-plan.md` is active). |
 | `docs/adr/` | Architecture Decision Records (template in `docs/adr/README.md`). |
-| `README.md` | Product rules and design rationale — read before changing behaviour. |
+| `README.md` | Public landing page: what the app is, how to run it. |
+| `docs/design.md` | Product rules and design rationale — read before changing behaviour. |
+| `docs/architecture.md` | Code layout, storage, mobile, deployment. |
 | `AGENTS.md` | Branching, worktrees, commits, versioning. |
 
 ## Find by task
