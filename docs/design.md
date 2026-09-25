@@ -4,6 +4,26 @@ Why SlashFacts behaves the way it does. Read this before changing gameplay: most
 here replaced something that was tried and removed, and the reason is written down so it
 does not get re-tried.
 
+## The premise: recall, not calculation
+
+SlashFacts is about **multiplication facts**, and a fact is binary: you know it or you
+don't. The app exists to build instant recall, and every rule below serves that.
+
+- **The clock blocks calculation.** `ANSWER_LIMIT_MS` (6 s, `packages/core/src/session.ts`)
+  is short enough to rule out counting on fingers, and long enough to read the fact and draw
+  two digits. Three seconds was tried and proved brutal: most of it went on the gesture, not
+  the recall. The app asks you to spit the answer out, not to work it out.
+- **The visual language is binary too.** Black and white, brutalist, heavy Archivo type,
+  no colour and no decoration. A known fact gets a tick and an unknown one gets nothing:
+  no stars, no progress bars, no "almost". The monochrome palette isn't a style choice
+  sitting on top of the app. It is the app's judgement made visible. Night mode swaps the
+  two colours and adds none.
+- **Only first-time answers count.** A fact answered after its answer was shown is reading,
+  not recall (see *Mastery is one tick*).
+
+A change that adds colour-coded feedback, partial credit or a softer grading scale works
+against this premise. Discuss it in an issue first.
+
 ## How the gesture is read
 
 Counting every cell the line touches does not work. A straight slash from **6** to **4**

@@ -31,6 +31,17 @@ is already there.
 The whole app runs on that one gesture, and it keeps the focus on remembering the fact rather
 than on working the screen.
 
+## Know it or don't
+
+A multiplication fact is either something you know or something you work out, and SlashFacts
+only cares about the first. Each question gives you **6 seconds**: enough to read it and draw
+the answer, too little to count on your fingers. The app isn't asking you to calculate. It
+asks you to **spit the answer out**.
+
+The look follows the same idea. Everything is **black and white**, with a brutalist layout,
+heavy type and no decoration, because the verdict is binary too. There's no "almost" and no
+partial credit. Either you know it, or you don't yet.
+
 ## Why it works
 
 - **✏️ One gesture, zero friction.** A stroke is read by where it *starts*, *ends* and
