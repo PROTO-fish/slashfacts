@@ -1,5 +1,69 @@
 # Agent instructions
 
+This repository is **agent-agnostic**. This file follows the open
+[AGENTS.md](https://agents.md) format and is the single source of instructions for every
+coding agent, and for humans too. It is plain Markdown with no tool-specific syntax.
+
+- **Don't add tool-specific instruction files or config directories to the repo.** If your
+  tool doesn't read `AGENTS.md` natively, point it here from your own local setup: a local
+  setting, or an untracked symlink listed in `.git/info/exclude`.
+- **Don't mention or credit any particular agent or AI tool** in tracked files, commit
+  messages, trailers or pull requests. The history reads the same whoever, or whatever,
+  wrote a change.
+- **Nested files are allowed.** Per the AGENTS.md convention, an `AGENTS.md` inside a
+  workspace (`apps/web`, `apps/mobile`, `packages/core`) takes precedence for that subtree.
+  None exist yet, so everything below applies repo-wide.
+
+## Project overview
+
+SlashFacts is a multiplication-tables trainer (2–9): the child answers by drawing one stroke
+through the digits of the result. It is an npm-workspaces monorepo:
+
+- `packages/core`: a pure TypeScript engine (facts, scheduler, gesture geometry). No DOM,
+  no React Native, no dependencies.
+- `apps/web`: Vite + React PWA, deployed to Railway.
+- `apps/mobile`: an Expo app for iOS and Android.
+
+Read `AGENTS_INDEX.md` to find files, and `docs/design.md` before changing any gameplay
+behaviour.
+
+## Setup, build and test
+
+```sh
+npm install              # once per checkout / worktree
+npm run dev              # web app on http://localhost:5173
+npm run typecheck        # core, web and mobile
+npm test                 # core engine + gesture tests (vitest)
+npm run build            # web production build
+cd apps/mobile && npx expo start   # native app in Expo Go
+```
+
+Run `npm run typecheck && npm test` before every commit. A change to `packages/core` must
+keep both apps typechecking.
+
+## Code style
+
+- TypeScript in strict mode everywhere. Two-space indent, single quotes, semicolons.
+- ESM: relative imports carry the `.js` extension, even from `.ts` files.
+- `packages/core` stays pure: no platform APIs and no dependencies. Platform code lives in the
+  apps, behind interfaces like `Storage`.
+- Web and mobile mirror each other file by file (see the pairing table in
+  `AGENTS_INDEX.md`). A behaviour change usually belongs in both apps, or better, in core.
+- Comments explain *why*. Match the density and tone of the surrounding code.
+
+## Privacy and security constraints
+
+The app is offline and account-free by design, for children. **Never add** network calls,
+analytics, crash reporting, ads, or third-party SDKs. The Android release build must keep
+asking for `VIBRATE` only (see `docs/licensing-audit.md`). Any new dependency must use a
+GPL-3.0-compatible license and be free software, or the F-Droid build breaks.
+
+## Pull requests
+
+- Every commit is signed off (`git commit -s`), per the DCO in `CONTRIBUTING.md`.
+- One scoped change per branch and PR (see Branching below). Titles follow Conventional
+  Commits.
+
 ## Branching — read this before touching any file
 
 Before the *first* edit of a new task — not before the first commit — check the current
