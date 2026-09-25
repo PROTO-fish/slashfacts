@@ -7,7 +7,6 @@ dist
 # AI coding tool configs/skills (local, per-developer)
 .agent/
 .agents/
-.claude/
 .codex/
 .gemini/
 .opencode/
