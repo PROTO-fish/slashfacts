@@ -236,6 +236,20 @@ main {
 }
 
 /*
+ * 22vw is a phone number. On a wide but laptop-height window it runs to the 10rem cap while
+ * the pad has already shrunk to fit the height, so the 300px --pad-w leaves above the pad is
+ * no longer enough: a 1512x806 window scrolled the 0 key off the bottom. Here the prompt is
+ * bounded by the pad instead, which keeps the phone's prompt-to-pad proportion. Phones never
+ * match, and from 900px tall the full-size prompt fits again — the same height at which
+ * .stage starts centring.
+ */
+@media (min-width: 700px) and (max-height: 899.98px) {
+  .prompt {
+    font-size: clamp(3.5rem, min(22vw, calc(var(--pad-w) * 0.24)), 10rem);
+  }
+}
+
+/*
  * Drawn, not a glyph: the same reasoning as the back arrow and the night toggle. The font's
  * × hangs off a baseline inside a line box sized for text, which left it sitting low here
  * and at a different height again on each native platform — a per-platform nudge to chase.
@@ -1055,5 +1069,14 @@ main {
   .home-main,
   .done-main {
     flex: 0 1 auto;
+  }
+
+  /* The 340px the base rule leaves around the picker was measured on a phone, where the
+     wordmark and title are sized in vw and stay small. At this width both sit at their caps
+     and the chrome around the picker is closer to 395px, which scrolled START and the footer
+     off a laptop-height window. The picker is also a little taller than wide (four 2:1 rows
+     plus three gaps), hence the divisor. */
+  .select {
+    max-width: min(420px, calc((100dvh - 395px) / 1.05));
   }
 }
