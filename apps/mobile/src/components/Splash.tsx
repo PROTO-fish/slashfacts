@@ -4,8 +4,8 @@ import * as SplashScreen from 'expo-splash-screen';
 import { SPLASH_IMAGE } from './splashImage.js';
 
 /** How long the mark stays up at least, so a fast start still reads as a beat, not a flicker. */
-const HOLD_MS = 450;
-const FADE_MS = 300;
+const HOLD_MS = 340;
+const FADE_MS = 225;
 /** app.json's `imageWidth` for expo-splash-screen, and index.html's <img> width. */
 const SIZE = 220;
 
