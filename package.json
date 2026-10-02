@@ -8,11 +8,11 @@
     "apps/*"
   ],
   "scripts": {
-    "dev": "npm run -w apps/web dev",
-    "build": "npm run -w apps/web build",
-    "start": "node apps/web/server.js",
-    "test": "npm run -w packages/core test && npm run -w apps/web test",
-    "typecheck": "npm run -w packages/core typecheck && npm run -w apps/web typecheck && npm run -w apps/mobile typecheck"
+    "dev": "npm run -w apps/mobile web",
+    "build": "npm run -w apps/mobile build:web",
+    "start": "node apps/mobile/server.mjs",
+    "test": "npm run -w packages/core test",
+    "typecheck": "npm run -w packages/core typecheck && npm run -w apps/mobile typecheck"
   },
   "devDependencies": {
     "typescript": "^5.7.2",

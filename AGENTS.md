@@ -12,7 +12,7 @@ coding agent, and for humans too. It is plain Markdown with no tool-specific syn
   code comments, docs, tracked files, pull requests or review comments. The history reads the
   same whoever, or whatever, wrote a change.
 - **Nested files are allowed.** Per the AGENTS.md convention, an `AGENTS.md` inside a
-  workspace (`apps/web`, `apps/mobile`, `packages/core`) takes precedence for that subtree.
+  workspace (`apps/mobile`, `packages/core`) takes precedence for that subtree.
   None exist yet, so everything below applies repo-wide.
 
 ## Project overview
@@ -22,10 +22,8 @@ through the digits of the result. It is an npm-workspaces monorepo:
 
 - `packages/core`: a pure TypeScript engine (facts, scheduler, gesture geometry). No DOM,
   no React Native, no dependencies.
-- `apps/mobile`: an Expo app for iOS, Android and the web. Its web export is the website,
+- `apps/mobile`: one Expo app for Android, iOS and the web. Its web export is the website,
   deployed to Railway.
-- `apps/web`: the previous Vite + React website, no longer deployed and due to be deleted
-  (issue #9). Don't add features to it.
 
 Read `AGENTS_INDEX.md` to find files, and `docs/design.md` before changing any gameplay
 behaviour.
@@ -34,15 +32,15 @@ behaviour.
 
 ```sh
 npm install              # once per checkout / worktree
-npm run dev              # web app on http://localhost:5173
-npm run typecheck        # core, web and mobile
+npm run dev              # the app in a browser, on http://localhost:8081
+npm run typecheck        # core and the app
 npm test                 # core engine + gesture tests (vitest)
-npm run build            # web production build
+npm run build            # website build in apps/mobile/dist
 cd apps/mobile && npx expo start   # native app in Expo Go
 ```
 
 Run `npm run typecheck && npm test` before every commit. A change to `packages/core` must
-keep both apps typechecking.
+keep the app typechecking.
 
 ## Code style
 
@@ -50,8 +48,11 @@ keep both apps typechecking.
 - ESM: relative imports carry the `.js` extension, even from `.ts` files.
 - `packages/core` stays pure: no platform APIs and no dependencies. Platform code lives in the
   apps, behind interfaces like `Storage`.
-- Web and mobile mirror each other file by file (see the pairing table in
-  `AGENTS_INDEX.md`). A behaviour change usually belongs in both apps, or better, in core.
+- One codebase for every platform. Where a platform needs its own code, add a sibling file
+  with a platform suffix (`storage/native.web.ts` next to `storage/native.ts`) that exports
+  the same names; Metro picks it for that platform. A change that touches one sibling
+  usually belongs in the other too. Check a layout change on a phone, a tablet and a
+  desktop browser window.
 - Comments explain *why*. Match the density and tone of the surrounding code.
 
 ## Privacy and security constraints

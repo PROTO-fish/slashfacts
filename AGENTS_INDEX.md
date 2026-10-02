@@ -9,9 +9,8 @@ npm workspaces monorepo (`package.json`: `packages/*`, `apps/*`).
 
 | Path | What |
 |---|---|
-| `packages/core` | `@slash/core` — pure TypeScript rules and gesture engine. No DOM, no React Native, no dependencies. Shared by both apps. |
-| `apps/web` | Vite + React web app / PWA. No longer deployed: the website is the Expo app's web build. To be deleted (#9). |
-| `apps/mobile` | Expo / React Native app for iOS and Android, and the website (its web export, deployed to Railway). |
+| `packages/core` | `@slash/core` — pure TypeScript rules and gesture engine. No DOM, no React Native, no dependencies. |
+| `apps/mobile` | The Expo / React Native app for Android, iOS and the web. Its web export is the website, deployed to Railway. |
 | `docs/plans/` | Implementation plans, current and past (`mobile-port-plan.md` is active). |
 | `docs/adr/` | Architecture Decision Records (template in `docs/adr/README.md`). |
 | `README.md` | Public landing page: what the app is, how to run it. |
@@ -32,52 +31,42 @@ npm workspaces monorepo (`package.json`: `packages/*`, `apps/*`).
 | Change FACTS data (table progress, practice-next list) | `packages/core/src/progress.ts` |
 | Change the app name / brand strings | `packages/core/src/brand.ts` |
 | Change the storage contract | `packages/core/src/storage.ts` (interface only) |
-| Change how a stroke is read into digits | `packages/core/src/slash/geometry.ts` — shared by web and mobile; test in `packages/core/test/geometry.test.ts` |
+| Change how a stroke is read into digits | `packages/core/src/slash/geometry.ts`; test in `packages/core/test/geometry.test.ts` |
 | Add a core export | `packages/core/src/index.ts` |
 | Run tests | `npm test` (vitest; `packages/core/test/`) |
 
-## Web ↔ mobile file pairs
+## App files (`apps/mobile/src/`)
 
-Each web file has a native counterpart with the same logic. A behaviour change usually
-belongs in both — or better, in `@slash/core`.
+One codebase for Android, iOS and the web. A file with a `.web.ts` sibling has a browser
+version that Metro picks for the web build; change both together.
 
-| Concern | Web (`apps/web/src/`) | Mobile (`apps/mobile/src/`) |
-|---|---|---|
-| App shell / screen switch | `App.tsx`, `main.tsx` | `App.tsx`, `../index.ts`, `browserSetup.web.ts` (service worker, zoom guard) |
-| App state + persistence wiring | `state.ts` | `state.ts` |
-| Storage implementation | `storage/idb.ts` (IndexedDB) | `storage/native.ts` (expo-sqlite); `storage/native.web.ts` (IndexedDB, same database as `idb.ts`) in the Expo web build |
-| Haptics | `haptics.ts` (navigator.vibrate) | `haptics.ts` (expo-haptics); `haptics.web.ts` (navigator.vibrate) in the Expo web build |
-| Gesture input adapter | `slash/useSlash.ts` (pointer events) | `slash/useSlashNative.ts` (RNGH `Gesture.Pan`) |
-| Answer pad + live stroke | `slash/SlashPad.tsx` | `slash/SlashPad.tsx` |
-| Question loop (grade, hold, reveal, re-arm) | `game/useQuestionLoop.ts` | `game/useQuestionLoop.ts` |
-| One question on screen + clock | `game/QuestionView.tsx` | `game/QuestionView.tsx` (Reanimated) |
-| Home (table picker + start) | `screens/Home.tsx` | `screens/Home.tsx` |
-| Round + session summary | `screens/Practice.tsx` | `screens/Practice.tsx` |
-| FACTS screen | `screens/Stats.tsx` | `screens/Stats.tsx` |
-| Table picker (reads `stroke.visits`, never `strokeDigits()`) | `components/TableSelect.tsx` | `components/TableSelect.tsx` |
-| Score panels | `components/Result.tsx` | `components/Result.tsx` |
-| Night-mode toggle | `components/NightToggle.tsx` | `components/NightToggle.tsx` |
-| Styling | `theme.css` (single stylesheet — source of truth for the design) | `theme/tokens.ts`, `theme/fonts.ts`, `theme/useBreakpoint.ts`, `theme/ThemeContext.tsx`, plus per-component `StyleSheet`s |
-| Big START / HOME buttons | inline in screens | `components/Launch.tsx` |
-| Inline SVG icons | inline in components | `components/icons.tsx` |
-| Striped gauge fill | CSS `repeating-linear-gradient` | `components/StripedFill.tsx` |
-
-When matching the mobile look to the web, read the relevant rules in
-`apps/web/src/theme.css` in full first — the native styles are translations of it.
-
-## Web app specifics (`apps/web/`)
-
-| Path | What |
+| Concern | Files |
 |---|---|
-| `index.html` | Meta tags, favicon, manifest link |
-| `public/manifest.webmanifest`, `public/icon-*.png`, `public/favicon.ico`, `public/logo.png` | PWA / favicon / link-preview assets |
-| `public/sw.js` | Service worker |
-| `public/privacy.html` | Privacy policy (store listings link to it) |
-| `public/fonts/` | Archivo variable woff2 |
-| `server.js` | Dependency-free static server (Railway served it until the Expo web build replaced this app) |
-| `vite.config.ts` | Build config |
+| App shell / screen switch | `App.tsx`, `../index.ts`; `browserSetup.web.ts` (service worker, zoom guard) on the web |
+| App state + persistence wiring | `state.ts` |
+| Storage implementation | `storage/native.ts` (expo-sqlite); `storage/native.web.ts` (IndexedDB) on the web |
+| Haptics | `haptics.ts` (expo-haptics); `haptics.web.ts` (`navigator.vibrate`) on the web |
+| Gesture input adapter | `slash/useSlashNative.ts` (RNGH `Gesture.Pan`) |
+| Answer pad + live stroke | `slash/SlashPad.tsx` |
+| Question loop (grade, hold, reveal, re-arm) | `game/useQuestionLoop.ts` |
+| One question on screen + clock | `game/QuestionView.tsx` (Reanimated) |
+| Home (table picker + start) | `screens/Home.tsx` |
+| Round + session summary | `screens/Practice.tsx` |
+| FACTS screen | `screens/Stats.tsx` |
+| Table picker (reads `stroke.visits`, never `strokeDigits()`) | `components/TableSelect.tsx` |
+| Score panels | `components/Result.tsx` |
+| Night-mode toggle | `components/NightToggle.tsx` |
+| Styling | `theme/tokens.ts`, `theme/fonts.ts`, `theme/useBreakpoint.ts` (breakpoints, wordmark size), `theme/ThemeContext.tsx`, plus per-component `StyleSheet`s |
+| Big START / HOME buttons | `components/Launch.tsx` |
+| Inline SVG icons | `components/icons.tsx` |
+| Striped gauge fill | `components/StripedFill.tsx` |
 
-## Mobile app specifics (`apps/mobile/`)
+Many comments cite a `theme.css` rule or an `apps/web/...` file as the origin of a value.
+Those name the previous Vite web app, removed in favour of the Expo web build (see
+`docs/adr/0001-one-expo-app-for-every-platform.md`). Read them in history with
+`git show 0ced619:apps/web/src/theme.css`.
+
+## App specifics (`apps/mobile/`)
 
 | Path | What |
 |---|---|

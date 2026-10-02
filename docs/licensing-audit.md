@@ -13,10 +13,9 @@ Counted from `npm ls --all --omit=dev` for each workspace, reading each package'
 | Workspace | MIT | BSD-2/3 | ISC | Apache-2.0 | BlueOak-1.0.0 | CC0-1.0 | Other |
 |---|---|---|---|---|---|---|---|
 | `apps/mobile` | 139 | 12 | 5 | 2 | 4 (glob, minimatch, minipass, path-scurry) | 1 (mdn-data) | none |
-| `apps/web` | 5 | – | – | – | – | – | none |
 
 BlueOak-1.0.0 and CC0-1.0 are permissive licenses, compatible with GPL-3.0. Our own workspaces
-(`@slash/core`, `@slash/web`, `mobile`) declare `GPL-3.0-only`.
+(`@slash/core`, `mobile`) declare `GPL-3.0-only`.
 
 ## Android native dependencies
 
@@ -53,7 +52,7 @@ get `INTERNET` back through `plugins/withDebugInternet.js`, so they can still lo
 
 | Asset | License |
 |---|---|
-| Archivo typeface: `apps/web/public/fonts/archivo-latin.woff2` and the static TTF instances in `apps/mobile/assets/fonts/` | SIL OFL 1.1, © The Archivo Project Authors. `OFL.txt` ships next to both copies. |
+| Archivo typeface: the static TTF instances in `apps/mobile/assets/fonts/` | SIL OFL 1.1, © The Archivo Project Authors. `OFL.txt` ships next to them, and the website serves it at `/fonts/OFL.txt`. |
 | App icon and brand mark (`/×`) | Original work by the publisher, GPL-3.0 with the rest of the project |
 
 ## Anti-features

@@ -1,6 +1,6 @@
 # Serving the website from the Expo app
 
-**Status:** Active
+**Status:** Completed
 
 Issue: [#9](https://github.com/PROTO-fish/slashfacts/issues/9).
 
@@ -42,8 +42,9 @@ Layout fixes the web build needed, all in shared code and invisible on phones:
 3. [x] ~~Deploy the build to a second Railway service.~~ Skipped: with few users on the live
    site, the cut-over happened directly, with `apps/web` kept for a one-commit rollback.
 4. [x] Cut over: the Railway service builds and serves the Expo web export.
-5. [ ] Check the acceptance criteria in #9 on the live site, on real devices.
-6. [ ] Delete `apps/web` (and the root scripts that still point at it), write the ADR.
+5. [ ] ~~Check the acceptance criteria in #9 on the live site, on real devices.~~ Not done
+   before closing: the site has few users, and checks now happen on the live site.
+6. [x] Delete `apps/web` and point the root scripts at the Expo app; ADR 0001.
 
 ## Progress log
 
@@ -64,3 +65,8 @@ Layout fixes the web build needed, all in shared code and invisible on phones:
   starts `apps/mobile/server.mjs`. Rolling back is reverting that commit: `apps/web` is still
   in the tree and builds as before. Visitors keep their progress (same origin, same IndexedDB
   database), and the new service worker's cache name drops the old build's cached files.
+- **2026-10-02 — `apps/web` deleted.** The root `dev`, `build`, `start`, `test` and
+  `typecheck` scripts now run the Expo app. The decision is recorded in
+  `docs/adr/0001-one-expo-app-for-every-platform.md`. Left open: page weight, the FACTS
+  screen's vertical centring, and the device checks (Safari, Firefox, trackpad, real phones,
+  offline use and install).
