@@ -77,6 +77,7 @@ When matching the mobile look to the web, read the relevant rules in
 | `server.js` | Dependency-free static server used on Railway |
 | `vite.config.ts` | Build config |
 | `../../railway.json` | Railway build/start commands |
+| `../../railpack.expo-web.json` | Build recipe for a Railway service serving the Expo web build (`RAILPACK_CONFIG_FILE`) |
 
 ## Mobile app specifics (`apps/mobile/`)
 

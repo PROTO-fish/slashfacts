@@ -1,0 +1,15 @@
+{
+  "$schema": "https://schema.railpack.com",
+  "steps": {
+    "install": {
+      "commands": [
+        { "src": ".", "dest": "." },
+        "npm ci --workspace=apps/mobile --workspace=packages/core --include-workspace-root"
+      ]
+    },
+    "build": {
+      "inputs": [{ "step": "install" }],
+      "commands": ["EXPO_NO_TELEMETRY=1 npm run -w apps/mobile build:web"]
+    }
+  }
+}
