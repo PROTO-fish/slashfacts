@@ -15,7 +15,7 @@ const ready = db.execAsync(
  * apps/web/src/storage/idb.ts one for one: same Storage contract, same discipline that a
  * storage failure degrades to "no saved progress" rather than breaking the practice loop.
  */
-export const nativeStorage: Storage = {
+export const deviceStorage: Storage = {
   async load() {
     try {
       await ready;

@@ -19,7 +19,13 @@ export interface Breakpoint {
   /** theme.css: `max-aspect-ratio: 2/5` — a screen taller than 400:1000 needs the extra
    *  height above the content absorbed rather than left as a growing gap. */
   readonly isTallNarrow: boolean;
+  /** theme.css `.wordmark { font-size: clamp(2rem, 7vw, 3.25rem) }`, floored at the 36 the
+   *  phone layout was tuned to, so only windows wider than a phone see the header grow. */
+  readonly wordmarkSize: number;
 }
+
+/** The wordmark size a phone gets; screens that budget their height count growth past it. */
+export const PHONE_WORDMARK_SIZE = 36;
 
 export function useBreakpoint(): Breakpoint {
   const { width, height } = useWindowDimensions();
@@ -30,5 +36,6 @@ export function useBreakpoint(): Breakpoint {
     isRoomy: width >= 700 && height >= 700,
     isLandscapeShort: width > height && height <= 650,
     isTallNarrow: width / height <= 2 / 5,
+    wordmarkSize: Math.min(52, Math.max(PHONE_WORDMARK_SIZE, width * 0.07)),
   };
 }

@@ -111,7 +111,9 @@ export function SlashPad({ status, onSlash, onTap, pending, resetKey }: Props) {
   const zeroHeight = size.w > 0 ? Math.min(140, Math.max(64, size.w * 0.24)) : 100;
   // .cell font-size: clamp(2rem, 11vw, 4rem) — approximated here off the measured cell
   // width (each of the 3 columns), which tracks the same "grows with the pad" intent.
-  const cellWidth = size.w > 0 ? (size.w - metrics.gap * 2) / 3 : 100;
+  // Floored: three exact thirds sum to the full width, and a browser's sub-pixel rounding
+  // then wraps the third key onto its own row.
+  const cellWidth = size.w > 0 ? Math.floor((size.w - metrics.gap * 2) / 3) : 100;
   const digitFontSize = Math.min(64, Math.max(32, cellWidth * 0.42));
 
   const cellStyle = (digit: number) => [
