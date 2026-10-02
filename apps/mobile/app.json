@@ -32,7 +32,8 @@
       ]
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "name": "SlashFacts",
+      "shortName": "/FACTS"
     },
     "plugins": [
       "expo-sqlite",

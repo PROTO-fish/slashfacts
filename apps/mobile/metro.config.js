@@ -19,9 +19,11 @@ config.resolver.nodeModulesPaths = [
 
 // packages/core's TypeScript source uses explicit ".js" specifiers pointing at ".ts" files
 // — the "moduleResolution: bundler" convention Vite already resolves for the web app.
-// Metro resolves specifiers literally, so retry an unresolved own-source ".js" import as
-// ".ts"/".tsx" before giving up. Real package.json "main": "index.js" files never reach
-// this fallback because they resolve on the first, unmodified attempt.
+// Metro resolves specifiers literally, so retry an unresolved own-source ".js" import
+// without its extension before giving up. Metro then applies its own extension order, which
+// is what lets a "foo.web.ts" stand in for "foo.ts" in the web build (naming "foo.ts"
+// outright would skip that). Real package.json "main": "index.js" files never reach this
+// fallback because they resolve on the first, unmodified attempt.
 const { resolveRequest: defaultResolveRequest } = config.resolver;
 config.resolver.resolveRequest = (context, moduleName, platform) => {
   const resolveDefault = (name) =>
@@ -32,14 +34,11 @@ config.resolver.resolveRequest = (context, moduleName, platform) => {
   try {
     return resolveDefault(moduleName);
   } catch (error) {
-    for (const ext of ['.ts', '.tsx']) {
-      try {
-        return resolveDefault(moduleName.slice(0, -3) + ext);
-      } catch {
-        // try the next extension
-      }
+    try {
+      return resolveDefault(moduleName.slice(0, -3));
+    } catch {
+      throw error;
     }
-    throw error;
   }
 };
 

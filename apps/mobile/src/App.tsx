@@ -39,7 +39,7 @@ function ThemedShell() {
  *  useAppState() a second time and starting a second session. */
 function ShellFor({ app }: { app: ReturnType<typeof useAppState> }) {
   const palette = usePalette();
-  const { metrics } = useBreakpoint();
+  const { metrics, wordmarkSize } = useBreakpoint();
   const insets = useSafeAreaInsets();
   const [screen, setScreen] = useState<Screen>('home');
 
@@ -49,38 +49,55 @@ function ShellFor({ app }: { app: ReturnType<typeof useAppState> }) {
   };
 
   return (
-    <View
-      style={[
-        styles.app,
-        { backgroundColor: palette.paper, paddingTop: insets.top, paddingBottom: insets.bottom },
-      ]}
-    >
+    // .app: on a window wider than the card, the ink-coloured backdrop shows on either side,
+    // so the shell reads as one phone-width column instead of a header stretched edge to edge.
+    <View style={[styles.backdrop, { backgroundColor: palette.ink }]}>
       <View
         style={[
-          styles.bar,
-          { borderBottomColor: palette.ink, borderBottomWidth: metrics.border, paddingHorizontal: metrics.padX },
+          styles.app,
+          { backgroundColor: palette.paper, paddingTop: insets.top, paddingBottom: insets.bottom },
         ]}
       >
-        <Text style={[styles.wordmark, { color: palette.ink, fontFamily: FONTS.blackWider }]}>{BRAND.name}</Text>
-        {screen !== 'home' && (
-          // .close is a plain "✕" glyph, not a drawn icon — the one button in the app
-          // that isn't.
-          <Pressable
-            onPress={() => setScreen('home')}
-            accessibilityRole="button"
-            accessibilityLabel="Back to the start"
-            hitSlop={12}
-            style={styles.close}
+        <View
+          style={[
+            styles.bar,
+            { borderBottomColor: palette.ink, borderBottomWidth: metrics.border, paddingHorizontal: metrics.padX },
+          ]}
+        >
+          <Text
+            style={[
+              styles.wordmark,
+              {
+                color: palette.ink,
+                fontFamily: FONTS.blackWider,
+                fontSize: wordmarkSize,
+                lineHeight: Math.round(wordmarkSize * 0.92),
+                letterSpacing: -wordmarkSize * 0.03,
+              },
+            ]}
           >
-            <Text style={[styles.closeGlyph, { color: palette.ink, fontFamily: FONTS.black }]}>✕</Text>
-          </Pressable>
-        )}
-      </View>
+            {BRAND.name}
+          </Text>
+          {screen !== 'home' && (
+            // .close is a plain "✕" glyph, not a drawn icon — the one button in the app
+            // that isn't.
+            <Pressable
+              onPress={() => setScreen('home')}
+              accessibilityRole="button"
+              accessibilityLabel="Back to the start"
+              hitSlop={12}
+              style={styles.close}
+            >
+              <Text style={[styles.closeGlyph, { color: palette.ink, fontFamily: FONTS.black }]}>✕</Text>
+            </Pressable>
+          )}
+        </View>
 
-      {!app.ready && <View style={styles.main} />}
-      {app.ready && screen === 'home' && <Home app={app} onStart={start} onStats={() => setScreen('stats')} />}
-      {app.ready && screen === 'practice' && <Practice app={app} onHome={() => setScreen('home')} />}
-      {app.ready && screen === 'stats' && <Stats app={app} onHome={() => setScreen('home')} />}
+        {!app.ready && <View style={styles.main} />}
+        {app.ready && screen === 'home' && <Home app={app} onStart={start} onStats={() => setScreen('stats')} />}
+        {app.ready && screen === 'practice' && <Practice app={app} onHome={() => setScreen('home')} />}
+        {app.ready && screen === 'stats' && <Stats app={app} onHome={() => setScreen('home')} />}
+      </View>
     </View>
   );
 }
@@ -99,15 +116,16 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-  app: { flex: 1 },
+  backdrop: { flex: 1 },
+  app: { flex: 1, width: '100%', maxWidth: 560, alignSelf: 'center' },
   bar: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingVertical: 10,
   },
-  // .wordmark { font-size: clamp(2rem, 7vw, 3.25rem); letter-spacing: -0.03em; line-height: 0.9 }
-  wordmark: { fontSize: 36, lineHeight: 33, letterSpacing: -1 },
+  // Size, line height and tracking scale with the window: useBreakpoint().wordmarkSize.
+  wordmark: {},
   close: { padding: 2 },
   // .close { font-size: clamp(1.5rem, 6vw, 2rem) }
   closeGlyph: { fontSize: 28, lineHeight: 28 },

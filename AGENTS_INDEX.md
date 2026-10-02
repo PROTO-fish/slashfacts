@@ -43,10 +43,10 @@ belongs in both — or better, in `@slash/core`.
 
 | Concern | Web (`apps/web/src/`) | Mobile (`apps/mobile/src/`) |
 |---|---|---|
-| App shell / screen switch | `App.tsx`, `main.tsx` | `App.tsx`, `../index.ts` |
+| App shell / screen switch | `App.tsx`, `main.tsx` | `App.tsx`, `../index.ts`, `browserSetup.web.ts` (service worker, zoom guard) |
 | App state + persistence wiring | `state.ts` | `state.ts` |
-| Storage implementation | `storage/idb.ts` (IndexedDB) | `storage/native.ts` (expo-sqlite) |
-| Haptics | `haptics.ts` (navigator.vibrate) | `haptics.ts` (expo-haptics) |
+| Storage implementation | `storage/idb.ts` (IndexedDB) | `storage/native.ts` (expo-sqlite); `storage/native.web.ts` (IndexedDB, same database as `idb.ts`) in the Expo web build |
+| Haptics | `haptics.ts` (navigator.vibrate) | `haptics.ts` (expo-haptics); `haptics.web.ts` (navigator.vibrate) in the Expo web build |
 | Gesture input adapter | `slash/useSlash.ts` (pointer events) | `slash/useSlashNative.ts` (RNGH `Gesture.Pan`) |
 | Answer pad + live stroke | `slash/SlashPad.tsx` | `slash/SlashPad.tsx` |
 | Question loop (grade, hold, reveal, re-arm) | `game/useQuestionLoop.ts` | `game/useQuestionLoop.ts` |
@@ -77,6 +77,7 @@ When matching the mobile look to the web, read the relevant rules in
 | `server.js` | Dependency-free static server used on Railway |
 | `vite.config.ts` | Build config |
 | `../../railway.json` | Railway build/start commands |
+| `../../railpack.expo-web.json` | Build recipe for a Railway service serving the Expo web build (`RAILPACK_CONFIG_FILE`) |
 
 ## Mobile app specifics (`apps/mobile/`)
 
@@ -85,11 +86,13 @@ When matching the mobile look to the web, read the relevant rules in
 | `app.json` | Expo config: name, bundle ids (`fish.proto.slashfacts`), icons, splash, plugins, Android permissions (release asks for `VIBRATE` only) |
 | `plugins/withDebugInternet.js` | Re-adds `INTERNET` to the debug manifest only, so debug builds reach Metro while release stays offline |
 | `eas.json` | EAS Build profiles (development / preview / production) |
-| `metro.config.js` | Monorepo resolution + `.js`→`.ts` import fallback for `@slash/core` — touch with care |
+| `metro.config.js` | Monorepo resolution + `.js` import fallback (retried extensionless, so `.web.ts` files win in the web build) — touch with care |
+| `public/` | Web build only: `index.html` template (meta tags, share previews), manifest, icons, `sw.js`, `privacy.html`, font licence. Copied as is by `npm run build:web` |
 | `babel.config.js` | `babel-preset-expo` + worklets plugin |
 | `assets/` | App icon, Android adaptive icon layers, splash |
 | `assets/fonts/` | Four static Archivo TTFs (instanced from the variable font) + `OFL.txt` |
 | `src/assets.d.ts` | `*.ttf` module typing |
 
 Commands (run in `apps/mobile`): `npx expo start --lan` (dev server for Expo Go),
-`npm run typecheck`, `npx expo export --platform ios|android` (bundle check).
+`npm run typecheck`, `npx expo export --platform ios|android` (bundle check),
+`npm run build:web` (web build into `dist/`; serve it with `SITE_DIR=apps/mobile/dist node apps/web/server.js`).

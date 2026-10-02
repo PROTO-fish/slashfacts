@@ -6,7 +6,9 @@ import { createReadStream, existsSync, statSync } from 'node:fs';
 import { createServer } from 'node:http';
 import { extname, join, normalize, resolve } from 'node:path';
 
-const ROOT = resolve(import.meta.dirname, 'dist');
+// SITE_DIR lets the same server host another build, e.g. the Expo web export
+// (apps/mobile/dist) while it is compared against this one.
+const ROOT = resolve(process.env.SITE_DIR ?? resolve(import.meta.dirname, 'dist'));
 const PORT = Number(process.env.PORT) || 3000;
 
 const TYPES = {
@@ -18,6 +20,7 @@ const TYPES = {
   '.svg': 'image/svg+xml',
   '.png': 'image/png',
   '.woff2': 'font/woff2',
+  '.ttf': 'font/ttf',
   '.ico': 'image/x-icon',
   '.txt': 'text/plain; charset=utf-8',
 };
@@ -28,8 +31,9 @@ const STATIC_TYPES = new Set(['.woff2', '.png', '.svg', '.ico']);
 /**
  * How long the browser may keep a file.
  *
- * Vite writes a content hash into every name under /assets/, so those can never go stale:
- * a change produces a different URL. The font and the icons cannot claim that — their
+ * Vite writes a content hash into every name under /assets/, and the Expo export does the
+ * same under /_expo/static/ and /assets/, so those can never go stale: a change produces a
+ * different URL. The font and the icons cannot claim that — their
  * names are fixed — so they get a month rather than a year, and no `immutable`. Replacing
  * one therefore reaches everybody within a month instead of never.
  *
@@ -37,7 +41,9 @@ const STATIC_TYPES = new Set(['.woff2', '.png', '.svg', '.ico']);
  * time, or a deploy would never reach a returning visitor.
  */
 function cacheControl(requested, ext) {
-  if (requested.startsWith('/assets/')) return 'public, max-age=31536000, immutable';
+  if (requested.startsWith('/assets/') || requested.startsWith('/_expo/static/')) {
+    return 'public, max-age=31536000, immutable';
+  }
   if (STATIC_TYPES.has(ext)) return 'public, max-age=2592000';
   return 'no-cache';
 }

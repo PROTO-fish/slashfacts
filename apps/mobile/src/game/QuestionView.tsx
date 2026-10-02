@@ -10,7 +10,7 @@ import Animated, {
 import { product, type Fact } from '@slash/core';
 import { usePalette } from '../theme/ThemeContext.js';
 import { FONTS } from '../theme/fonts.js';
-import { useBreakpoint } from '../theme/useBreakpoint.js';
+import { PHONE_WORDMARK_SIZE, useBreakpoint } from '../theme/useBreakpoint.js';
 import { SlashPad, type PadStatus } from '../slash/SlashPad.js';
 import { TimesIcon } from '../components/icons.js';
 
@@ -25,10 +25,12 @@ const PROMPT_SIZE = 84;
  * The pad is square-ish, so its width sets its height — about 1.24 times it once the three
  * cell rows and the 0 bar are counted. The third term is the one this file never had: with
  * only a width cap, a short screen has no way to keep the 0 key above the fold.
- * The 300 is the chrome above the pad — bar, meta row, clock and the prompt's own band.
+ * The 300 is the chrome above the pad — bar, meta row, clock and the prompt's own band — with
+ * a phone's header; a wider window's taller wordmark (see useBreakpoint) comes off on top.
  */
-function padWidthFor(windowWidth: number, windowHeight: number) {
-  return Math.min(400, windowWidth * 0.94, (windowHeight - 300) / 1.24);
+function padWidthFor(windowWidth: number, windowHeight: number, wordmarkSize: number) {
+  const headerGrowth = (wordmarkSize - PHONE_WORDMARK_SIZE) * 0.92;
+  return Math.min(400, windowWidth * 0.94, (windowHeight - 300 - headerGrowth) / 1.24);
 }
 
 interface Props {
@@ -66,7 +68,7 @@ export function QuestionView({
   onTap,
 }: Props) {
   const palette = usePalette();
-  const { metrics } = useBreakpoint();
+  const { metrics, wordmarkSize } = useBreakpoint();
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const revealing = status === 'reveal';
   const progress = useSharedValue(1);
@@ -102,7 +104,7 @@ export function QuestionView({
    * above and below, so a taller phone silently grew the gap under the clock and nothing
    * about the text or the font could correct it.
    */
-  const padWidth = padWidthFor(windowWidth, windowHeight);
+  const padWidth = padWidthFor(windowWidth, windowHeight, wordmarkSize);
   const rhythm = Math.round(padWidth * 0.1);
 
   return (
@@ -132,7 +134,10 @@ export function QuestionView({
         <Animated.View style={[styles.clockFill, { backgroundColor: palette.ink }, clockStyle]} />
       </View>
 
-      <View style={styles.stage}>
+      {/* theme.css @media (min-height: 900px) { .stage { justify-content: center } }: the pad
+          stops growing, so a tall window would strand the prompt above a band of white.
+          Kept to tablet and desktop widths, so phone layouts stay as tuned. */}
+      <View style={[styles.stage, windowWidth >= 700 && windowHeight >= 900 && styles.stageCentred]}>
         <View style={[styles.prompt, { marginTop: rhythm, marginBottom: rhythm }]}>
           <Text style={[styles.promptText, { color: palette.ink, fontFamily: FONTS.blackWide }]}>
             {fact.a}
@@ -212,6 +217,9 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     minHeight: 0,
+  },
+  stageCentred: {
+    justifyContent: 'center',
   },
   prompt: {
     flexDirection: 'row',

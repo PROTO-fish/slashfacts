@@ -12,7 +12,7 @@ import {
   type Session,
   type Settings,
 } from '@slash/core';
-import { nativeStorage } from './storage/native.js';
+import { deviceStorage } from './storage/native.js';
 
 export interface AppState {
   ready: boolean;
@@ -48,7 +48,7 @@ export function useAppState(): AppState {
 
   useEffect(() => {
     let cancelled = false;
-    nativeStorage.load().then((persisted) => {
+    deviceStorage.load().then((persisted) => {
       if (cancelled) return;
       const restored = fromPersisted(persisted);
       const saved = restored.settings;
@@ -66,7 +66,7 @@ export function useAppState(): AppState {
   }, []);
 
   const persist = useCallback((nextStats: ReadonlyMap<FactId, FactStat>, nextSettings: Settings) => {
-    void nativeStorage.save(toPersisted(nextStats, nextSettings));
+    void deviceStorage.save(toPersisted(nextStats, nextSettings));
   }, []);
 
   const answer = useCallback(
@@ -120,7 +120,7 @@ export function useAppState(): AppState {
     const empty = new Map<FactId, FactStat>();
     statsRef.current = empty;
     setStats(empty);
-    void nativeStorage.clear();
+    void deviceStorage.clear();
     const fresh = startSession(empty, settingsRef.current, Date.now());
     sessionRef.current = fresh;
     setSession(fresh);
