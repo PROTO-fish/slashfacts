@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { StyleSheet, Text, View, useWindowDimensions, type LayoutChangeEvent } from 'react-native';
+import { StyleSheet, Text, View, type LayoutChangeEvent } from 'react-native';
 import Animated, {
   cancelAnimation,
   Easing,
@@ -11,6 +11,7 @@ import { product, type Fact } from '@slash/core';
 import { usePalette } from '../theme/ThemeContext.js';
 import { FONTS } from '../theme/fonts.js';
 import { PHONE_WORDMARK_SIZE, useBreakpoint } from '../theme/useBreakpoint.js';
+import { useViewport } from '../theme/viewport.js';
 import { SlashPad, type PadStatus } from '../slash/SlashPad.js';
 import { TimesIcon } from '../components/icons.js';
 
@@ -69,7 +70,7 @@ export function QuestionView({
 }: Props) {
   const palette = usePalette();
   const { metrics, wordmarkSize } = useBreakpoint();
-  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
+  const { width: windowWidth, height: windowHeight } = useViewport();
   const revealing = status === 'reveal';
   const progress = useSharedValue(1);
   const runningKey = useRef<string | null>(null);
