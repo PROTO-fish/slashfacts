@@ -13,21 +13,24 @@ const CONFIRM_MS = 3000;
 
 const seconds = (ms: number) => `${(ms / 1000).toFixed(1)}s`;
 
-/** Port of the web `History`: last answers oldest first — black came, white did not, dashed none yet. */
+/**
+ * Port of the web `History`: last answers oldest first — black came, white did not, a bar
+ * none yet. The bar is the same "—" TABLES shows for no data; a dashed outline on a 13px
+ * square broke up into stray ticks on Android.
+ */
 function History({ recent, ink }: { recent: readonly boolean[]; ink: string }) {
   const slots = [...Array<null>(RECENT_WINDOW - recent.length).fill(null), ...recent];
   const label = `${recent.filter(Boolean).length} of last ${recent.length}`;
   return (
     <View style={styles.history} accessible accessibilityRole="image" accessibilityLabel={label}>
       {slots.map((slot, i) => (
-        <View
-          key={i}
-          style={[
-            styles.mark,
-            { borderColor: ink, borderStyle: slot === null ? 'dashed' : 'solid' },
-            slot === true && { backgroundColor: ink },
-          ]}
-        />
+        <View key={i} style={styles.slot}>
+          {slot === null ? (
+            <View style={[styles.empty, { backgroundColor: ink }]} />
+          ) : (
+            <View style={[styles.mark, { borderColor: ink }, slot && { backgroundColor: ink }]} />
+          )}
+        </View>
       ))}
     </View>
   );
@@ -182,6 +185,8 @@ const styles = StyleSheet.create({
   fraction: { fontSize: 10.5 },
   // Same 2px ink border as the gauge, so history and the mastered gauge read as one black/white scale.
   mark: { width: 13, height: 13, borderWidth: 2 },
+  slot: { width: 13, height: 13, justifyContent: 'center' },
+  empty: { height: 2 },
   history: { flexDirection: 'row', gap: 3 },
   nothing: { fontSize: 13.5, letterSpacing: 1.4, opacity: 0.6 },
   actions: { alignItems: 'center' },
