@@ -60,6 +60,7 @@ version that Metro picks for the web build; change both together.
 | Big START / HOME buttons | `components/Launch.tsx` |
 | Inline SVG icons | `components/icons.tsx` |
 | Striped gauge fill | `components/StripedFill.tsx` |
+| Launch splash overlay (native + web) | `components/Splash.tsx`, `components/splashImage.ts` / `.web.ts`, `public/splash.png`, `public/index.html` |
 
 Many comments cite a `theme.css` rule or an `apps/web/...` file as the origin of a value.
 Those name the previous Vite web app, removed in favour of the Expo web build (see

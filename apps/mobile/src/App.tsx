@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useFonts } from 'expo-font';
 import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -12,6 +12,7 @@ import { useAppState } from './state.js';
 import { Home } from './screens/Home.js';
 import { Practice } from './screens/Practice.js';
 import { Stats } from './screens/Stats.js';
+import { Splash } from './components/Splash.js';
 
 type Screen = 'home' | 'practice' | 'stats';
 
@@ -25,8 +26,11 @@ type Screen = 'home' | 'practice' | 'stats';
  * (here) rather than wrapping it from outside — the RN equivalent of the web version
  * writing `document.documentElement.dataset.theme` in an effect once settings arrive.
  */
-function ThemedShell() {
+function ThemedShell({ onReady }: { onReady: () => void }) {
   const app = useAppState();
+  useEffect(() => {
+    if (app.ready) onReady();
+  }, [app.ready, onReady]);
   return (
     <ThemeProvider night={app.settings.night}>
       <StatusBar style={app.settings.night ? 'light' : 'dark'} />
@@ -104,12 +108,16 @@ function ShellFor({ app }: { app: ReturnType<typeof useAppState> }) {
 
 export default function App() {
   const [fontsLoaded] = useFonts(FONT_ASSETS);
-  if (!fontsLoaded) return null;
+  const [ready, setReady] = useState(false);
+  const markReady = useCallback(() => setReady(true), []);
 
+  // The splash renders before the fonts arrive too: on the web it takes over from the copy
+  // index.html shows, and returning null here would blank the page between the two.
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
-        <ThemedShell />
+        {fontsLoaded && <ThemedShell onReady={markReady} />}
+        <Splash ready={ready} />
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );
