@@ -2,17 +2,19 @@ import { useCallback, useEffect, useState } from 'react';
 import { useFonts } from 'expo-font';
 import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BRAND } from '@slash/core';
 import { FONTS, FONT_ASSETS } from './theme/fonts.js';
 import { ThemeProvider, usePalette } from './theme/ThemeContext.js';
 import { useBreakpoint } from './theme/useBreakpoint.js';
+import { ViewportProvider, useViewport } from './theme/viewport.js';
 import { useAppState } from './state.js';
 import { Home } from './screens/Home.js';
 import { Practice } from './screens/Practice.js';
 import { Stats } from './screens/Stats.js';
 import { Splash } from './components/Splash.js';
+import { BACKDROP_TEXTURE } from './components/backdropTexture.js';
 
 type Screen = 'home' | 'practice' | 'stats';
 
@@ -45,6 +47,10 @@ function ShellFor({ app }: { app: ReturnType<typeof useAppState> }) {
   const palette = usePalette();
   const { metrics, wordmarkSize } = useBreakpoint();
   const insets = useSafeAreaInsets();
+  const viewport = useViewport();
+  // A framed card's rounded corners would clip the wordmark at the usual padding.
+  const cornerRadius = viewport.framed ? Math.round(viewport.height * 0.059) : 0;
+  const barPadX = Math.max(metrics.padX, Math.round(cornerRadius * 0.55));
   const [screen, setScreen] = useState<Screen>('home');
 
   const start = () => {
@@ -53,19 +59,41 @@ function ShellFor({ app }: { app: ReturnType<typeof useAppState> }) {
   };
 
   return (
-    // .app: on a window wider than the card, the ink-coloured backdrop shows on either side,
-    // so the shell reads as one phone-width column instead of a header stretched edge to edge.
-    <View style={[styles.backdrop, { backgroundColor: palette.ink }]}>
+    // On a desktop window the app is drawn as a phone-shaped card centred on the ink
+    // backdrop (see viewport.tsx), rather than a phone-width column stretched to the
+    // window's full height.
+    <View style={[styles.backdrop, viewport.framed && styles.backdropFramed, { backgroundColor: palette.ink }]}>
+      {viewport.framed && BACKDROP_TEXTURE && (
+        <Image
+          source={app.settings.night ? BACKDROP_TEXTURE.night : BACKDROP_TEXTURE.day}
+          resizeMode="repeat"
+          // Explicit size: on web an asset's own dimensions otherwise win over absoluteFill,
+          // and the tile is drawn once in the corner instead of repeated.
+          style={[StyleSheet.absoluteFill, styles.fill]}
+          accessibilityElementsHidden
+          importantForAccessibility="no-hide-descendants"
+        />
+      )}
       <View
         style={[
-          styles.app,
+          // A framed card takes its size from the viewport and must not flex: on web,
+          // `flex` sets flex-basis, which a flex column honours over `height`.
+          // Its corners round like a phone screen's: ~55pt on a 932pt-tall iPhone.
+          viewport.framed
+            ? {
+                width: viewport.width,
+                height: viewport.height,
+                borderRadius: cornerRadius,
+                overflow: 'hidden',
+              }
+            : styles.app,
           { backgroundColor: palette.paper, paddingTop: insets.top, paddingBottom: insets.bottom },
         ]}
       >
         <View
           style={[
             styles.bar,
-            { borderBottomColor: palette.ink, borderBottomWidth: metrics.border, paddingHorizontal: metrics.padX },
+            { borderBottomColor: palette.ink, borderBottomWidth: metrics.border, paddingHorizontal: barPadX },
           ]}
         >
           <Text
@@ -116,7 +144,11 @@ export default function App() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
-        {fontsLoaded && <ThemedShell onReady={markReady} />}
+        {fontsLoaded && (
+          <ViewportProvider>
+            <ThemedShell onReady={markReady} />
+          </ViewportProvider>
+        )}
         <Splash ready={ready} />
       </SafeAreaProvider>
     </GestureHandlerRootView>
@@ -125,6 +157,8 @@ export default function App() {
 
 const styles = StyleSheet.create({
   backdrop: { flex: 1 },
+  backdropFramed: { alignItems: 'center', justifyContent: 'center' },
+  fill: { width: '100%', height: '100%' },
   app: { flex: 1, width: '100%', maxWidth: 560, alignSelf: 'center' },
   bar: {
     flexDirection: 'row',

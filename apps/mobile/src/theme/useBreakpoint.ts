@@ -1,5 +1,5 @@
-import { useWindowDimensions } from 'react-native';
 import { COMPACT_METRICS, WIDE_METRICS, type Metrics } from './tokens.js';
+import { useViewport } from './viewport.js';
 
 /**
  * Mirrors theme.css's media queries as booleans, not layout — each screen still decides
@@ -28,7 +28,7 @@ export interface Breakpoint {
 export const PHONE_WORDMARK_SIZE = 36;
 
 export function useBreakpoint(): Breakpoint {
-  const { width, height } = useWindowDimensions();
+  const { width, height } = useViewport();
   const isWide = width >= 900;
   return {
     metrics: isWide ? WIDE_METRICS : COMPACT_METRICS,

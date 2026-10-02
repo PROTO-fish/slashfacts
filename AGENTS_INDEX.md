@@ -61,6 +61,7 @@ version that Metro picks for the web build; change both together.
 | Inline SVG icons | `components/icons.tsx` |
 | Striped gauge fill | `components/StripedFill.tsx` |
 | Launch splash overlay (native + web) | `components/Splash.tsx`, `components/splashImage.ts` / `.web.ts`, `public/splash.png`, `public/index.html` |
+| Desktop phone frame (web): card size, rounded corners, crumpled-paper backdrop | `theme/viewport.tsx` (frame size; screens size against it, not the window), `App.tsx`, `components/backdropTexture.ts` / `.web.ts`, `assets/backdrop/`, `scripts/generate-backdrop.mjs` |
 
 Many comments cite a `theme.css` rule or an `apps/web/...` file as the origin of a value.
 Those name the previous Vite web app, removed in favour of the Expo web build (see
@@ -81,6 +82,7 @@ Those name the previous Vite web app, removed in favour of the Expo web build (s
 | `babel.config.js` | `babel-preset-expo` + worklets plugin |
 | `assets/` | App icon, Android adaptive icon layers, splash |
 | `assets/fonts/` | Four static Archivo TTFs (instanced from the variable font) + `OFL.txt` |
+| `assets/backdrop/` | Day and night crumpled-paper tiles behind the desktop frame (web only); regenerate with `node scripts/generate-backdrop.mjs` |
 | `src/assets.d.ts` | `*.ttf` module typing |
 
 Commands (run in `apps/mobile`): `npx expo start --lan` (dev server for Expo Go),
