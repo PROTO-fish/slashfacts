@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="apps/web/public/icon-512.png" alt="SlashFacts logo" width="140" />
+  <img src="apps/mobile/public/icon-512.png" alt="SlashFacts logo" width="140" />
 </p>
 
 <h1 align="center">/ FACTS</h1>
@@ -59,7 +59,7 @@ partial credit. Either you know it, or you don't yet.
 
 No account, no server-side data, no analytics, no ads, no third-party SDKs. Progress is
 stored on the device and nowhere else. On Android the app asks for exactly one permission,
-`VIBRATE`. See the [privacy policy](apps/web/public/privacy.html).
+`VIBRATE`. See the [privacy policy](apps/mobile/public/privacy.html).
 
 ## Get it
 
@@ -73,18 +73,18 @@ stored on the device and nowhere else. On Android the app asks for exactly one p
 
 ```sh
 npm install
-npm run dev      # web app on http://localhost:5173
+npm run dev      # the app in a browser, on http://localhost:8081
 npm test         # engine + gesture tests
-npm run build    # production build in apps/web/dist
-npm start        # serve the build on $PORT
+npm run build    # website build in apps/mobile/dist
+npm start        # serve that build on $PORT
 ```
 
 For the native app, run `cd apps/mobile && npx expo start` and open it in Expo Go.
 
 ## Under the hood
 
-A small monorepo: one pure TypeScript engine, `packages/core`, is shared by a Vite + React
-web app and an Expo app. It holds the facts, the adaptive scheduler and the gesture reader,
+A small monorepo: one pure TypeScript engine, `packages/core`, drives one Expo app that runs
+on Android, iOS and the web. It holds the facts, the adaptive scheduler and the gesture reader,
 has zero dependencies, and is fully tested.
 
 - 📐 [**Design rules**](docs/design.md): how a stroke becomes digits, why the 1 and 10
@@ -105,5 +105,5 @@ SlashFacts is made by **PROTO/fish** and released under the
 [GNU General Public License v3.0](LICENSE). The app icon and brand mark are covered by the
 same license.
 
-The Archivo typeface (`apps/web/public/fonts`, `apps/mobile/assets/fonts`) is © The Archivo
+The Archivo typeface (`apps/mobile/assets/fonts`) is © The Archivo
 Project Authors and licensed under the [SIL Open Font License 1.1](apps/mobile/assets/fonts/OFL.txt).

@@ -1,8 +1,7 @@
 # Architecture
 
-SlashFacts is an npm-workspaces monorepo: one pure TypeScript engine shared by a web app
-and a native app. `AGENTS_INDEX.md` maps tasks to files and pairs each web file with its
-mobile counterpart.
+SlashFacts is an npm-workspaces monorepo: one pure TypeScript engine and one Expo app that
+runs on Android, iOS and the web. `AGENTS_INDEX.md` maps tasks to files.
 
 ## Code layout
 
@@ -16,20 +15,17 @@ packages/core     pure TypeScript, zero dependencies, no DOM
   storage.ts      the Storage interface only — no implementation
   slash/geometry.ts   the gesture engine: pure, no React, fully tested
 
-apps/web          Vite + React
-  slash/useSlash.ts   pointer events -> geometry
+apps/mobile       Expo (React Native, and react-native-web for the website)
+  slash/useSlashNative.ts  react-native-gesture-handler pan -> geometry
   slash/SlashPad.tsx  the pad and the live stroke
   game/useQuestionLoop.ts  the question loop: grade, hold, reveal, re-arm
   game/QuestionView.tsx    one question on screen
   components/TableSelect.tsx  the picker: tap or slash across the tables
-  components/Matrix.tsx       the map, read-only
-  storage/idb.ts      IndexedDB, implementing the core Storage interface
-  server.js           dependency-free static server for Railway
-
-apps/mobile       Expo (React Native), same screens as apps/web
-  slash/useSlashNative.ts  react-native-gesture-handler pan -> geometry
   storage/native.ts   expo-sqlite, implementing the core Storage interface
-  haptics.ts          expo-haptics feedback
+  storage/native.web.ts    IndexedDB, the same interface, in the web build
+  haptics.ts          expo-haptics feedback (haptics.web.ts: navigator.vibrate)
+  public/             web build only: page template, manifest, icons, service worker
+  server.mjs          dependency-free static server for Railway
   plugins/            Expo config plugins (release APK asks for VIBRATE only)
 ```
 
@@ -38,17 +34,19 @@ the adaptive algorithm can be replaced without touching a single component.
 
 ## Data
 
-Everything is stored locally (IndexedDB on the web, SQLite on mobile) — no accounts, no backend, nothing to leak. A
+Everything is stored locally (SQLite on Android and iOS, IndexedDB on the web) — no accounts, no backend, nothing to leak. A
 `Storage` implementation is the only thing a sync backend would need to replace.
 
-## iOS / Android
+## Platforms
 
 The Expo app in `apps/mobile` depends on `@slash/core` unchanged, including
-`geometry.ts`, which lives there precisely so web and native read a stroke through one
-implementation. Three things have platform implementations: the `Storage` interface
-(expo-sqlite), the gesture source (react-native-gesture-handler feeding the same
-`extendStroke`), and haptics (expo-haptics). See [`plans/mobile-port-plan.md`](plans/mobile-port-plan.md) for the
-full port plan.
+`geometry.ts`, so every platform reads a stroke through one implementation. The gesture
+source is react-native-gesture-handler everywhere, feeding the same `extendStroke`. Two
+things differ on the web, each through a `.web.ts` sibling Metro picks for the web build:
+storage (IndexedDB instead of expo-sqlite) and haptics (`navigator.vibrate` instead of
+expo-haptics). [`adr/0001-one-expo-app-for-every-platform.md`](adr/0001-one-expo-app-for-every-platform.md)
+records why the separate Vite web app was dropped; [`plans/mobile-port-plan.md`](plans/mobile-port-plan.md)
+and [`plans/expo-web-plan.md`](plans/expo-web-plan.md) hold the history.
 
 ## Web deployment (Railway)
 
@@ -56,4 +54,4 @@ Live at **https://slashfacts.proto.fish**, served from the Expo app's web export
 `railpack.json` installs only the mobile and core workspaces and runs
 `npm run -w apps/mobile build:web`; `railway.json` starts `node apps/mobile/server.mjs`, which
 binds `$PORT`, serves `apps/mobile/dist`, falls back to `index.html` for client routes, and
-marks hashed assets immutable. `apps/web` is no longer deployed.
+marks hashed assets immutable.
