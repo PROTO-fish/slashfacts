@@ -4,12 +4,13 @@
     "install": {
       "commands": [
         { "src": ".", "dest": "." },
-        "npm ci --workspace=apps/web --workspace=packages/core --include-workspace-root"
+        "npm ci --workspace=apps/mobile --workspace=packages/core --include-workspace-root"
       ]
     },
     "build": {
       "inputs": [{ "step": "install" }],
-      "commands": ["npm run -w apps/web build"]
+      "variables": { "EXPO_NO_TELEMETRY": "1" },
+      "commands": ["npm run -w apps/mobile build:web"]
     }
   }
 }

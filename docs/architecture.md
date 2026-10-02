@@ -52,7 +52,8 @@ full port plan.
 
 ## Web deployment (Railway)
 
-Live at **https://slashfacts.proto.fish**. `railpack.json` installs only the web and core
-workspaces and runs `npm run -w apps/web build`; `railway.json` starts
-`node apps/web/server.js`, which binds `$PORT`, serves `apps/web/dist`, falls back to
-`index.html` for client routes, and marks hashed assets immutable.
+Live at **https://slashfacts.proto.fish**, served from the Expo app's web export.
+`railpack.json` installs only the mobile and core workspaces and runs
+`npm run -w apps/mobile build:web`; `railway.json` starts `node apps/mobile/server.mjs`, which
+binds `$PORT`, serves `apps/mobile/dist`, falls back to `index.html` for client routes, and
+marks hashed assets immutable. `apps/web` is no longer deployed.
