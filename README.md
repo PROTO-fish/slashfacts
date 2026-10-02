@@ -95,9 +95,9 @@ has zero dependencies, and is fully tested.
 
 ## Contributing
 
-Bug reports, ideas and pull requests are welcome. Start with
-[`CONTRIBUTING.md`](CONTRIBUTING.md). Every commit needs a `Signed-off-by` line
-(`git commit -s`), certifying the [Developer Certificate of Origin](https://developercertificate.org/).
+Bug reports and ideas are welcome: open an issue. Pull requests come after, once a maintainer
+asks for one in the issue; see [`CONTRIBUTING.md`](CONTRIBUTING.md). Every commit needs a
+`Signed-off-by` line (`git commit -s`), certifying the [Developer Certificate of Origin](https://developercertificate.org/).
 
 ## License
 
