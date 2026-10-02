@@ -10,8 +10,8 @@ npm workspaces monorepo (`package.json`: `packages/*`, `apps/*`).
 | Path | What |
 |---|---|
 | `packages/core` | `@slash/core` — pure TypeScript rules and gesture engine. No DOM, no React Native, no dependencies. Shared by both apps. |
-| `apps/web` | Vite + React web app / PWA, deployed to Railway. |
-| `apps/mobile` | Expo / React Native app for iOS and Android. |
+| `apps/web` | Vite + React web app / PWA. No longer deployed: the website is the Expo app's web build. To be deleted (#9). |
+| `apps/mobile` | Expo / React Native app for iOS and Android, and the website (its web export, deployed to Railway). |
 | `docs/plans/` | Implementation plans, current and past (`mobile-port-plan.md` is active). |
 | `docs/adr/` | Architecture Decision Records (template in `docs/adr/README.md`). |
 | `README.md` | Public landing page: what the app is, how to run it. |
@@ -74,10 +74,8 @@ When matching the mobile look to the web, read the relevant rules in
 | `public/sw.js` | Service worker |
 | `public/privacy.html` | Privacy policy (store listings link to it) |
 | `public/fonts/` | Archivo variable woff2 |
-| `server.js` | Dependency-free static server used on Railway |
+| `server.js` | Dependency-free static server (Railway served it until the Expo web build replaced this app) |
 | `vite.config.ts` | Build config |
-| `../../railway.json` | Railway build/start commands |
-| `../../railpack.expo-web.json` | Build recipe for a Railway service serving the Expo web build (`RAILPACK_CONFIG_FILE`) |
 
 ## Mobile app specifics (`apps/mobile/`)
 
@@ -87,6 +85,8 @@ When matching the mobile look to the web, read the relevant rules in
 | `plugins/withDebugInternet.js` | Re-adds `INTERNET` to the debug manifest only, so debug builds reach Metro while release stays offline |
 | `eas.json` | EAS Build profiles (development / preview / production) |
 | `metro.config.js` | Monorepo resolution + `.js` import fallback (retried extensionless, so `.web.ts` files win in the web build) — touch with care |
+| `server.mjs` | Dependency-free static server for `dist/`, used on Railway |
+| `../../railway.json`, `../../railpack.json` | Railway start command, and the build recipe (installs the mobile and core workspaces, runs `build:web`) |
 | `public/` | Web build only: `index.html` template (meta tags, share previews), manifest, icons, `sw.js`, `privacy.html`, font licence. Copied as is by `npm run build:web` |
 | `babel.config.js` | `babel-preset-expo` + worklets plugin |
 | `assets/` | App icon, Android adaptive icon layers, splash |
@@ -95,4 +95,4 @@ When matching the mobile look to the web, read the relevant rules in
 
 Commands (run in `apps/mobile`): `npx expo start --lan` (dev server for Expo Go),
 `npm run typecheck`, `npx expo export --platform ios|android` (bundle check),
-`npm run build:web` (web build into `dist/`; serve it with `SITE_DIR=apps/mobile/dist node apps/web/server.js`).
+`npm run build:web` (web build into `dist/`; serve it with `node server.mjs`).

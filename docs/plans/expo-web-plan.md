@@ -20,7 +20,7 @@ new build passes every acceptance criterion in the issue.
 | Manifest, icons, privacy policy | `public/` | `public/`, copied unchanged |
 | Service worker | `public/sw.js` (cache `slashfacts-v1`) | `public/sw.js` (cache `slashfacts-v2`, so the old build's files are dropped), registered by `src/browserSetup.web.ts` |
 | Build | `vite build` | `npm run build:web` (`expo export -p web`) into `apps/mobile/dist` |
-| Hosting | `apps/web/server.js` | the same server, pointed at the new build with `SITE_DIR` |
+| Hosting | `apps/web/server.js` | `apps/mobile/server.mjs`, the same dependency-free server, serving `apps/mobile/dist` |
 
 Metro picks the `.web.ts` files because `metro.config.js` now retries an unresolved `.js`
 import without its extension, which lets Metro apply its platform extensions.
@@ -39,10 +39,11 @@ Layout fixes the web build needed, all in shared code and invisible on phones:
 
 1. [x] Make `apps/mobile` build for the web.
 2. [x] Web storage, haptics, page template, installable-app files.
-3. [ ] Deploy the build to a second Railway service next to `slashfacts.proto.fish`.
-4. [ ] Compare both against the acceptance criteria in #9, on real devices.
-5. [ ] Cut over: point `slashfacts.proto.fish` at the new build, delete `apps/web`, update
-   `AGENTS_INDEX.md`, `AGENTS.md`, `docs/architecture.md` and `railpack.json`, write the ADR.
+3. [x] ~~Deploy the build to a second Railway service.~~ Skipped: with few users on the live
+   site, the cut-over happened directly, with `apps/web` kept for a one-commit rollback.
+4. [x] Cut over: the Railway service builds and serves the Expo web export.
+5. [ ] Check the acceptance criteria in #9 on the live site, on real devices.
+6. [ ] Delete `apps/web` (and the root scripts that still point at it), write the ADR.
 
 ## Progress log
 
@@ -59,3 +60,7 @@ Layout fixes the web build needed, all in shared code and invisible on phones:
     (121 KB each) against one 90 KB woff2. To be judged against the criteria in #9.
   - Not yet checked: Safari and Firefox, a trackpad, real phones, offline use and install
     (the service worker needs HTTPS or localhost).
+- **2026-10-02 — Cut over.** `railpack.json` now builds the Expo web export and `railway.json`
+  starts `apps/mobile/server.mjs`. Rolling back is reverting that commit: `apps/web` is still
+  in the tree and builds as before. Visitors keep their progress (same origin, same IndexedDB
+  database), and the new service worker's cache name drops the old build's cached files.

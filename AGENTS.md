@@ -22,8 +22,10 @@ through the digits of the result. It is an npm-workspaces monorepo:
 
 - `packages/core`: a pure TypeScript engine (facts, scheduler, gesture geometry). No DOM,
   no React Native, no dependencies.
-- `apps/web`: Vite + React PWA, deployed to Railway.
-- `apps/mobile`: an Expo app for iOS and Android.
+- `apps/mobile`: an Expo app for iOS, Android and the web. Its web export is the website,
+  deployed to Railway.
+- `apps/web`: the previous Vite + React website, no longer deployed and due to be deleted
+  (issue #9). Don't add features to it.
 
 Read `AGENTS_INDEX.md` to find files, and `docs/design.md` before changing any gameplay
 behaviour.
