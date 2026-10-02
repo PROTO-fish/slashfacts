@@ -49,7 +49,7 @@ function ShellFor({ app }: { app: ReturnType<typeof useAppState> }) {
   const insets = useSafeAreaInsets();
   const viewport = useViewport();
   // A framed card's rounded corners would clip the wordmark at the usual padding.
-  const cornerRadius = viewport.framed ? Math.round(viewport.height * 0.059) : 0;
+  const cornerRadius = viewport.framed ? Math.round(viewport.height * 0.04) : 0;
   const barPadX = Math.max(metrics.padX, Math.round(cornerRadius * 0.55));
   const [screen, setScreen] = useState<Screen>('home');
 
