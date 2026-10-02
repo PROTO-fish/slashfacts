@@ -59,8 +59,17 @@ analytics, crash reporting, ads, or third-party SDKs. The Android release build 
 asking for `VIBRATE` only (see `docs/licensing-audit.md`). Any new dependency must use a
 GPL-3.0-compatible license and be free software, or the F-Droid build breaks.
 
-## Pull requests
+## Contributing: issues first, pull requests on request
 
+The contribution rules live in `CONTRIBUTING.md`; read it before opening anything on
+GitHub. They apply to every agent, whoever it works for:
+
+- **Every change starts from an issue.** Find the existing one or open it, then link it from
+  the branch's pull request.
+- **Never open a pull request until a maintainer asks for one**, in the issue or directly to
+  you. Finishing the work isn't a request: commit on the branch, stop, and report back.
+- Opening an issue or a pull request publishes on someone's behalf. Show the person you work
+  for the draft first, unless they've told you to post it.
 - Every commit is signed off (`git commit -s`), per the DCO in `CONTRIBUTING.md`.
 - One scoped change per branch and PR (see Branching below). Titles follow Conventional
   Commits.

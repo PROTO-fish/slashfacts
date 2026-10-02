@@ -18,6 +18,7 @@ npm workspaces monorepo (`package.json`: `packages/*`, `apps/*`).
 | `docs/design.md` | Product rules and design rationale — read before changing behaviour. |
 | `docs/architecture.md` | Code layout, storage, mobile, deployment. |
 | `AGENTS.md` | Branching, worktrees, commits, versioning. |
+| `CONTRIBUTING.md` | Contribution rules: issue first, pull request only on request, DCO sign-off. |
 
 ## Find by task
 
