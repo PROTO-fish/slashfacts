@@ -103,15 +103,12 @@ function png(grey) {
 }
 
 const day = new Uint8Array(SIZE * SIZE);
-const night = new Uint8Array(SIZE * SIZE);
 for (let y = 0; y < SIZE; y++) {
   for (let x = 0; x < SIZE; x++) {
     const g = Math.max(0, Math.min(255, Math.round(brightness(x, y) * STRENGTH)));
     day[y * SIZE + x] = g; // light marks on the black ink
-    night[y * SIZE + x] = 255 - g; // the same paper, inverted for the white ink at night
   }
 }
 
 const dir = new URL('../assets/backdrop/', import.meta.url);
 writeFileSync(new URL('crumple-day.png', dir), png(day));
-writeFileSync(new URL('crumple-night.png', dir), png(night));

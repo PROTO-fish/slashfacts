@@ -1,11 +1,7 @@
 import type { ImageSourcePropType } from 'react-native';
 
 /**
- * Crumpled black paper behind the framed card on a desktop window, as seamless tiles from
- * scripts/generate-backdrop.mjs. The night tile is the same paper inverted, for the white
- * ink backdrop.
+ * Crumpled black paper behind the framed card on a desktop window, as a seamless tile from
+ * scripts/generate-backdrop.mjs.
  */
-export const BACKDROP_TEXTURE: { day: ImageSourcePropType; night: ImageSourcePropType } | null = {
-  day: require('../../assets/backdrop/crumple-day.png'),
-  night: require('../../assets/backdrop/crumple-night.png'),
-};
+export const BACKDROP_TEXTURE: ImageSourcePropType | null = require('../../assets/backdrop/crumple-day.png');

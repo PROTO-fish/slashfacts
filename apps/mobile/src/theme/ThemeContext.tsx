@@ -1,17 +1,9 @@
-import { createContext, useContext, useMemo, type ReactNode } from 'react';
-import { DAY, NIGHT, type Palette } from './tokens.js';
-
-const PaletteContext = createContext<Palette>(DAY);
+import { DAY, type Palette } from './tokens.js';
 
 /**
- * App.tsx owns `night` as part of Settings (persisted, same as the web app); this context
- * just makes the resulting palette available without threading it through every prop list.
+ * The app is day only: black ink on white paper. Styles still ask for their colours here
+ * rather than hard-coding them, so the two-colour discipline stays in one place.
  */
-export function ThemeProvider({ night, children }: { night: boolean; children: ReactNode }) {
-  const palette = useMemo(() => (night ? NIGHT : DAY), [night]);
-  return <PaletteContext.Provider value={palette}>{children}</PaletteContext.Provider>;
-}
-
 export function usePalette(): Palette {
-  return useContext(PaletteContext);
+  return DAY;
 }

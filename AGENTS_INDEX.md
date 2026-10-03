@@ -53,9 +53,10 @@ version that Metro picks for the web build; change both together.
 | Home (table picker + start) | `screens/Home.tsx` |
 | Round + session summary | `screens/Practice.tsx` |
 | FACTS screen | `screens/Stats.tsx` |
+| ABOUT screen (version, PROTO/fish, GPL notice, links, font credit) | `screens/About.tsx`; links and contact live in `BRAND` (`packages/core/src/brand.ts`) |
 | Table picker (reads `stroke.visits`, never `strokeDigits()`) | `components/TableSelect.tsx` |
 | Score panels | `components/Result.tsx` |
-| Night-mode toggle | `components/NightToggle.tsx` |
+| PROTO/fish mark (home credit, blinking ABOUT title) | `components/Mark.tsx` |
 | Styling | `theme/tokens.ts`, `theme/fonts.ts`, `theme/useBreakpoint.ts` (breakpoints, wordmark size), `theme/ThemeContext.tsx`, plus per-component `StyleSheet`s |
 | Big START / HOME buttons | `components/Launch.tsx` |
 | Inline SVG icons | `components/icons.tsx` |
@@ -82,7 +83,7 @@ Those name the previous Vite web app, removed in favour of the Expo web build (s
 | `babel.config.js` | `babel-preset-expo` + worklets plugin |
 | `assets/` | App icon, Android adaptive icon layers, splash |
 | `assets/fonts/` | Four static Archivo TTFs (instanced from the variable font) + `OFL.txt` |
-| `assets/backdrop/` | Day and night crumpled-paper tiles behind the desktop frame (web only); regenerate with `node scripts/generate-backdrop.mjs` |
+| `assets/backdrop/` | Crumpled-paper tile behind the desktop frame (web only); regenerate with `node scripts/generate-backdrop.mjs` |
 | `src/assets.d.ts` | `*.ttf` module typing |
 
 Commands (run in `apps/mobile`): `npx expo start --lan` (dev server for Expo Go),

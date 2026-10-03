@@ -1,8 +1,7 @@
 /**
  * The app is two colours, and every style names them through these tokens — the same
- * discipline theme.css keeps with --ink/--paper, so night mode stays one swap rather than
- * a second stylesheet. border/gap/padX/footerTier scale up at the tablet breakpoint; see
- * useBreakpoint().
+ * discipline theme.css keeps with --ink/--paper. border/gap/padX/footerTier scale up at
+ * the tablet breakpoint; see useBreakpoint().
  */
 export interface Palette {
   readonly ink: string;
@@ -10,7 +9,6 @@ export interface Palette {
 }
 
 export const DAY: Palette = { ink: '#000', paper: '#fff' };
-export const NIGHT: Palette = { ink: '#fff', paper: '#000' };
 
 export interface Metrics {
   readonly border: number;

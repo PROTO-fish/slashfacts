@@ -6,38 +6,37 @@ import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BRAND } from '@slash/core';
 import { FONTS, FONT_ASSETS } from './theme/fonts.js';
-import { ThemeProvider, usePalette } from './theme/ThemeContext.js';
+import { usePalette } from './theme/ThemeContext.js';
 import { useBreakpoint } from './theme/useBreakpoint.js';
 import { ViewportProvider, useViewport } from './theme/viewport.js';
 import { useAppState } from './state.js';
 import { Home } from './screens/Home.js';
 import { Practice } from './screens/Practice.js';
 import { Stats } from './screens/Stats.js';
+import { About } from './screens/About.js';
 import { Splash } from './components/Splash.js';
 import { BACKDROP_TEXTURE } from './components/backdropTexture.js';
 
-type Screen = 'home' | 'practice' | 'stats';
+type Screen = 'home' | 'practice' | 'stats' | 'about';
 
 /**
  * Native port of apps/web/src/App.tsx. One screen to choose from, one to play, one to
  * look back at — no navigation bar, since home asks which tables and starts the round, the
- * round returns to it, and FACTS is a page you visit rather than a tab you live in.
+ * round returns to it, and FACTS is a page you visit rather than a tab you live in. ABOUT,
+ * reached from the PROTO/fish mark on home, is the same kind of page.
  *
- * The palette lives on `settings.night`, which useAppState loads asynchronously from
- * storage, so ThemeProvider has to sit *inside* the component that calls useAppState
- * (here) rather than wrapping it from outside — the RN equivalent of the web version
- * writing `document.documentElement.dataset.theme` in an effect once settings arrive.
+ * Day only: black ink on white paper, with a dark status bar.
  */
-function ThemedShell({ onReady }: { onReady: () => void }) {
+function AppShell({ onReady }: { onReady: () => void }) {
   const app = useAppState();
   useEffect(() => {
     if (app.ready) onReady();
   }, [app.ready, onReady]);
   return (
-    <ThemeProvider night={app.settings.night}>
-      <StatusBar style={app.settings.night ? 'light' : 'dark'} />
+    <>
+      <StatusBar style="dark" />
       <ShellFor app={app} />
-    </ThemeProvider>
+    </>
   );
 }
 
@@ -65,7 +64,7 @@ function ShellFor({ app }: { app: ReturnType<typeof useAppState> }) {
     <View style={[styles.backdrop, viewport.framed && styles.backdropFramed, { backgroundColor: palette.ink }]}>
       {viewport.framed && BACKDROP_TEXTURE && (
         <Image
-          source={app.settings.night ? BACKDROP_TEXTURE.night : BACKDROP_TEXTURE.day}
+          source={BACKDROP_TEXTURE}
           resizeMode="repeat"
           // Explicit size: on web an asset's own dimensions otherwise win over absoluteFill,
           // and the tile is drawn once in the corner instead of repeated.
@@ -126,9 +125,12 @@ function ShellFor({ app }: { app: ReturnType<typeof useAppState> }) {
         </View>
 
         {!app.ready && <View style={styles.main} />}
-        {app.ready && screen === 'home' && <Home app={app} onStart={start} onStats={() => setScreen('stats')} />}
+        {app.ready && screen === 'home' && (
+          <Home app={app} onStart={start} onStats={() => setScreen('stats')} onAbout={() => setScreen('about')} />
+        )}
         {app.ready && screen === 'practice' && <Practice app={app} onHome={() => setScreen('home')} />}
         {app.ready && screen === 'stats' && <Stats app={app} onHome={() => setScreen('home')} />}
+        {app.ready && screen === 'about' && <About onHome={() => setScreen('home')} />}
       </View>
     </View>
   );
@@ -146,7 +148,7 @@ export default function App() {
       <SafeAreaProvider>
         {fontsLoaded && (
           <ViewportProvider>
-            <ThemedShell onReady={markReady} />
+            <AppShell onReady={markReady} />
           </ViewportProvider>
         )}
         <Splash ready={ready} />
