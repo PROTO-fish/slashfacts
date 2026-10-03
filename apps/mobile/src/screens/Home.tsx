@@ -1,10 +1,10 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { sanitizeTables } from '@slash/core';
 import { usePalette } from '../theme/ThemeContext.js';
 import { FONTS } from '../theme/fonts.js';
 import { useBreakpoint } from '../theme/useBreakpoint.js';
 import { Launch } from '../components/Launch.js';
-import { NightToggle } from '../components/NightToggle.js';
+import { Mark } from '../components/Mark.js';
 import { TableSelect } from '../components/TableSelect.js';
 import type { AppState } from '../state.js';
 
@@ -16,10 +16,12 @@ export function Home({
   app,
   onStart,
   onStats,
+  onAbout,
 }: {
   app: AppState;
   onStart: () => void;
   onStats: () => void;
+  onAbout: () => void;
 }) {
   const palette = usePalette();
   const { metrics } = useBreakpoint();
@@ -39,7 +41,10 @@ export function Home({
       </View>
 
       <View style={[styles.footer, { height: metrics.footerTier }]}>
-        <NightToggle on={settings.night} onToggle={() => setSettings({ ...settings, night: !settings.night })} />
+        {/* Who made it, and the way in to About. */}
+        <Pressable onPress={onAbout} accessibilityRole="link" accessibilityLabel="About SlashFacts, by PROTO/fish" hitSlop={14}>
+          <Mark height={14} color={palette.ink} />
+        </Pressable>
       </View>
     </View>
   );

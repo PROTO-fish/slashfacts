@@ -16,8 +16,8 @@ SplashScreen.preventAutoHideAsync().catch(() => {});
 /**
  * The opening beat: the brand mark on white, then a short fade into the app. Drawn over
  * everything rather than instead of it, so fonts and saved progress load underneath and
- * the first screen is already there when it fades. Always white, even in night mode,
- * because the native splash before it is.
+ * the first screen is already there when it fades. White, like the native splash before
+ * it.
  */
 export function Splash({ ready }: { ready: boolean }) {
   const progress = useRef(new Animated.Value(0)).current;

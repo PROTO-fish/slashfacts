@@ -16,8 +16,9 @@ don't. The app exists to build instant recall, and every rule below serves that.
 - **The visual language is binary too.** Black and white, brutalist, heavy Archivo type,
   no colour and no decoration. A known fact gets a tick and an unknown one gets nothing:
   no stars, no progress bars, no "almost". The monochrome palette isn't a style choice
-  sitting on top of the app. It is the app's judgement made visible. Night mode swaps the
-  two colours and adds none.
+  sitting on top of the app. It is the app's judgement made visible. There is one
+  palette, black ink on white paper, and no night mode (see
+  `docs/adr/0002-day-only.md`).
 - **Only first-time answers count.** A fact answered after its answer was shown is reading,
   not recall (see *Mastery is one tick*).
 

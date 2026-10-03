@@ -53,7 +53,7 @@ partial credit. Either you know it, or you don't yet.
   count as knowing it.
 - **✅ One tick per fact.** The **FACTS** map ticks a fact once it has been answered right
   *first time*. A child can read it at a glance and explain the rule in one sentence.
-- **📳 Feels physical.** Haptic feedback on every answer (Android and iOS), plus a night mode.
+- **📳 Feels physical.** Haptic feedback on every answer (Android and iOS).
 
 ## Private by design
 

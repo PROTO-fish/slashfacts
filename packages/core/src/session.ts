@@ -15,15 +15,12 @@ export interface Settings {
   readonly tables: readonly number[];
   readonly adaptive: boolean;
   readonly haptics: boolean;
-  /** Ink and paper swapped. A display preference, not a game rule. */
-  readonly night: boolean;
 }
 
 export const DEFAULT_SETTINGS: Settings = {
   tables: [...ALL_TABLES],
   adaptive: true,
   haptics: true,
-  night: false,
 };
 
 export const ROUND_LENGTH = 10;
