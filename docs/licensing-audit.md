@@ -37,6 +37,22 @@ Checked with `./gradlew :app:dependencies --configuration releaseRuntimeClasspat
 `fdroid scanner --exit-code` (fdroidserver 2.4.5) on the release APK exits 0: no known
 non-free classes, and no extra signing blocks.
 
+`fdroid build` also scans the source tree after `npm ci` and `expo prebuild`, and that scan
+is stricter: it flagged 89 files under `node_modules`. They fall into three groups, and the
+recipe (`docs/fdroid/fish.proto.slashfacts.yml`) handles each the way the Expo apps
+already in fdroiddata do:
+
+- **Prebuilt Expo module AARs/JARs** (`local-maven-repo/`, `prebuilds/`). The recipe sets
+  Expo autolinking's `buildFromSource: [".*"]`, so every module compiles from source and
+  the prebuilt files go unused; `scandelete` removes them.
+- **Files that never reach the Android build:** iOS strings, xcframeworks, macOS and
+  Windows tools, `esbuild`, `dotslash`, and expo-sqlite's opt-in `libsql`/`vec` libraries
+  and wasm (the default build compiles SQLite from its vendored C source). `scandelete`
+  removes them.
+- **Needed at build time:** the Linux `hermesc` (compiles the JS bundle to Hermes bytecode)
+  and four Gradle files that declare `node_modules` Maven repos. These are `scanignore`d,
+  as in other accepted React Native recipes.
+
 ## Permissions (release APK)
 
 | Permission | Why |
@@ -54,6 +70,7 @@ get `INTERNET` back through `plugins/withDebugInternet.js`, so they can still lo
 |---|---|
 | Archivo typeface: the static TTF instances in `apps/mobile/assets/fonts/` | SIL OFL 1.1, © The Archivo Project Authors. `OFL.txt` ships next to them, and the website serves it at `/fonts/OFL.txt`. |
 | App icon and brand mark (`/×`) | Original work by the publisher, GPL-3.0 with the rest of the project |
+| PROTO/fish mark (`>_`, `components/Mark.tsx`) | The publisher's own logo, drawn from `logo-mark.svg` on proto.fish |
 
 ## Anti-features
 
