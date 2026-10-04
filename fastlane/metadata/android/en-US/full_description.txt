@@ -3,6 +3,7 @@
 <li>Pick the tables to practise, and each round adapts to the facts you keep missing or answer slowly.</li>
 <li>A missed fact shows its answer and comes straight back until it is answered right.</li>
 <li>The Facts map ticks every fact answered right first time — one mark a child can read at a glance.</li>
-<li>Haptic feedback on every answer, dark mode, fully usable offline.</li>
+<li>Haptic feedback on every answer, fully usable offline.</li>
 </ul>
 <p>Designed for children: no account, no network access, no analytics, no ads. Everything stays on the device.</p>
+<p>Made by PROTO/fish · https://proto.fish</p>
