@@ -4,6 +4,7 @@ import { ANSWER_LIMIT_MS, parseFactId, product, summarizeRound } from '@slash/co
 import { usePalette } from '../theme/ThemeContext.js';
 import { FONTS } from '../theme/fonts.js';
 import { useBreakpoint } from '../theme/useBreakpoint.js';
+import { useScaledStyles } from '../theme/scaledStyles.js';
 import { Result } from '../components/Result.js';
 import { Launch } from '../components/Launch.js';
 import { RestartIcon, BackIcon } from '../components/icons.js';
@@ -17,7 +18,8 @@ import type { AppState } from '../state.js';
  */
 export function Practice({ app, onHome }: { app: AppState; onHome: () => void }) {
   const palette = usePalette();
-  const { metrics } = useBreakpoint();
+  const { metrics, scale } = useBreakpoint();
+  const styles = useScaledStyles(sheet);
   const { session, settings } = app;
   const live = session && !session.done ? parseFactId(session.current) : null;
 
@@ -62,13 +64,13 @@ export function Practice({ app, onHome }: { app: AppState; onHome: () => void })
           <Launch
             onPress={app.newRound}
             accessibilityLabel="Start another round"
-            icon={<RestartIcon size={26} color={palette.paper} />}
+            icon={<RestartIcon size={26 * scale} color={palette.paper} />}
           />
           <Launch
             onPress={onHome}
             secondary
             accessibilityLabel="Home"
-            icon={<BackIcon size={20} color={palette.ink} />}
+            icon={<BackIcon size={20 * scale} color={palette.ink} />}
           />
         </View>
       </View>
@@ -97,7 +99,7 @@ export function Practice({ app, onHome }: { app: AppState; onHome: () => void })
   );
 }
 
-const styles = StyleSheet.create({
+const sheet = StyleSheet.create({
   screen: { flex: 1, alignItems: 'center', paddingTop: 16, paddingBottom: 18 },
   practice: { flex: 1, width: '100%', maxWidth: 420 },
   doneScroll: { flex: 1, width: '100%', maxWidth: 420 },

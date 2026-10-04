@@ -9,6 +9,7 @@ import { FONTS, FONT_ASSETS } from './theme/fonts.js';
 import { usePalette } from './theme/ThemeContext.js';
 import { useBreakpoint } from './theme/useBreakpoint.js';
 import { ViewportProvider, useViewport } from './theme/viewport.js';
+import { useScaledStyles } from './theme/scaledStyles.js';
 import { useAppState } from './state.js';
 import { Home } from './screens/Home.js';
 import { Practice } from './screens/Practice.js';
@@ -29,12 +30,14 @@ type Screen = 'home' | 'practice' | 'stats' | 'about';
  */
 function AppShell({ onReady }: { onReady: () => void }) {
   const app = useAppState();
+  // On a tablet the status bar sits over the dark backdrop either side of the column.
+  const { columned } = useViewport();
   useEffect(() => {
     if (app.ready) onReady();
   }, [app.ready, onReady]);
   return (
     <>
-      <StatusBar style="dark" />
+      <StatusBar style={columned ? 'light' : 'dark'} />
       <ShellFor app={app} />
     </>
   );
@@ -47,6 +50,7 @@ function ShellFor({ app }: { app: ReturnType<typeof useAppState> }) {
   const { metrics, wordmarkSize } = useBreakpoint();
   const insets = useSafeAreaInsets();
   const viewport = useViewport();
+  const styles = useScaledStyles(sheet);
   // A framed card's rounded corners would clip the wordmark at the usual padding.
   const cornerRadius = viewport.framed ? Math.round(viewport.height * 0.04) : 0;
   const barPadX = Math.max(metrics.padX, Math.round(cornerRadius * 0.55));
@@ -61,8 +65,16 @@ function ShellFor({ app }: { app: ReturnType<typeof useAppState> }) {
     // On a desktop window the app is drawn as a phone-shaped card centred on the ink
     // backdrop (see viewport.tsx), rather than a phone-width column stretched to the
     // window's full height.
-    <View style={[styles.backdrop, viewport.framed && styles.backdropFramed, { backgroundColor: palette.ink }]}>
-      {viewport.framed && BACKDROP_TEXTURE && (
+    // On a tablet it is a full-height paper column on the same backdrop. On a phone the
+    // paper simply fills the screen.
+    <View
+      style={[
+        styles.backdrop,
+        viewport.framed && styles.backdropFramed,
+        { backgroundColor: viewport.framed || viewport.columned ? palette.ink : palette.paper },
+      ]}
+    >
+      {(viewport.framed || viewport.columned) && (
         <Image
           source={BACKDROP_TEXTURE}
           resizeMode="repeat"
@@ -85,7 +97,9 @@ function ShellFor({ app }: { app: ReturnType<typeof useAppState> }) {
                 borderRadius: cornerRadius,
                 overflow: 'hidden',
               }
-            : styles.app,
+            : viewport.columned
+              ? [styles.app, styles.column, { width: viewport.width * viewport.scale }]
+              : styles.app,
           { backgroundColor: palette.paper, paddingTop: insets.top, paddingBottom: insets.bottom },
         ]}
       >
@@ -157,11 +171,12 @@ export default function App() {
   );
 }
 
-const styles = StyleSheet.create({
+const sheet = StyleSheet.create({
   backdrop: { flex: 1 },
   backdropFramed: { alignItems: 'center', justifyContent: 'center' },
   fill: { width: '100%', height: '100%' },
-  app: { flex: 1, width: '100%', maxWidth: 560, alignSelf: 'center' },
+  app: { flex: 1, width: '100%' },
+  column: { alignSelf: 'center' },
   bar: {
     flexDirection: 'row',
     alignItems: 'center',

@@ -6,6 +6,7 @@ import { activeDigits, pathThroughCells, strokePath, type Cell } from '@slash/co
 import { usePalette } from '../theme/ThemeContext.js';
 import { FONTS } from '../theme/fonts.js';
 import { useBreakpoint } from '../theme/useBreakpoint.js';
+import { useScaledStyles } from '../theme/scaledStyles.js';
 import { useSlashNative } from './useSlashNative.js';
 
 const KEYS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -33,7 +34,8 @@ interface Props {
  */
 export function SlashPad({ status, onSlash, onTap, pending, resetKey }: Props) {
   const palette = usePalette();
-  const { metrics } = useBreakpoint();
+  const { metrics, scale } = useBreakpoint();
+  const styles = useScaledStyles(sheet);
   const padRef = useRef<View>(null);
   const cellRefs = useRef(new Map<number, View>());
   const cells = useRef<Cell[]>([]);
@@ -108,13 +110,17 @@ export function SlashPad({ status, onSlash, onTap, pending, resetKey }: Props) {
   // theme.css: .cell.zero's height is clamp(64px, 24cqw, 140px) of the PAD's own width, not
   // the viewport's, so it scales with the digit keys beside it. size.w is that measured
   // pad width (from onLayout, the RN equivalent of the container query).
-  const zeroHeight = size.w > 0 ? Math.min(140, Math.max(64, size.w * 0.24)) : 100;
+  const zeroHeight = size.w > 0 ? Math.min(140 * scale, Math.max(64 * scale, size.w * 0.24)) : 100 * scale;
   // .cell font-size: clamp(2rem, 11vw, 4rem) — approximated here off the measured cell
   // width (each of the 3 columns), which tracks the same "grows with the pad" intent.
   // Floored: three exact thirds sum to the full width, and a browser's sub-pixel rounding
-  // then wraps the third key onto its own row.
-  const cellWidth = size.w > 0 ? Math.floor((size.w - metrics.gap * 2) / 3) : 100;
-  const digitFontSize = Math.min(64, Math.max(32, cellWidth * 0.42));
+  // then wraps the third key onto its own row. A tablet's fractional zoom (1.116 on a 9.7"
+  // iPad) can measure the pad a hair over its real width too — 446.5 read as 447 — so there
+  // a point is left spare, and `space-between` on the grid gives it to the gaps (see
+  // TableSelect, which does the same).
+  const spare = scale === 1 ? 0 : 1;
+  const cellWidth = size.w > 0 ? Math.floor((size.w - metrics.gap * 2 - spare) / 3) : 100 * scale;
+  const digitFontSize = Math.min(64 * scale, Math.max(32 * scale, cellWidth * 0.42));
 
   const cellStyle = (digit: number) => [
     styles.cell,
@@ -172,8 +178,8 @@ export function SlashPad({ status, onSlash, onTap, pending, resetKey }: Props) {
         {/* A white line inside a black casing reads on both the paper and the lit cells. */}
         {showStroke && path && size.w > 0 && (
           <Svg style={StyleSheet.absoluteFill} width={size.w} height={size.h} pointerEvents="none">
-            <Path d={path} stroke={palette.ink} strokeWidth={22} strokeLinecap="round" strokeLinejoin="round" fill="none" />
-            <Path d={path} stroke={palette.paper} strokeWidth={12} strokeLinecap="round" strokeLinejoin="round" fill="none" />
+            <Path d={path} stroke={palette.ink} strokeWidth={22 * scale} strokeLinecap="round" strokeLinejoin="round" fill="none" />
+            <Path d={path} stroke={palette.paper} strokeWidth={12 * scale} strokeLinecap="round" strokeLinejoin="round" fill="none" />
           </Svg>
         )}
       </View>
@@ -181,13 +187,14 @@ export function SlashPad({ status, onSlash, onTap, pending, resetKey }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const sheet = StyleSheet.create({
   pad: {
     width: '100%',
   },
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    justifyContent: 'space-between',
   },
   cell: {
     alignItems: 'center',

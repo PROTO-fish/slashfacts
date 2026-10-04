@@ -4,6 +4,7 @@ import { RECENT_WINDOW, practiceNext, tableProgress } from '@slash/core';
 import { usePalette } from '../theme/ThemeContext.js';
 import { FONTS } from '../theme/fonts.js';
 import { useBreakpoint } from '../theme/useBreakpoint.js';
+import { useScaledStyles } from '../theme/scaledStyles.js';
 import { Launch } from '../components/Launch.js';
 import { BackIcon, ResetIcon } from '../components/icons.js';
 import type { AppState } from '../state.js';
@@ -19,6 +20,7 @@ const seconds = (ms: number) => `${(ms / 1000).toFixed(1)}s`;
  * square broke up into stray ticks on Android.
  */
 function History({ recent, ink }: { recent: readonly boolean[]; ink: string }) {
+  const styles = useScaledStyles(sheet);
   const slots = [...Array<null>(RECENT_WINDOW - recent.length).fill(null), ...recent];
   const label = `${recent.filter(Boolean).length} of last ${recent.length}`;
   return (
@@ -45,7 +47,8 @@ function History({ recent, ink }: { recent: readonly boolean[]; ink: string }) {
  */
 export function Stats({ app, onHome }: { app: AppState; onHome: () => void }) {
   const palette = usePalette();
-  const { metrics } = useBreakpoint();
+  const { metrics, scale } = useBreakpoint();
+  const styles = useScaledStyles(sheet);
   const [armed, setArmed] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -70,7 +73,7 @@ export function Stats({ app, onHome }: { app: AppState; onHome: () => void }) {
   const tables = tableProgress(app.stats);
   const practice = practiceNext(app.stats);
   const ink = palette.ink;
-  const ruleStyle = { borderTopColor: ink, borderTopWidth: 2 };
+  const ruleStyle = { borderTopColor: ink, borderTopWidth: 2 * scale };
 
   return (
     <View style={[styles.screen, { paddingHorizontal: metrics.padX }]}>
@@ -132,7 +135,7 @@ export function Stats({ app, onHome }: { app: AppState; onHome: () => void }) {
       </ScrollView>
 
       <View style={styles.actions}>
-        <Launch onPress={onHome} secondary accessibilityLabel="Home" icon={<BackIcon size={20} color={ink} />} />
+        <Launch onPress={onHome} secondary accessibilityLabel="Home" icon={<BackIcon size={20 * scale} color={ink} />} />
       </View>
 
       <View style={[styles.footer, { height: metrics.footerTier }]}>
@@ -143,7 +146,7 @@ export function Stats({ app, onHome }: { app: AppState; onHome: () => void }) {
           hitSlop={16}
           style={styles.resetButton}
         >
-          <ResetIcon size={18} color={ink} />
+          <ResetIcon size={18 * scale} color={ink} />
           {armed && (
             <Text style={[styles.resetLabel, { color: palette.paper, backgroundColor: ink, fontFamily: FONTS.extraBold }]}>
               RESET · TAP AGAIN
@@ -155,8 +158,9 @@ export function Stats({ app, onHome }: { app: AppState; onHome: () => void }) {
   );
 }
 
-const styles = StyleSheet.create({
-  screen: { flex: 1, paddingTop: 16, gap: 16 },
+const sheet = StyleSheet.create({
+  // Home's 420pt column plus its 16pt margins: a phone fills it, a tablet centres it.
+  screen: { flex: 1, width: '100%', maxWidth: 452, alignSelf: 'center', paddingTop: 16, gap: 16 },
   scroll: { flex: 1 },
   main: { gap: 14, paddingBottom: 16 },
   // .page-title

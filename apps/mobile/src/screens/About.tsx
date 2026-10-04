@@ -3,6 +3,7 @@ import { BRAND } from '@slash/core';
 import { usePalette } from '../theme/ThemeContext.js';
 import { FONTS } from '../theme/fonts.js';
 import { useBreakpoint } from '../theme/useBreakpoint.js';
+import { useScaledStyles } from '../theme/scaledStyles.js';
 import { Launch } from '../components/Launch.js';
 import { Mark } from '../components/Mark.js';
 import { BackIcon } from '../components/icons.js';
@@ -10,6 +11,7 @@ import app from '../../app.json';
 
 /** One ruled line in a panel: what it is on the left, what tapping does on the right. */
 function LinkRow({ label, action, url, ink }: { label: string; action: string; url: string; ink: string }) {
+  const styles = useScaledStyles(sheet);
   return (
     <Pressable
       onPress={() => Linking.openURL(url)}
@@ -32,7 +34,8 @@ function LinkRow({ label, action, url, ink }: { label: string; action: string; u
  */
 export function About({ onHome }: { onHome: () => void }) {
   const palette = usePalette();
-  const { metrics } = useBreakpoint();
+  const { metrics, scale } = useBreakpoint();
+  const styles = useScaledStyles(sheet);
   const ink = palette.ink;
   const panel = [styles.panel, { borderColor: ink, borderWidth: metrics.border }];
 
@@ -40,7 +43,7 @@ export function About({ onHome }: { onHome: () => void }) {
     <View style={[styles.screen, { paddingHorizontal: metrics.padX }]}>
       <ScrollView style={styles.scroll} contentContainerStyle={styles.main}>
         <View accessible accessibilityRole="header" accessibilityLabel="About" style={styles.title}>
-          <Mark height={34} color={ink} blink />
+          <Mark height={34 * scale} color={ink} blink />
         </View>
 
         <View style={panel}>
@@ -72,7 +75,7 @@ export function About({ onHome }: { onHome: () => void }) {
       </ScrollView>
 
       <View style={styles.actions}>
-        <Launch onPress={onHome} secondary accessibilityLabel="Home" icon={<BackIcon size={20} color={ink} />} />
+        <Launch onPress={onHome} secondary accessibilityLabel="Home" icon={<BackIcon size={20 * scale} color={ink} />} />
       </View>
 
       <View style={{ height: metrics.footerTier }} />
@@ -80,8 +83,9 @@ export function About({ onHome }: { onHome: () => void }) {
   );
 }
 
-const styles = StyleSheet.create({
-  screen: { flex: 1, paddingTop: 16, gap: 16 },
+const sheet = StyleSheet.create({
+  // Home's 420pt column plus its 16pt margins: a phone fills it, a tablet centres it.
+  screen: { flex: 1, width: '100%', maxWidth: 452, alignSelf: 'center', paddingTop: 16, gap: 16 },
   scroll: { flex: 1 },
   main: { gap: 14, paddingBottom: 16 },
   // Same height as Stats' .page-title line, so the first panel starts at the same place.

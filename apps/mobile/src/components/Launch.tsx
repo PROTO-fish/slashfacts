@@ -2,6 +2,7 @@ import { Pressable, StyleSheet, Text, type StyleProp, type ViewStyle } from 'rea
 import { usePalette } from '../theme/ThemeContext.js';
 import { FONTS } from '../theme/fonts.js';
 import { useBreakpoint } from '../theme/useBreakpoint.js';
+import { useScaledStyles } from '../theme/scaledStyles.js';
 
 /**
  * Native port of theme.css's `.launch` / `.launch.second` — the one button vocabulary in
@@ -25,7 +26,8 @@ export function Launch({
   style?: StyleProp<ViewStyle>;
 }) {
   const palette = usePalette();
-  const { metrics } = useBreakpoint();
+  const { metrics, scale } = useBreakpoint();
+  const styles = useScaledStyles(sheet);
   return (
     <Pressable
       onPress={onPress}
@@ -35,8 +37,8 @@ export function Launch({
         styles.base,
         { borderColor: palette.ink, borderWidth: metrics.border },
         secondary
-          ? { backgroundColor: palette.paper, paddingVertical: 13 }
-          : { backgroundColor: palette.ink, paddingVertical: 20 },
+          ? { backgroundColor: palette.paper, paddingVertical: 13 * scale }
+          : { backgroundColor: palette.ink, paddingVertical: 20 * scale },
         icon ? styles.iconOnly : null,
         style,
       ]}
@@ -56,7 +58,7 @@ export function Launch({
   );
 }
 
-const styles = StyleSheet.create({
+const sheet = StyleSheet.create({
   base: {
     width: '100%',
     maxWidth: 420,
