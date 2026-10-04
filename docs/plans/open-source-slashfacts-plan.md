@@ -253,3 +253,11 @@ On itère jusqu'à obtenir un build vert.
   web build needs the repo root (`railpack.json`, `package-lock.json`, the `@slash/core`
   workspace), and pointing it at `/apps/web` breaks `npm install` with a 404 on `@slash/core`.
   The PROTO/fish landing page is live at https://proto.fish (GitHub Pages).
+- **2026-10-04 — Submitted to F-Droid.** The repository is public and `v1.0.0` is tagged
+  (#24 added the PROTO/fish credit, the About screen and day-only mode; #25 the store media
+  and a recipe that passes the scanner). The recipe, rewritten on the pattern of the Expo
+  apps already in fdroiddata and split into three per-ABI APKs, is
+  [fdroiddata!51170](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/51170), opened
+  from the `proto-fish/fdroiddata` fork; its CI builds all three APKs and `checkupdates`
+  finds the tag. Waiting on review. Release process and changelog naming are in
+  `docs/fdroid/README.md`.
