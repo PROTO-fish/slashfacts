@@ -1,0 +1,46 @@
+# Keeps a release PR open on main: the next version from the Conventional Commits since the last
+# release, CHANGELOG.md, and the version bumped in app.json and the package files. Merging it
+# tags vX.Y.Z and publishes a GitHub Release. See "Releasing" in AGENTS.md.
+name: release-please
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    outputs:
+      pr: ${{ steps.release.outputs.pr }}
+    steps:
+      - uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+  # release-please can set a version string but not compute an integer, so the store build
+  # numbers are derived on the release PR's branch, every time release-please rewrites it.
+  build-numbers:
+    needs: release-please
+    if: needs.release-please.outputs.pr
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ fromJSON(needs.release-please.outputs.pr).headBranchName }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node apps/mobile/scripts/sync-build-numbers.mjs
+      - name: Commit the build numbers
+        run: |
+          git diff --quiet && exit 0
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -s -am 'chore: derive store build numbers from the version'
+          git push

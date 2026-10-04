@@ -18,6 +18,8 @@ npm workspaces monorepo (`package.json`: `packages/*`, `apps/*`).
 | `docs/architecture.md` | Code layout, storage, mobile, deployment. |
 | `AGENTS.md` | Branching, worktrees, commits, versioning. |
 | `CONTRIBUTING.md` | Contribution rules: issue first, pull request only on request, DCO sign-off. |
+| `CHANGELOG.md` | Release notes, written by release-please from the commit history — don't edit by hand. |
+| `release-please-config.json`, `.release-please-manifest.json`, `.github/workflows/release-please.yml` | Versioning and releases (see "Releasing" in `AGENTS.md`). |
 
 ## Find by task
 
@@ -76,6 +78,7 @@ Those name the previous Vite web app, removed in favour of the Expo web build (s
 | `app.json` | Expo config: name, bundle ids (`fish.proto.slashfacts`), icons, splash, plugins, Android permissions (release asks for `VIBRATE` only) |
 | `plugins/withDebugInternet.js` | Re-adds `INTERNET` to the debug manifest only, so debug builds reach Metro while release stays offline |
 | `eas.json` | EAS Build profiles (development / preview / production) |
+| `scripts/sync-build-numbers.mjs` | Derives `versionCode` / `buildNumber` in `app.json` from its version; run by the release workflow |
 | `metro.config.js` | Monorepo resolution + `.js` import fallback (retried extensionless, so `.web.ts` files win in the web build) — touch with care |
 | `server.mjs` | Dependency-free static server for `dist/`, used on Railway |
 | `../../railway.json`, `../../railpack.json` | Railway start command, and the build recipe (installs the mobile and core workspaces, runs `build:web`) |
