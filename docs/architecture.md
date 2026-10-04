@@ -45,8 +45,7 @@ source is react-native-gesture-handler everywhere, feeding the same `extendStrok
 things differ on the web, each through a `.web.ts` sibling Metro picks for the web build:
 storage (IndexedDB instead of expo-sqlite) and haptics (`navigator.vibrate` instead of
 expo-haptics). [`adr/0001-one-expo-app-for-every-platform.md`](adr/0001-one-expo-app-for-every-platform.md)
-records why the separate Vite web app was dropped; [`plans/mobile-port-plan.md`](plans/mobile-port-plan.md)
-and [`plans/expo-web-plan.md`](plans/expo-web-plan.md) hold the history.
+records why the separate Vite web app was dropped.
 
 ## Web deployment (Railway)
 

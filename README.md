@@ -91,7 +91,7 @@ has zero dependencies, and is fully tested.
   tables are out, why a round's score is not a level.
 - 🧱 [**Architecture**](docs/architecture.md): code layout, storage, the mobile app,
   deployment.
-- 📚 [**All docs**](docs/README.md): plans, decision records, licensing audit.
+- 📚 [**All docs**](docs/README.md): design, architecture, decision records, licensing audit, F-Droid.
 
 ## Contributing
 

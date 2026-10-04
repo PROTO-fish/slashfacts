@@ -108,10 +108,7 @@ or delete a file it lists, update the index in the same commit.
 
 ## Docs
 
-- `docs/plans/` — implementation plans, current and past. Give a new plan a `**Status:**`
-  line right under the title (`Active`, `Completed`, `Cancelled`) and update it in place as
-  the work progresses; don't move or delete a plan once it's done, the folder is the
-  history.
+- No plan documents in the repo. Plan in the issue; decisions worth keeping become ADRs.
 - `docs/adr/` — Architecture Decision Records for significant technical decisions, one file
   per decision (`docs/adr/NNNN-short-title.md`). See `docs/adr/README.md` for the template
   and numbering convention. Write one when a decision would otherwise have to be
