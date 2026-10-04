@@ -1,3 +1,10 @@
+---
+type: Runbook
+title: Releasing through F-Droid
+description: How a tag becomes an F-Droid release, the versionCode scheme, why the recipe looks the way it does, and local `fdroid build`.
+tags: [fdroid, release]
+---
+
 # F-Droid
 
 SlashFacts is built and signed by F-Droid from this repository's tags. The build recipe

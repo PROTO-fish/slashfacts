@@ -13,7 +13,7 @@ npm workspaces monorepo (`package.json`: `packages/*`, `apps/*`).
 | `apps/mobile` | The Expo / React Native app for Android, iOS and the web. Its web export is the website, deployed to Railway. |
 | `docs/plans/` | Implementation plans, current and past (`mobile-port-plan.md` is active). |
 | `docs/adr/` | Architecture Decision Records (template in `docs/adr/README.md`). |
-| `docs/fdroid/` | F-Droid recipe (copy of the fdroiddata metadata) and `README.md`: how releases reach F-Droid, changelog naming, local `fdroid build`. |
+| `docs/fdroid/` | OKF bundle (`index.md`): the F-Droid recipe (copy of the fdroiddata metadata), `README.md` (how releases reach F-Droid, changelog naming, local `fdroid build`), `fdroiddata-contributing.md` (fdroiddata's MR rules; re-check upstream), `submission.md` (inclusion MR state). |
 | `fastlane/metadata/android/` | Store listing read by F-Droid: text, icon, screenshots, feature graphic, changelogs (`<versionCode × 1000 + 3>.txt`). |
 | `README.md` | Public landing page: what the app is, how to run it. |
 | `docs/design.md` | Product rules and design rationale — read before changing behaviour. |
