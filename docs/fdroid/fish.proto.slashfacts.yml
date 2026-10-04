@@ -1,4 +1,3 @@
-# Draft recipe for gitlab.com/fdroid/fdroiddata → metadata/fish.proto.slashfacts.yml
 Categories:
   - Science & Education
 License: GPL-3.0-only
@@ -17,16 +16,13 @@ Repo: https://github.com/PROTO-fish/slashfacts.git
 
 Builds:
   - versionName: 1.0.0
-    versionCode: 1
-    commit: v1.0.0
+    versionCode: 1001
+    commit: 5484547600f5f0d58c6a8c16ea4ce93dcedc10c4
     subdir: apps/mobile
     sudo:
+      - echo "deb https://deb.debian.org/debian forky main" > /etc/apt/sources.list.d/forky.list
       - apt-get update
-      - apt-get install -y xz-utils
-      - curl -Lo node.tar.xz https://nodejs.org/dist/v22.20.0/node-v22.20.0-linux-x64.tar.xz
-      - echo "00bbd05e306ea68b6e13e17360d0e2f680b493ef95f2fea1c4296ff7437530bc node.tar.xz"
-        | sha256sum -c -
-      - tar xJf node.tar.xz --strip-components=1 -C /usr/local
+      - apt-get install -y -t forky nodejs npm
     init: cd ../.. && npm ci
     output: android/app/build/outputs/apk/release/app-release-unsigned.apk
     prebuild:
@@ -38,6 +34,9 @@ Builds:
         node_modules/react-native-worklets/android/build.gradle.kts
       - EXPO_NO_TELEMETRY=1 npx expo prebuild -p android --no-install --clean
       - sed -i -e '/signingConfig /d' android/app/build.gradle
+      - sed -i 's/versionCode \([0-9][0-9]*\)/versionCode (\1 * 1000 + 1)/' android/app/build.gradle
+      - sed -i '/reactNativeArchitectures=/d' android/gradle.properties
+      - printf '\nreactNativeArchitectures=armeabi-v7a\n' >> android/gradle.properties
       - printf '\norg.gradle.jvmargs=-Xmx4g -XX:MaxMetaspaceSize=2g\n' >> android/gradle.properties
     scanignore:
       - node_modules/hermes-compiler/hermesc/linux64-bin/hermesc
@@ -51,8 +50,91 @@ Builds:
     build: cd android && gradle assembleRelease
     ndk: 27.1.12297006
 
+  - versionName: 1.0.0
+    versionCode: 1002
+    commit: 5484547600f5f0d58c6a8c16ea4ce93dcedc10c4
+    subdir: apps/mobile
+    sudo:
+      - echo "deb https://deb.debian.org/debian forky main" > /etc/apt/sources.list.d/forky.list
+      - apt-get update
+      - apt-get install -y -t forky nodejs npm
+    init: cd ../.. && npm ci
+    output: android/app/build/outputs/apk/release/app-release-unsigned.apk
+    prebuild:
+      - sed -i -e '1a "expo":{"autolinking":{"android":{"buildFromSource":[".*"]}}},'
+        package.json
+      - sed -i '/jvmToolchain\|JavaVersion/s/17/21/' ../../node_modules/@react-native/gradle-plugin/*/build.gradle.kts
+        ../../node_modules/@react-native/gradle-plugin/react-native-gradle-plugin/src/main/kotlin/com/facebook/react/utils/JdkConfiguratorUtils.kt
+      - sed -i 's/fromTarget("17")/fromTarget("21")/' node_modules/react-native-reanimated/android/build.gradle.kts
+        node_modules/react-native-worklets/android/build.gradle.kts
+      - EXPO_NO_TELEMETRY=1 npx expo prebuild -p android --no-install --clean
+      - sed -i -e '/signingConfig /d' android/app/build.gradle
+      - sed -i 's/versionCode \([0-9][0-9]*\)/versionCode (\1 * 1000 + 2)/' android/app/build.gradle
+      - sed -i '/reactNativeArchitectures=/d' android/gradle.properties
+      - printf '\nreactNativeArchitectures=arm64-v8a\n' >> android/gradle.properties
+      - printf '\norg.gradle.jvmargs=-Xmx4g -XX:MaxMetaspaceSize=2g\n' >> android/gradle.properties
+    scanignore:
+      - node_modules/hermes-compiler/hermesc/linux64-bin/hermesc
+      - apps/mobile/node_modules/react-native/ReactAndroid/publish.gradle
+      - apps/mobile/node_modules/expo/node_modules/expo-modules-core/android/ExpoModulesCorePlugin.gradle
+      - apps/mobile/node_modules/react-native-safe-area-context/android/build.gradle
+      - apps/mobile/node_modules/react-native-svg/android/build.gradle
+    scandelete:
+      - node_modules
+      - apps/mobile/node_modules
+    build: cd android && gradle assembleRelease
+    ndk: 27.1.12297006
+
+  - versionName: 1.0.0
+    versionCode: 1003
+    commit: 5484547600f5f0d58c6a8c16ea4ce93dcedc10c4
+    subdir: apps/mobile
+    sudo:
+      - echo "deb https://deb.debian.org/debian forky main" > /etc/apt/sources.list.d/forky.list
+      - apt-get update
+      - apt-get install -y -t forky nodejs npm
+    init: cd ../.. && npm ci
+    output: android/app/build/outputs/apk/release/app-release-unsigned.apk
+    prebuild:
+      - sed -i -e '1a "expo":{"autolinking":{"android":{"buildFromSource":[".*"]}}},'
+        package.json
+      - sed -i '/jvmToolchain\|JavaVersion/s/17/21/' ../../node_modules/@react-native/gradle-plugin/*/build.gradle.kts
+        ../../node_modules/@react-native/gradle-plugin/react-native-gradle-plugin/src/main/kotlin/com/facebook/react/utils/JdkConfiguratorUtils.kt
+      - sed -i 's/fromTarget("17")/fromTarget("21")/' node_modules/react-native-reanimated/android/build.gradle.kts
+        node_modules/react-native-worklets/android/build.gradle.kts
+      - EXPO_NO_TELEMETRY=1 npx expo prebuild -p android --no-install --clean
+      - sed -i -e '/signingConfig /d' android/app/build.gradle
+      - sed -i 's/versionCode \([0-9][0-9]*\)/versionCode (\1 * 1000 + 3)/' android/app/build.gradle
+      - sed -i '/reactNativeArchitectures=/d' android/gradle.properties
+      - printf '\nreactNativeArchitectures=x86_64\n' >> android/gradle.properties
+      - printf '\norg.gradle.jvmargs=-Xmx4g -XX:MaxMetaspaceSize=2g\n' >> android/gradle.properties
+    scanignore:
+      - node_modules/hermes-compiler/hermesc/linux64-bin/hermesc
+      - apps/mobile/node_modules/react-native/ReactAndroid/publish.gradle
+      - apps/mobile/node_modules/expo/node_modules/expo-modules-core/android/ExpoModulesCorePlugin.gradle
+      - apps/mobile/node_modules/react-native-safe-area-context/android/build.gradle
+      - apps/mobile/node_modules/react-native-svg/android/build.gradle
+    scandelete:
+      - node_modules
+      - apps/mobile/node_modules
+    build: cd android && gradle assembleRelease
+    ndk: 27.1.12297006
+
+MaintainerNotes: |-
+  android/ is generated by `expo prebuild` at build time, so checkupdates reads the
+  version from apps/mobile/app.json via UpdateCheckData. Expo modules build from source
+  (autolinking buildFromSource); hermesc and the gradle files declaring node_modules
+  maven repos are scanignored, the rest of the flagged node_modules is scandeleted.
+  The JDK toolchain and JVM targets move to 21, the buildserver's JDK; reanimated and
+  worklets hardcode Kotlin 17, hence their own sed. Per-ABI APKs: versionCode is
+  1000 * upstream + 1/2/3 for armeabi-v7a/arm64-v8a/x86_64.
+
 AutoUpdateMode: Version
 UpdateCheckMode: Tags ^v[\d.]+$
+VercodeOperation:
+  - 1000 * %c + 1
+  - 1000 * %c + 2
+  - 1000 * %c + 3
 UpdateCheckData: apps/mobile/app.json|"versionCode":\s*(\d+)|.|"version":\s*"([^"]+)"
 CurrentVersion: 1.0.0
-CurrentVersionCode: 1
+CurrentVersionCode: 1003
