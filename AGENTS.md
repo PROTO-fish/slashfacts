@@ -214,9 +214,11 @@ recipe reads `versionCode` from `app.json` and publishes 1000 × code + 1/2/3, o
 1. Every push to `main` updates one open release PR (`chore(main): release X.Y.Z`): the
    version, `CHANGELOG.md`, and the build numbers. Commit titles become the changelog, so
    write them for a reader.
-2. Before merging it, add the F-Droid changelog on the release PR's branch:
-   `fastlane/metadata/android/en-US/changelogs/<1000 × code + 3>.txt` (for 1.1.0,
+2. Before merging it, add the F-Droid changelog on the release PR's branch, one per locale:
+   `fastlane/metadata/android/<locale>/changelogs/<1000 × code + 3>.txt` (for 1.1.0,
    `10100003.txt`), plain text, 500 characters at most, drawn from the release notes.
+   F-Droid matches the file against the highest per-ABI versionCode; any other name is
+   silently ignored.
 3. Merge the release PR. That tags `vX.Y.Z` and publishes a GitHub Release with the same
    notes; F-Droid's update check picks up the tag on its own.
 4. Build and submit the store builds from the tag (EAS for Google Play and the App Store).
