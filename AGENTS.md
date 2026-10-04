@@ -198,6 +198,25 @@ Use [Semantic Versioning](https://semver.org/): `MAJOR.MINOR.PATCH`.
 - `MINOR` — new, backwards-compatible functionality.
 - `PATCH` — backwards-compatible bug fix.
 
-Bump the version when merging to `main` for a release, based on the highest-impact commit
-type included since the last release (a single breaking change forces a major bump even if
-other commits in the same release are `fix`/`feat`).
+Don't bump versions by hand: release-please (`.github/workflows/release-please.yml`) does it
+from the commit types since the last release — a single breaking change forces a major bump
+even if the other commits are `fix`/`feat`. One version covers the repo: the root
+`package.json` and the app (`apps/mobile/app.json`, `apps/mobile/package.json`).
+`packages/core` is internal and keeps its own.
+
+The store build numbers derive from the version, MAJOR×10000 + MINOR×100 + PATCH (1.1.0 →
+10100), as `android.versionCode` and `ios.buildNumber` in `app.json`
+(`apps/mobile/scripts/sync-build-numbers.mjs`). Minor and patch stay below 100. The F-Droid
+recipe reads `versionCode` from `app.json` and publishes 1000 × code + 1/2/3, one per ABI.
+
+## Releasing
+
+1. Every push to `main` updates one open release PR (`chore(main): release X.Y.Z`): the
+   version, `CHANGELOG.md`, and the build numbers. Commit titles become the changelog, so
+   write them for a reader.
+2. Before merging it, add the F-Droid changelog on the release PR's branch:
+   `fastlane/metadata/android/en-US/changelogs/<1000 × code + 3>.txt` (for 1.1.0,
+   `10100003.txt`), plain text, 500 characters at most, drawn from the release notes.
+3. Merge the release PR. That tags `vX.Y.Z` and publishes a GitHub Release with the same
+   notes; F-Droid's update check picks up the tag on its own.
+4. Build and submit the store builds from the tag (EAS for Google Play and the App Store).

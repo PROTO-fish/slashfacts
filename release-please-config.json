@@ -1,0 +1,18 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "bootstrap-sha": "5484547600f5f0d58c6a8c16ea4ce93dcedc10c4",
+  "include-component-in-tag": false,
+  "include-v-in-tag": true,
+  "packages": {
+    ".": {
+      "release-type": "node",
+      "package-name": "slashfacts",
+      "changelog-path": "CHANGELOG.md",
+      "extra-files": [
+        { "type": "json", "path": "apps/mobile/app.json", "jsonpath": "$.expo.version" },
+        { "type": "json", "path": "apps/mobile/package.json", "jsonpath": "$.version" },
+        { "type": "json", "path": "package-lock.json", "jsonpath": "$.packages['apps/mobile'].version" }
+      ]
+    }
+  }
+}
