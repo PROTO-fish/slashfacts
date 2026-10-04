@@ -22,20 +22,34 @@ export interface Breakpoint {
   /** theme.css `.wordmark { font-size: clamp(2rem, 7vw, 3.25rem) }`, floored at the 36 the
    *  phone layout was tuned to, so only windows wider than a phone see the header grow. */
   readonly wordmarkSize: number;
+  /** The tablet zoom (see useUiScale). The breakpoints above are judged in layout points;
+   *  metrics and wordmarkSize are already multiplied by it, ready to draw. */
+  readonly scale: number;
 }
 
 /** The wordmark size a phone gets; screens that budget their height count growth past it. */
 export const PHONE_WORDMARK_SIZE = 36;
 
+function scaleMetrics(metrics: Metrics, scale: number): Metrics {
+  if (scale === 1) return metrics;
+  return {
+    border: metrics.border * scale,
+    gap: metrics.gap * scale,
+    padX: metrics.padX * scale,
+    footerTier: metrics.footerTier * scale,
+  };
+}
+
 export function useBreakpoint(): Breakpoint {
-  const { width, height } = useViewport();
+  const { width, height, scale } = useViewport();
   const isWide = width >= 900;
   return {
-    metrics: isWide ? WIDE_METRICS : COMPACT_METRICS,
+    metrics: scaleMetrics(isWide ? WIDE_METRICS : COMPACT_METRICS, scale),
     isWide,
     isRoomy: width >= 700 && height >= 700,
     isLandscapeShort: width > height && height <= 650,
     isTallNarrow: width / height <= 2 / 5,
-    wordmarkSize: Math.min(52, Math.max(PHONE_WORDMARK_SIZE, width * 0.07)),
+    wordmarkSize: Math.min(52, Math.max(PHONE_WORDMARK_SIZE, width * 0.07)) * scale,
+    scale,
   };
 }

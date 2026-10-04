@@ -3,6 +3,7 @@ import type { Score } from '@slash/core';
 import { usePalette } from '../theme/ThemeContext.js';
 import { FONTS } from '../theme/fonts.js';
 import { useBreakpoint } from '../theme/useBreakpoint.js';
+import { useScaledStyles } from '../theme/scaledStyles.js';
 
 const seconds = (ms: number) => `${(ms / 1000).toFixed(1)}s`;
 
@@ -15,6 +16,7 @@ const seconds = (ms: number) => `${(ms / 1000).toFixed(1)}s`;
 export function Result({ score }: { score: Score }) {
   const palette = usePalette();
   const { metrics } = useBreakpoint();
+  const styles = useScaledStyles(sheet);
   const border = { borderColor: palette.ink, borderWidth: metrics.border };
   return (
     <View style={styles.container}>
@@ -58,7 +60,7 @@ export function Result({ score }: { score: Score }) {
   );
 }
 
-const styles = StyleSheet.create({
+const sheet = StyleSheet.create({
   container: { gap: 14, width: '100%' },
   panel: { padding: 14 },
   scorePanel: { paddingVertical: 20 },

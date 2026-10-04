@@ -12,6 +12,7 @@ import { usePalette } from '../theme/ThemeContext.js';
 import { FONTS } from '../theme/fonts.js';
 import { PHONE_WORDMARK_SIZE, useBreakpoint } from '../theme/useBreakpoint.js';
 import { useViewport } from '../theme/viewport.js';
+import { useScaledStyles } from '../theme/scaledStyles.js';
 import { SlashPad, type PadStatus } from '../slash/SlashPad.js';
 import { TimesIcon } from '../components/icons.js';
 
@@ -69,7 +70,8 @@ export function QuestionView({
   onTap,
 }: Props) {
   const palette = usePalette();
-  const { metrics, wordmarkSize } = useBreakpoint();
+  const { metrics, wordmarkSize, scale } = useBreakpoint();
+  const styles = useScaledStyles(sheet);
   const { width: windowWidth, height: windowHeight } = useViewport();
   const revealing = status === 'reveal';
   const progress = useSharedValue(1);
@@ -95,7 +97,7 @@ export function QuestionView({
 
   const onPadSlotLayout = (event: LayoutChangeEvent) => setPadSlotWidth(event.nativeEvent.layout.width);
   // .reveal-number { font-size: 72cqw } — 72% of the pad-slot's own measured width.
-  const revealFontSize = padSlotWidth > 0 ? padSlotWidth * 0.72 : 72;
+  const revealFontSize = padSlotWidth > 0 ? padSlotWidth * 0.72 : 72 * scale;
 
   /*
    * The pad is the one thing on this screen whose size is the same on every phone of this
@@ -105,7 +107,8 @@ export function QuestionView({
    * above and below, so a taller phone silently grew the gap under the clock and nothing
    * about the text or the font could correct it.
    */
-  const padWidth = padWidthFor(windowWidth, windowHeight, wordmarkSize);
+  // Worked out in layout points, like the rest of the phone tuning, then zoomed.
+  const padWidth = padWidthFor(windowWidth, windowHeight, wordmarkSize / scale) * scale;
   const rhythm = Math.round(padWidth * 0.1);
 
   return (
@@ -144,7 +147,7 @@ export function QuestionView({
             {fact.a}
           </Text>
           <View style={styles.promptTimes}>
-            <TimesIcon size={PROMPT_SIZE * 0.42} color={palette.ink} />
+            <TimesIcon size={PROMPT_SIZE * 0.42 * scale} color={palette.ink} />
           </View>
           <Text style={[styles.promptText, { color: palette.ink, fontFamily: FONTS.blackWide }]}>
             {fact.b}
@@ -179,7 +182,7 @@ export function QuestionView({
   );
 }
 
-const styles = StyleSheet.create({
+const sheet = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',

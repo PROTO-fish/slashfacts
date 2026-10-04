@@ -16,8 +16,10 @@ const LAYERS = [
   [5, 1, 21],
   [14, 0.45, 22],
 ];
-/** Brightness of a value of 1, in grey levels above the backdrop's ink. */
-const STRENGTH = 26;
+/** The grey every facet starts from, so the backdrop reads as dark paper, not a black hole. */
+const BASE = 20;
+/** Brightness of a value of 1, in grey levels above BASE. */
+const STRENGTH = 36;
 
 function hash(i, j, s) {
   let h = Math.imul(i, 374761393) ^ Math.imul(j, 668265263) ^ Math.imul(s + 1, 982451653);
@@ -105,7 +107,7 @@ function png(grey) {
 const day = new Uint8Array(SIZE * SIZE);
 for (let y = 0; y < SIZE; y++) {
   for (let x = 0; x < SIZE; x++) {
-    const g = Math.max(0, Math.min(255, Math.round(brightness(x, y) * STRENGTH)));
+    const g = Math.max(0, Math.min(255, Math.round(BASE + brightness(x, y) * STRENGTH)));
     day[y * SIZE + x] = g; // light marks on the black ink
   }
 }

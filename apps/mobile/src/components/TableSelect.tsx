@@ -6,6 +6,7 @@ import { ALL_TABLES, strokePath, type Cell, type StrokeKind, type StrokeState } 
 import { usePalette } from '../theme/ThemeContext.js';
 import { FONTS } from '../theme/fonts.js';
 import { useBreakpoint } from '../theme/useBreakpoint.js';
+import { useScaledStyles } from '../theme/scaledStyles.js';
 import { useSlashNative } from '../slash/useSlashNative.js';
 import { CheckIcon } from './icons.js';
 
@@ -26,7 +27,8 @@ interface Props {
  */
 export function TableSelect({ selected, onSelect }: Props) {
   const palette = usePalette();
-  const { metrics } = useBreakpoint();
+  const { metrics, scale } = useBreakpoint();
+  const styles = useScaledStyles(sheet);
   const chosen = new Set(selected);
   const hostRef = useRef<View>(null);
   const rowRefs = useRef(new Map<number, View>());
@@ -98,12 +100,18 @@ export function TableSelect({ selected, onSelect }: Props) {
 
   // theme.css: .select is a real 2-column CSS grid, where `gap` is subtracted before the
   // columns divide the space. RN's flexbox `gap` doesn't do that for percentage widths, so
-  // the column width is computed explicitly the same way SlashPad sizes its cells.
-  const colWidth = size.w > 0 ? (size.w - metrics.gap) / 2 : 150;
+  // the column width is computed explicitly the same way SlashPad sizes its cells. At a
+  // fractional tablet zoom (1.125, 1.21) the row's width can be measured a hair over its real
+  // width (react-native-web reports 508.5 as 509), and two halves of it plus the gap then
+  // wrap every table into one column — so a tablet leaves a point spare, floored, and
+  // `space-between` on the row gives it to the gap rather than to the right-hand edge.
+  // A phone's widths are whole points and stay exact.
+  const spare = scale === 1 ? 0 : 1;
+  const colWidth = size.w > 0 ? Math.floor((size.w - metrics.gap - spare) / 2) : 150 * scale;
   // .select .row { aspect-ratio: 2/1 }
   const rowHeight = colWidth / 2;
   // .select .row { font-size: clamp(1.8rem, 9vw, 3.2rem) } — scaled off the row's own size.
-  const digitFontSize = Math.min(48, Math.max(28, rowHeight * 0.55));
+  const digitFontSize = Math.min(48 * scale, Math.max(28 * scale, rowHeight * 0.55));
 
   return (
     <GestureDetector gesture={slash.gesture}>
@@ -166,8 +174,8 @@ export function TableSelect({ selected, onSelect }: Props) {
         {/* A white line inside a black casing reads on both the paper and the filled rows. */}
         {ink && size.w > 0 && (
           <Svg style={StyleSheet.absoluteFill} width={size.w} height={size.h} pointerEvents="none">
-            <Path d={ink} stroke={palette.ink} strokeWidth={22} strokeLinecap="round" strokeLinejoin="round" fill="none" />
-            <Path d={ink} stroke={palette.paper} strokeWidth={12} strokeLinecap="round" strokeLinejoin="round" fill="none" />
+            <Path d={ink} stroke={palette.ink} strokeWidth={22 * scale} strokeLinecap="round" strokeLinejoin="round" fill="none" />
+            <Path d={ink} stroke={palette.paper} strokeWidth={12 * scale} strokeLinecap="round" strokeLinejoin="round" fill="none" />
           </Svg>
         )}
       </View>
@@ -177,10 +185,11 @@ export function TableSelect({ selected, onSelect }: Props) {
 
 // Two columns, four rows: 2 3 / 4 5 / 6 7 / 8 9 — wide enough for a thumb, short enough
 // that all eight tables are on screen with room left for the launch buttons.
-const styles = StyleSheet.create({
+const sheet = StyleSheet.create({
   select: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    justifyContent: 'space-between',
   },
   row: {
     flexDirection: 'row',
