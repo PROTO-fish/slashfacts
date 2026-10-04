@@ -117,6 +117,22 @@ or delete a file it lists, update the index in the same commit.
   and numbering convention. Write one when a decision would otherwise have to be
   re-litigated or reverse-engineered from a diff later (a library choice, a structural
   tradeoff, something rejected and why).
+- `docs/fdroid/` — an [Open Knowledge Format](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md)
+  (OKF) bundle; see Knowledge bundles below.
+
+### Knowledge bundles
+
+A directory with an `index.md` that declares `okf_version` is an OKF bundle: one concept per
+Markdown file, each with YAML frontmatter (`type` required; `index.md` and `log.md` are
+reserved). Some concepts summarise external rules we don't own, such as fdroiddata's.
+For those:
+
+- **Read the upstream before acting on the summary.** Its URL is in `resource` and
+  `sources[].resource`. Upstream wins whenever the two disagree.
+- If the upstream changed since `sources[].last_modified`, or `stale_after` has passed,
+  update the concept, its dates and the bundle's `log.md` in the same change.
+- Link with relative paths so GitHub renders them, list every concept in `index.md`, and
+  don't name a coding agent in `generated` or `verified`.
 
 ## Worktrees
 
@@ -210,6 +226,10 @@ The store build numbers derive from the version, MAJOR×10000 + MINOR×100 + PAT
 recipe reads `versionCode` from `app.json` and publishes 1000 × code + 1/2/3, one per ABI.
 
 ## Releasing
+
+While SlashFacts' fdroiddata inclusion merge request is open, don't merge the release PR:
+a new tag during review means resubmitting the recipe
+(`docs/fdroid/fdroiddata-contributing.md`, state in `docs/fdroid/submission.md`).
 
 1. Every push to `main` updates one open release PR (`chore(main): release X.Y.Z`): the
    version, `CHANGELOG.md`, and the build numbers. Commit titles become the changelog, so
