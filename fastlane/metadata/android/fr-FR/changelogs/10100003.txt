@@ -1,0 +1,3 @@
+Tablettes : la colonne de papier remplit l'écran en portrait, en paysage et en écran partagé.
+La page À propos affiche notre adresse de contact, hello@proto.fish.
+Un téléchargement plus léger.

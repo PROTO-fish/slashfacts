@@ -1,0 +1,3 @@
+Tablets: the paper column fills the screen in portrait, landscape and split screen.
+About shows our contact address, hello@proto.fish.
+A smaller download.
