@@ -15,15 +15,17 @@ RepoType: git
 Repo: https://github.com/PROTO-fish/slashfacts.git
 
 Builds:
-  - versionName: 1.0.0
-    versionCode: 1001
-    commit: 5484547600f5f0d58c6a8c16ea4ce93dcedc10c4
+  - versionName: 1.1.0
+    versionCode: 10100001
+    commit: aadd5da0921230999aae9caf2575714d83777b9d
     subdir: apps/mobile
     sudo:
       - echo "deb https://deb.debian.org/debian forky main" > /etc/apt/sources.list.d/forky.list
       - apt-get update
       - apt-get install -y -t forky nodejs npm
-    init: cd ../.. && npm ci
+    init:
+      - cd ../..
+      - npm ci
     output: android/app/build/outputs/apk/release/app-release-unsigned.apk
     prebuild:
       - sed -i -e '1a "expo":{"autolinking":{"android":{"buildFromSource":[".*"]}}},'
@@ -47,18 +49,22 @@ Builds:
     scandelete:
       - node_modules
       - apps/mobile/node_modules
-    build: cd android && gradle assembleRelease
+    build:
+      - cd android
+      - gradle assembleRelease
     ndk: 27.1.12297006
 
-  - versionName: 1.0.0
-    versionCode: 1002
-    commit: 5484547600f5f0d58c6a8c16ea4ce93dcedc10c4
+  - versionName: 1.1.0
+    versionCode: 10100002
+    commit: aadd5da0921230999aae9caf2575714d83777b9d
     subdir: apps/mobile
     sudo:
       - echo "deb https://deb.debian.org/debian forky main" > /etc/apt/sources.list.d/forky.list
       - apt-get update
       - apt-get install -y -t forky nodejs npm
-    init: cd ../.. && npm ci
+    init:
+      - cd ../..
+      - npm ci
     output: android/app/build/outputs/apk/release/app-release-unsigned.apk
     prebuild:
       - sed -i -e '1a "expo":{"autolinking":{"android":{"buildFromSource":[".*"]}}},'
@@ -82,18 +88,22 @@ Builds:
     scandelete:
       - node_modules
       - apps/mobile/node_modules
-    build: cd android && gradle assembleRelease
+    build:
+      - cd android
+      - gradle assembleRelease
     ndk: 27.1.12297006
 
-  - versionName: 1.0.0
-    versionCode: 1003
-    commit: 5484547600f5f0d58c6a8c16ea4ce93dcedc10c4
+  - versionName: 1.1.0
+    versionCode: 10100003
+    commit: aadd5da0921230999aae9caf2575714d83777b9d
     subdir: apps/mobile
     sudo:
       - echo "deb https://deb.debian.org/debian forky main" > /etc/apt/sources.list.d/forky.list
       - apt-get update
       - apt-get install -y -t forky nodejs npm
-    init: cd ../.. && npm ci
+    init:
+      - cd ../..
+      - npm ci
     output: android/app/build/outputs/apk/release/app-release-unsigned.apk
     prebuild:
       - sed -i -e '1a "expo":{"autolinking":{"android":{"buildFromSource":[".*"]}}},'
@@ -117,7 +127,9 @@ Builds:
     scandelete:
       - node_modules
       - apps/mobile/node_modules
-    build: cd android && gradle assembleRelease
+    build:
+      - cd android
+      - gradle assembleRelease
     ndk: 27.1.12297006
 
 MaintainerNotes: |-
@@ -136,5 +148,5 @@ VercodeOperation:
   - 1000 * %c + 2
   - 1000 * %c + 3
 UpdateCheckData: apps/mobile/app.json|"versionCode":\s*(\d+)|.|"version":\s*"([^"]+)"
-CurrentVersion: 1.0.0
-CurrentVersionCode: 1003
+CurrentVersion: 1.1.0
+CurrentVersionCode: 10100003

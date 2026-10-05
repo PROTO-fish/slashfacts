@@ -70,9 +70,13 @@ empty Android SDK, and on macOS a few things need care:
   mounted SDK directory.
 - Keep the fdroiddata-style working directory on a Docker volume, not a macOS bind mount,
   whose file ownership breaks `expo prebuild --clean`.
-- `fdroid build -l` expects the source already cloned into `build/fish.proto.slashfacts`.
+- `fdroid build -l` expects the source already cloned into `build/fish.proto.slashfacts`,
+  next to a `build/.fdroidvcs-fish.proto.slashfacts` file holding `git <Repo URL>`; without it
+  fdroid deletes the clone and clones again.
 - Under amd64 emulation in an 8 GB Docker VM, cap Gradle's memory from a mounted
   `~/.gradle/gradle.properties` (`org.gradle.jvmargs=-Xmx2560m`,
   `kotlin.daemon.jvmargs=-Xmx1536m`, `org.gradle.workers.max=2`), or the daemon is killed.
-- Build one ABI with `fdroid build -v -l fish.proto.slashfacts:1002`. `fdroid lint` and
+  Since R8 is on (1.1.0), use `org.gradle.workers.max=1`: R8 running next to lint was
+  killed out of memory with two workers.
+- Build one ABI with `fdroid build -v -l fish.proto.slashfacts:10100002`. `fdroid lint` and
   `fdroid rewritemeta` should both leave the metadata unchanged.
