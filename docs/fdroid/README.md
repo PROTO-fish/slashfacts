@@ -42,6 +42,10 @@ about a third of the universal 95 MB APK. Their versionCodes are derived from `a
 | arm64-v8a | `versionCode × 1000 + 2` |
 | x86_64 | `versionCode × 1000 + 3` |
 
+The recipe's `VercodeOperation` holds that arithmetic, and each build entry writes its own
+versionCode into the generated `build.gradle` with `$$VERCODE$$`, so the scheme lives in
+one place.
+
 ## Why the recipe looks the way it does
 
 It follows the Expo apps already in fdroiddata (e.g. Breathly, SimpleDay):
@@ -62,17 +66,32 @@ It follows the Expo apps already in fdroiddata (e.g. Breathly, SimpleDay):
 ## Testing the recipe locally
 
 `fdroid build` runs in fdroidserver's Docker image
-(`registry.gitlab.com/fdroid/docker-executable-fdroidserver:master`). The image ships an
-empty Android SDK, and on macOS a few things need care:
+(`registry.gitlab.com/fdroid/docker-executable-fdroidserver:master`). `local-build/` wraps
+it the way the buildserver runs the recipe:
 
-- Bake the recipe's `sudo` steps (Node from Debian forky) into a derived image, since
-  `sudo` only runs on the real buildserver, and install the NDK and SDK platform into a
-  mounted SDK directory.
-- Keep the fdroiddata-style working directory on a Docker volume, not a macOS bind mount,
-  whose file ownership breaks `expo prebuild --clean`.
-- `fdroid build -l` expects the source already cloned into `build/fish.proto.slashfacts`.
-- Under amd64 emulation in an 8 GB Docker VM, cap Gradle's memory from a mounted
-  `~/.gradle/gradle.properties` (`org.gradle.jvmargs=-Xmx2560m`,
-  `kotlin.daemon.jvmargs=-Xmx1536m`, `org.gradle.workers.max=2`), or the daemon is killed.
-- Build one ABI with `fdroid build -v -l fish.proto.slashfacts:1002`. `fdroid lint` and
-  `fdroid rewritemeta` should both leave the metadata unchanged.
+```sh
+cd docs/fdroid/local-build
+./setup.sh                      # once: the images and the SDK/NDK volume
+./fdroid-build.sh               # every build entry; or e.g. ./fdroid-build.sh 10100002
+```
+
+APKs and logs land in `local-build/out/<run>/`. On an x86_64 Linux machine with Docker, the
+three ABIs take about 15 minutes. The scripts take care of what the image doesn't do on its own:
+
+- The recipe's `sudo` steps (Node from Debian forky) only run on the real buildserver, so
+  the `Dockerfile` bakes them into a derived image, and `setup.sh` installs the NDK and SDK
+  platform into the `sfsdk` volume.
+- The fdroiddata-style working directory lives on a Docker volume, not a bind mount, whose
+  file ownership on macOS breaks `expo prebuild --clean`.
+- `fdroid build -l` expects the source already cloned into `build/fish.proto.slashfacts`,
+  next to a `build/.fdroidvcs-fish.proto.slashfacts` file holding `git <Repo URL>`; without it
+  fdroid deletes the clone and clones again.
+- `fdroid lint` flags `Categories` here because the directory lacks fdroiddata's
+  `config/`; the merge request's pipeline runs the real lint. `fdroid lint` and
+  `fdroid rewritemeta` in an fdroiddata checkout should both leave the metadata unchanged.
+
+On macOS (Apple silicon), the image runs under amd64 emulation: one ABI takes about 15
+minutes, and an 8 GB Docker VM needs Gradle capped through `GRADLE_PROPERTIES=<file>` with
+`org.gradle.jvmargs=-Xmx3g -XX:MaxMetaspaceSize=1g`, `kotlin.daemon.jvmargs=-Xmx1g` and
+`org.gradle.workers.max=1`. With two workers, R8 running next to lint was killed out of
+memory.
