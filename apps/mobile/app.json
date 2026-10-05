@@ -47,7 +47,16 @@
           "backgroundColor": "#ffffff"
         }
       ],
-      "./plugins/withDebugInternet"
+      "./plugins/withDebugInternet",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "enableMinifyInReleaseBuilds": true,
+            "enableShrinkResourcesInReleaseBuilds": true
+          }
+        }
+      ]
     ],
     "extra": {
       "eas": {

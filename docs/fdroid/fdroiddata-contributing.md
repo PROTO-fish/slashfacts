@@ -81,6 +81,19 @@ From the [App inclusion template][inclusion-template]:
   Don't pay for CI: if GitLab asks for a phone number or card, say so in the MR
   instead.[^inclusion-template]
 
+# Reviewer expectations
+
+Not written in the documents above, but asked for in review of
+[!51170](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/51170):
+
+- **One command per list item.** `sudo`, `init`, `prebuild` and `build` take a list of
+  strings; don't chain commands with `;` or `&&` in one string. The
+  [Build Metadata Reference][metadata-reference] allows both and `fdroid lint` passes
+  either way, so only the review catches it. The items run as one bash script, so a `cd`
+  carries over to the next item.
+- **R8 on.** The Reports tab's minor "no R8 marker" finding is expected to be fixed, not
+  explained: release builds minify and shrink resources.
+
 # What this means for SlashFacts
 
 - **Don't tag a release while the inclusion MR is open.** The template keeps only the
@@ -95,3 +108,4 @@ From the [App inclusion template][inclusion-template]:
 [contributing]: https://gitlab.com/fdroid/fdroiddata/-/blob/master/CONTRIBUTING.md
 [inclusion-template]: https://gitlab.com/fdroid/fdroiddata/-/blob/master/.gitlab/merge_request_templates/App%20inclusion.md
 [inclusion-policy]: https://f-droid.org/docs/Inclusion_Policy
+[metadata-reference]: https://f-droid.org/docs/Build_Metadata_Reference
