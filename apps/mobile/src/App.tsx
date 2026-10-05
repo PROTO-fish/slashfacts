@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useFonts } from 'expo-font';
 import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { BackHandler, Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BRAND } from '@slash/core';
 import { FONTS, FONT_ASSETS } from './theme/fonts.js';
@@ -55,6 +55,17 @@ function ShellFor({ app }: { app: ReturnType<typeof useAppState> }) {
   const cornerRadius = viewport.framed ? Math.round(viewport.height * 0.04) : 0;
   const barPadX = Math.max(metrics.padX, Math.round(cornerRadius * 0.55));
   const [screen, setScreen] = useState<Screen>('home');
+
+  // Android's Back button goes up to home, like the ✕ does; on home it closes the app.
+  // Without a listener, Back closes the app from every screen. A no-op on web and iOS.
+  useEffect(() => {
+    if (screen === 'home') return;
+    const sub = BackHandler.addEventListener('hardwareBackPress', () => {
+      setScreen('home');
+      return true;
+    });
+    return () => sub.remove();
+  }, [screen]);
 
   const start = () => {
     app.newRound();
