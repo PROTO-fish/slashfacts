@@ -93,6 +93,11 @@ Not written in the documents above, but asked for in review of
   carries over to the next item.
 - **R8 on.** The Reports tab's minor "no R8 marker" finding is expected to be fixed, not
   explained: release builds minify and shrink resources.
+- **Use the metadata's variables.** `prebuild`, `build` and `init` can use `$$VERCODE$$`,
+  `$$VERSION$$` and `$$COMMIT$$`; write `versionCode $$VERCODE$$` rather than recomputing
+  the entry's versionCode in a `sed`.
+- **No `MaintainerNotes`.** Explanations for the packagers go in the merge request
+  description, not in the metadata.
 
 # What this means for SlashFacts
 

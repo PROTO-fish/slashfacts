@@ -27,9 +27,9 @@ curl -s https://gitlab.com/api/v4/projects/fdroid%2Ffdroiddata/merge_requests/51
 |---|---|
 | State | Open, mergeable, squash on merge, maintainers may push |
 | Fork, branch | `gitlab.com/proto-fish/fdroiddata`, branch `slashfacts` (unprotected) |
-| Head | `72c57f4f47`, pipeline passed; the Reports tab is info only, with the R8 marker on all three APKs (22, 28 and 29 MB) |
+| Head | `cd3f15cdf1`. On `72c57f4f47` the pipeline passed and the Reports tab was info only, with the R8 marker on all three APKs (22, 28 and 29 MB) |
 | Builds | `v1.1.0` by full hash, three per-ABI APKs (versionCode 10100001–10100003), R8 on |
-| Review | Round 1: Node from Debian, done in `348d53f9c`. Round 2: one command per list item and R8 on, done in `72c57f4f47` with release 1.1.0. Both answered. |
+| Review | Round 1: Node from Debian, done in `348d53f9c`. Round 2: one command per list item and R8 on, done in `72c57f4f47` with release 1.1.0. Round 3: `$$VERCODE$$` and no `MaintainerNotes`, done in `cd3f15cdf1`; the APKs are byte-identical to round 2's. All answered. |
 
 The review comments need a GitLab login to read through the API.
 

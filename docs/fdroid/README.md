@@ -42,6 +42,10 @@ about a third of the universal 95 MB APK. Their versionCodes are derived from `a
 | arm64-v8a | `versionCode × 1000 + 2` |
 | x86_64 | `versionCode × 1000 + 3` |
 
+The recipe's `VercodeOperation` holds that arithmetic, and each build entry writes its own
+versionCode into the generated `build.gradle` with `$$VERCODE$$`, so the scheme lives in
+one place.
+
 ## Why the recipe looks the way it does
 
 It follows the Expo apps already in fdroiddata (e.g. Breathly, SimpleDay):
