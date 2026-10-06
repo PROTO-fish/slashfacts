@@ -16,3 +16,6 @@ dist
 # Expo prebuild output (continuous native generation)
 apps/mobile/android/
 apps/mobile/ios/
+
+# Lavish review pages
+.lavish/
