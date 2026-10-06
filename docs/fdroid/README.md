@@ -25,10 +25,13 @@ in `AGENTS.md`):
    (MAJOR×10000 + MINOR×100 + PATCH, so 1.1.0 is 10100). The bot reads both from `app.json`
    (`UpdateCheckData`), since `android/` only exists after `expo prebuild`.
 2. On that release PR, add the changelog for each locale in
-   `fastlane/metadata/android/<locale>/changelogs/`, named after the **highest split
-   versionCode**, `versionCode × 1000 + 3`: versionCode 10100 gets `10100003.txt`. F-Droid
-   matches changelog files against the APKs' versionCodes, not against `app.json`, so a file
-   named `10100.txt` is silently ignored.
+   `fastlane/metadata/android/<locale>/changelogs/`, as **three identical files, one per
+   per-ABI versionCode** (see below): versionCode 10100 gets `10100001.txt`, `10100002.txt`
+   and `10100003.txt`. fdroidserver attaches a `<versionCode>.txt` only to the build with
+   that exact versionCode (`fdroidserver/update.py`, `index.py`); a build without its own
+   file shows no "What's new", and a file named `10100.txt` is silently ignored. Shipping
+   only `…003.txt` left the armeabi-v7a and arm64 APKs, what most phones install, without a
+   changelog in 1.1.0.
 3. Merge the release PR. It tags `vX.Y.Z`; only tags matching `^v[\d.]+$` are considered.
 
 ## Per-ABI APKs
