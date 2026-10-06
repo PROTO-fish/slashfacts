@@ -98,6 +98,9 @@ Not written in the documents above, but asked for in review of
   the entry's versionCode in a `sed`.
 - **No `MaintainerNotes`.** Explanations for the packagers go in the merge request
   description, not in the metadata.
+- **A changelog per published versionCode.** With an ABI split, each APK needs its own
+  `fastlane/metadata/android/<locale>/changelogs/<versionCode>.txt`; one file for the
+  highest versionCode only reaches that APK. See [Releasing through F-Droid](README.md#releasing-a-new-version).
 
 # What this means for SlashFacts
 

@@ -231,11 +231,12 @@ a new tag during review means resubmitting the recipe
 1. Every push to `main` updates one open release PR (`chore(main): release X.Y.Z`): the
    version, `CHANGELOG.md`, and the build numbers. Commit titles become the changelog, so
    write them for a reader.
-2. Before merging it, add the F-Droid changelog on the release PR's branch, one per locale:
-   `fastlane/metadata/android/<locale>/changelogs/<1000 × code + 3>.txt` (for 1.1.0,
-   `10100003.txt`), plain text, 500 characters at most, drawn from the release notes.
-   F-Droid matches the file against the highest per-ABI versionCode; any other name is
-   silently ignored.
+2. Before merging it, add the F-Droid changelogs on the release PR's branch: in each locale's
+   `fastlane/metadata/android/<locale>/changelogs/`, one identical file per per-ABI
+   versionCode, `<1000 × code + 1>.txt`, `+ 2` and `+ 3` (for 1.1.0, `10100001.txt`,
+   `10100002.txt` and `10100003.txt`), plain text, 500 characters at most, drawn from the
+   release notes. F-Droid attaches each file only to the APK with that exact versionCode, so
+   a missing file means no "What's new" for that ABI, and any other name is silently ignored.
 3. Merge the release PR. That tags `vX.Y.Z` and publishes a GitHub Release with the same
    notes; F-Droid's update check picks up the tag on its own.
 4. Build and submit the store builds from the tag (EAS for Google Play and the App Store).

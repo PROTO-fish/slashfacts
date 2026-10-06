@@ -16,7 +16,7 @@ stale_after: 2026-10-12T00:00:00Z
 
 # State
 
-Checked on 2026-10-05. The MR changes every few days, so read its live state first:
+Checked on 2026-10-06. The MR changes every few days, so read its live state first:
 
 ```sh
 curl -s https://gitlab.com/api/v4/projects/fdroid%2Ffdroiddata/merge_requests/51170 \
@@ -29,7 +29,7 @@ curl -s https://gitlab.com/api/v4/projects/fdroid%2Ffdroiddata/merge_requests/51
 | Fork, branch | `gitlab.com/proto-fish/fdroiddata`, branch `slashfacts` (unprotected) |
 | Head | `cd3f15cdf1`. On `72c57f4f47` the pipeline passed and the Reports tab was info only, with the R8 marker on all three APKs (22, 28 and 29 MB) |
 | Builds | `v1.1.0` by full hash, three per-ABI APKs (versionCode 10100001–10100003), R8 on |
-| Review | Round 1: Node from Debian, done in `348d53f9c`. Round 2: one command per list item and R8 on, done in `72c57f4f47` with release 1.1.0. Round 3: `$$VERCODE$$` and no `MaintainerNotes`, done in `cd3f15cdf1`; the APKs are byte-identical to round 2's. All answered. |
+| Review | Round 1: Node from Debian, done in `348d53f9c`. Round 2: one command per list item and R8 on, done in `72c57f4f47` with release 1.1.0. Round 3: `$$VERCODE$$` and no `MaintainerNotes`, done in `cd3f15cdf1`; the APKs are byte-identical to round 2's. On 2026-10-05 the MR got the `review-requested` label: it waits for a maintainer's on-device test. On 2026-10-06 a static review (license, dependencies, `VIBRATE` only, VirusTotal 0/68) found only missing changelogs for 10100001 and 10100002, added in this repository (#42); no recipe change. |
 
 The review comments need a GitLab login to read through the API.
 
@@ -43,7 +43,7 @@ Against the [contribution rules](fdroiddata-contributing.md):
 | Pipeline passes | Yes, on the current head. |
 | `fdroid lint` / `rewritemeta` clean, local `fdroid build` | Yes (arm64, versionCode 10100002), and the APK was smoke-tested on an emulator. |
 | Template filled in | Yes, updated for 1.1.0 on 2026-10-05. |
-| Fastlane metadata upstream, `en-US` | Yes, with the 1.1.0 changelog as `changelogs/10100003.txt`. |
+| Fastlane metadata upstream, `en-US` | Yes, with the 1.1.0 changelog as `changelogs/10100001.txt`, `10100002.txt` and `10100003.txt` (`en-US`, `fr-FR`). |
 | Only the latest version, full `commit` hash | Yes, as long as no new tag lands during review. |
 | Reproducible Builds | Off: no upstream-signed APKs, so F-Droid signs. This can't be switched later. |
 | ABI split | Yes, 29 MB per ABI instead of 95 MB universal. |
