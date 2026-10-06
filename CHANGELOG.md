@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/PROTO-fish/slashfacts/compare/v1.1.0...v1.1.1) (2026-10-06)
+
+
+### Bug Fixes
+
+* **fdroid:** ship a changelog for every per-ABI versionCode ([#43](https://github.com/PROTO-fish/slashfacts/issues/43)) ([86135f6](https://github.com/PROTO-fish/slashfacts/commit/86135f64427e71b8552773c55470720b20e422d9)), closes [#42](https://github.com/PROTO-fish/slashfacts/issues/42)
+
 ## [1.1.0](https://github.com/PROTO-fish/slashfacts/compare/v1.0.0...v1.1.0) (2026-10-05)
 
 
