@@ -21,6 +21,10 @@
   <img alt="No tracking" src="https://img.shields.io/badge/tracking-none-black" />
 </p>
 
+<p align="center">
+  <img src="fastlane/metadata/android/en-US/images/featureGraphic.png" alt="SlashFacts: times tables, answered with one stroke. A stroke drawn from 1 to 8 answers 9 × 2." width="720" />
+</p>
+
 ---
 
 **SlashFacts** is a times-tables trainer for kids. There are no buttons to tap and no cartoon
@@ -30,6 +34,12 @@ is already there.
 
 The whole app runs on that one gesture, and it keeps the focus on remembering the fact rather
 than on working the screen.
+
+<p align="center">
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" alt="Choosing the tables to practise, ×2 to ×9" width="240" />
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" alt="Answering 9 × 2 with one stroke from 1 to 8" width="240" />
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" alt="The FACTS map: progress per table and the facts to practise next" width="240" />
+</p>
 
 ## Know it or don't
 
@@ -66,7 +76,7 @@ stored on the device and nowhere else. On Android the app asks for exactly one p
 | Platform | Status |
 |---|---|
 | 🌐 Web | [slashfacts.proto.fish](https://slashfacts.proto.fish) — installable as a PWA |
-| 🤖 Android | F-Droid submission in preparation · Google Play later |
+| 🤖 Android | F-Droid: [inclusion request](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/51170) under review · Google Play later |
 | 🍎 iOS | App Store later |
 
 ## Run it locally
