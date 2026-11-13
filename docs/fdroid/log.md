@@ -1,5 +1,8 @@
 # Directory Update Log
 
+## 2026-11-13
+* **Update**: The [merge request](submission.md) was merged on 2026-10-18 and SlashFacts 1.1.0 has been on F-Droid since 2026-10-22; releases no longer wait on the review.
+
 ## 2026-10-06
 * **Update**: Changelogs go in one file per per-ABI versionCode ([releasing](README.md#releasing-a-new-version), [reviewer expectations](fdroiddata-contributing.md#reviewer-expectations)); recorded the static review of the [merge request](submission.md).
 

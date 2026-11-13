@@ -13,7 +13,7 @@ in `AGENTS.md`).
 
 * [Releasing through F-Droid](README.md) - How a tag becomes an F-Droid release, the versionCode scheme, why the recipe looks the way it does, and local `fdroid build`.
 * [fdroiddata contribution rules](fdroiddata-contributing.md) - What fdroiddata asks of a merge request, summarised from its CONTRIBUTING.md and inclusion template; always re-check upstream.
-* [Inclusion merge request](submission.md) - Where SlashFacts' fdroiddata merge request stands, and how it complies with the rules.
+* [Inclusion merge request](submission.md) - SlashFacts' fdroiddata merge request (merged 2026-10-18, on F-Droid since 2026-10-22), and how it complied with the rules.
 
 # Files
 

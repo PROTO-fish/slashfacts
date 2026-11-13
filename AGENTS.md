@@ -224,10 +224,6 @@ recipe reads `versionCode` from `app.json` and publishes 1000 × code + 1/2/3, o
 
 ## Releasing
 
-While SlashFacts' fdroiddata inclusion merge request is open, don't merge the release PR:
-a new tag during review means resubmitting the recipe
-(`docs/fdroid/fdroiddata-contributing.md`, state in `docs/fdroid/submission.md`).
-
 1. Every push to `main` updates one open release PR (`chore(main): release X.Y.Z`): the
    version, `CHANGELOG.md`, and the build numbers. Commit titles become the changelog, so
    write them for a reader.
