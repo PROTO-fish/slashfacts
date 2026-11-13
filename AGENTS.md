@@ -62,6 +62,23 @@ analytics, crash reporting, ads, or third-party SDKs. The Android release build 
 asking for `VIBRATE` only (see `docs/licensing-audit.md`). Any new dependency must use a
 GPL-3.0-compatible license and be free software, or the F-Droid build breaks.
 
+## Public repository: publish only the essential
+
+SlashFacts is open source (GPL-3.0) and this repository is public. Every commit, file,
+issue, pull request, review comment and release note is published to everyone.
+
+- **Publish strictly what the change needs**: the code, and the documentation a contributor
+  or user needs to understand it. Nothing else.
+- **Publish only public information.** Never commit or post personal data (beyond the name
+  and address in the DCO sign-off), local paths, machine or device names and identifiers,
+  IP addresses, credentials, keys, tokens or signing files, or account and team identifiers
+  the build itself doesn't need.
+- **Internal material stays local**: store review correspondence and notes, drafts,
+  recordings, logs and working notes. Keep it in untracked files listed in
+  `.git/info/exclude`.
+- When unsure whether something is essential or public, leave it out and ask the person
+  you work for.
+
 ## Contributing: issues first, pull requests on request
 
 The contribution rules live in `CONTRIBUTING.md`; read it before opening anything on
