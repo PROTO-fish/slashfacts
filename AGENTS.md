@@ -17,7 +17,7 @@ coding agent, and for humans too. It is plain Markdown with no tool-specific syn
 
 ## Project overview
 
-SlashFacts is a multiplication-tables trainer (2–9): the child answers by drawing one stroke
+SlashFacts is a multiplication-tables trainer (2–9): the player answers by drawing one stroke
 through the digits of the result. It is an npm-workspaces monorepo:
 
 - `packages/core`: a pure TypeScript engine (facts, scheduler, gesture geometry). No DOM,
@@ -57,7 +57,7 @@ keep the app typechecking.
 
 ## Privacy and security constraints
 
-The app is offline and account-free by design, for children. **Never add** network calls,
+The app is offline and account-free by design, for everyone, children included. **Never add** network calls,
 analytics, crash reporting, ads, or third-party SDKs. The Android release build must keep
 asking for `VIBRATE` only (see `docs/licensing-audit.md`). Any new dependency must use a
 GPL-3.0-compatible license and be free software, or the F-Droid build breaks.
