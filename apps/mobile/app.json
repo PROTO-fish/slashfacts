@@ -52,6 +52,7 @@
         }
       ],
       "./plugins/withDebugInternet",
+      "./plugins/withSceneLifecycle",
       [
         "expo-build-properties",
         {

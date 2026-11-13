@@ -26,7 +26,7 @@ apps/mobile       Expo (React Native, and react-native-web for the website)
   haptics.ts          expo-haptics feedback (haptics.web.ts: navigator.vibrate)
   public/             web build only: page template, manifest, icons, service worker
   server.mjs          dependency-free static server for Railway
-  plugins/            Expo config plugins (release APK asks for VIBRATE only)
+  plugins/            Expo config plugins (release APK asks for VIBRATE only; iOS scene life cycle)
 ```
 
 The engine is pure and injects its own RNG, so scheduling is deterministic under test and

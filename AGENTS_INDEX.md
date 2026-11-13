@@ -78,6 +78,7 @@ Those name the previous Vite web app, removed in favour of the Expo web build (s
 |---|---|
 | `app.json` | Expo config: name, bundle ids (`fish.proto.slashfacts`), icons, splash, plugins, Android permissions (release asks for `VIBRATE` only) |
 | `plugins/withDebugInternet.js` | Re-adds `INTERNET` to the debug manifest only, so debug builds reach Metro while release stays offline |
+| `plugins/withSceneLifecycle.js` | Adopts the iOS UIScene life cycle (Expo's `EXExpoAppSceneDelegate`), without which iOS 27 SDK builds stop at launch |
 | `eas.json` | EAS Build profiles (development / preview / production) |
 | `scripts/sync-build-numbers.mjs` | Derives `versionCode` / `buildNumber` in `app.json` from its version; run by the release workflow |
 | `metro.config.js` | Monorepo resolution + `.js` import fallback (retried extensionless, so `.web.ts` files win in the web build) — touch with care |
