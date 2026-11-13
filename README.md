@@ -76,7 +76,7 @@ stored on the device and nowhere else. On Android the app asks for exactly one p
 | Platform | Status |
 |---|---|
 | 🌐 Web | [slashfacts.proto.fish](https://slashfacts.proto.fish) — installable as a PWA |
-| 🤖 Android | F-Droid: [inclusion request](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/51170) under review · Google Play later |
+| 🤖 Android | [F-Droid](https://f-droid.org/packages/fish.proto.slashfacts/) · Google Play later |
 | 🍎 iOS | App Store later |
 
 ## Run it locally

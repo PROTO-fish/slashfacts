@@ -1,7 +1,7 @@
 ---
 type: Merge Request
 title: Inclusion merge request
-description: Where SlashFacts' fdroiddata merge request stands, and how it complies with the rules.
+description: SlashFacts' fdroiddata inclusion merge request (merged), and how it complied with the rules.
 resource: https://gitlab.com/fdroid/fdroiddata/-/merge_requests/51170
 tags: [fdroid, fdroiddata, release]
 sources:
@@ -11,22 +11,28 @@ sources:
   - id: rules
     resource: fdroiddata-contributing.md
     title: fdroiddata contribution rules
-stale_after: 2026-10-12T00:00:00Z
+stale_after: 2027-05-13T00:00:00Z
 ---
 
 # State
 
-Checked on 2026-10-06. The MR changes every few days, so read its live state first:
+Merged on 2026-10-18. SlashFacts 1.1.0 has been on F-Droid since 2026-10-22
+(https://f-droid.org/packages/fish.proto.slashfacts/), as three per-ABI APKs, versionCodes
+10100001 to 10100003. Later releases need no new merge request: F-Droid's update check reads
+each `vX.Y.Z` tag and the `versionCode` in `app.json` ([releasing](README.md)).
+
+Checked on 2026-11-13:
 
 ```sh
-curl -s https://gitlab.com/api/v4/projects/fdroid%2Ffdroiddata/merge_requests/51170 \
-  | grep -oE '"(state|detailed_merge_status|sha|updated_at)":"[^"]*"'
+curl -s https://f-droid.org/api/v1/packages/fish.proto.slashfacts
 ```
+
+The table below records the merge request as it stood during review.
 
 | | |
 |---|---|
-| State | Open, mergeable, squash on merge, maintainers may push |
-| Fork, branch | `gitlab.com/proto-fish/fdroiddata`, branch `slashfacts` (unprotected) |
+| State | Merged on 2026-10-18 |
+| Fork, branch | `gitlab.com/proto-fish/fdroiddata`, branch `slashfacts` |
 | Head | `cd3f15cdf1`. On `72c57f4f47` the pipeline passed and the Reports tab was info only, with the R8 marker on all three APKs (22, 28 and 29 MB) |
 | Builds | `v1.1.0` by full hash, three per-ABI APKs (versionCode 10100001–10100003), R8 on |
 | Review | Round 1: Node from Debian, done in `348d53f9c`. Round 2: one command per list item and R8 on, done in `72c57f4f47` with release 1.1.0. Round 3: `$$VERCODE$$` and no `MaintainerNotes`, done in `cd3f15cdf1`; the APKs are byte-identical to round 2's. On 2026-10-05 the MR got the `review-requested` label: it waits for a maintainer's on-device test. On 2026-10-06 a static review (license, dependencies, `VIBRATE` only, VirusTotal 0/68) found only missing changelogs for 10100001 and 10100002, added in this repository (#42); no recipe change. |
