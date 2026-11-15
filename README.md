@@ -77,7 +77,7 @@ stored on the device and nowhere else. On Android the app asks for exactly one p
 |---|---|
 | 🌐 Web | [slashfacts.proto.fish](https://slashfacts.proto.fish) — installable as a PWA |
 | 🤖 Android | [F-Droid](https://f-droid.org/packages/fish.proto.slashfacts/) · Google Play later |
-| 🍎 iOS | App Store later |
+| 🍎 iOS | [App Store](https://apps.apple.com/app/id6834372742) |
 
 ## Run it locally
 
