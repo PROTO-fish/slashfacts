@@ -14,7 +14,8 @@ npm workspaces monorepo (`package.json`: `packages/*`, `apps/*`).
 | `docs/adr/` | Architecture Decision Records (template in `docs/adr/README.md`). |
 | `docs/fdroid/` | OKF bundle (`index.md`): the F-Droid recipe (copy of the fdroiddata metadata), `README.md` (how releases reach F-Droid, changelog naming, local `fdroid build`), `fdroiddata-contributing.md` (fdroiddata's MR rules; re-check upstream), `submission.md` (inclusion MR state), `local-build/` (scripts for a local `fdroid build`). |
 | `fastlane/metadata/android/` | Store listing read by F-Droid: text, icon, screenshots, feature graphic, changelogs (`<versionCode × 1000 + 3>.txt`). |
-| `README.md` | Public landing page: what the app is, how to run it. |
+| `README.md` | Public landing page: what the app is, store download badges, how to run it. |
+| `docs/assets/store-badges/` | Official App Store, Google Play and F-Droid download badges; `README.md` records sources and usage. |
 | `docs/design.md` | Product rules and design rationale — read before changing behaviour. |
 | `docs/architecture.md` | Code layout, storage, mobile, deployment. |
 | `AGENTS.md` | Branching, worktrees, commits, versioning. |

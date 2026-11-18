@@ -73,11 +73,15 @@ stored on the device and nowhere else. On Android the app asks for exactly one p
 
 ## Get it
 
-| Platform | Status |
-|---|---|
-| 🌐 Web | [slashfacts.proto.fish](https://slashfacts.proto.fish) — installable as a PWA |
-| 🤖 Android | [F-Droid](https://f-droid.org/packages/fish.proto.slashfacts/) · Google Play later |
-| 🍎 iOS | App Store later |
+<p align="center">
+  <a href="https://apps.apple.com/us/app/slashfacts-times-tables/id6834372742"><img src="docs/assets/store-badges/app-store.svg" alt="Download on the App Store" height="48" /></a>
+  &emsp;
+  <a href="https://play.google.com/store/apps/details?id=fish.proto.slashfacts"><img src="docs/assets/store-badges/google-play.png" alt="Get it on Google Play" height="48" /></a>
+  &emsp;
+  <a href="https://f-droid.org/packages/fish.proto.slashfacts/"><img src="docs/assets/store-badges/f-droid.svg" alt="Get it on F-Droid" height="48" /></a>
+</p>
+
+Or [play on the web](https://slashfacts.proto.fish) — installable as a PWA.
 
 ## Run it locally
 
@@ -114,6 +118,10 @@ asks for one in the issue; see [`CONTRIBUTING.md`](CONTRIBUTING.md). Every commi
 SlashFacts is made by **PROTO/fish** and released under the
 [GNU General Public License v3.0](LICENSE). The app icon and brand mark are covered by the
 same license.
+
+Apple, the Apple logo, and App Store are trademarks of Apple Inc., registered in the U.S.
+and other countries. Google Play and the Google Play logo are trademarks of Google LLC.
+Store badges belong to their respective owners; see [badge sources and usage](docs/assets/store-badges/README.md).
 
 The Archivo typeface (`apps/mobile/assets/fonts`) is © The Archivo
 Project Authors and licensed under the [SIL Open Font License 1.1](apps/mobile/assets/fonts/OFL.txt).
