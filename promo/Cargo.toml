@@ -1,0 +1,41 @@
+[package]
+name = "slashfacts-promo"
+version = "0.1.0"
+edition = "2024"
+publish = false
+default-run = "slashfacts-promo"
+
+[dependencies]
+fframes = { version = "=1.4.0", features = ["compile-time-svgtree", "cli"] }
+fframes_skia_renderer = { version = "=1.4.0", features = ["metal"] }
+fframes_native_player = { version = "=1.4.0", default-features = false, features = ["metal", "audio"] }
+
+[target.'cfg(not(windows))'.dependencies]
+fframes = { version = "=1.4.0", features = ["h264", "libav-agree-gpl"] }
+
+[features]
+# Render 1920x1080 instead of 1080x1920.
+landscape = []
+
+[lib]
+name = "slashfacts_promo"
+path = "src/lib.rs"
+doctest = false
+
+[[bin]]
+name = "slashfacts-promo"
+path = "src/main.rs"
+
+[[bin]]
+name = "pop"
+path = "src/bin/pop.rs"
+required-features = ["landscape"]
+
+[workspace]
+
+[profile.dev]
+opt-level = 1
+
+[profile.dev.package."*"]
+opt-level = 3
+
