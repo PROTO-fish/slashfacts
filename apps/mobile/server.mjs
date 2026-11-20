@@ -20,6 +20,7 @@ const TYPES = {
   '.webmanifest': 'application/manifest+json; charset=utf-8',
   '.svg': 'image/svg+xml',
   '.png': 'image/png',
+  '.webp': 'image/webp',
   '.ttf': 'font/ttf',
   '.woff2': 'font/woff2',
   '.ico': 'image/x-icon',
@@ -27,7 +28,7 @@ const TYPES = {
 };
 
 /** Media that never changes within a build but carries no hash in its name. */
-const STATIC_TYPES = new Set(['.png', '.svg', '.ico']);
+const STATIC_TYPES = new Set(['.png', '.webp', '.svg', '.ico']);
 
 /**
  * How long the browser may keep a file.

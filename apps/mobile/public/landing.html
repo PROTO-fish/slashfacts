@@ -35,8 +35,18 @@ a{color:inherit;text-decoration:none}
   grid-template-areas:"mark" "head" "links" "why" "foot";grid-template-rows:auto 1fr auto auto auto;max-width:1280px;margin:0 auto}
 .sheet>*{background:var(--paper)}
 .mark{grid-area:mark;padding:14px 20px;font-size:clamp(1.6rem,4vw,2.6rem);line-height:1;letter-spacing:-.02em}
-.head{grid-area:head;display:flex;align-items:flex-end;padding:56px 20px 24px}
-h1{font-size:clamp(3rem,13.5vw,8.5rem);line-height:.86;letter-spacing:-.045em}
+.head{grid-area:head;display:grid;grid-template-rows:minmax(0,1fr) auto;align-items:end;padding:56px 20px 24px;overflow:hidden}
+h1{grid-row:2;font-size:clamp(3rem,13.5vw,8.5rem);line-height:.86;letter-spacing:-.045em}
+h1 br{display:none}
+/* The app itself, in a tilted phone with a hard shadow. It takes only the height left above
+   the slogan, running off the top of the sheet, so it never covers the words. */
+.stage{display:none;position:relative;align-self:stretch;min-height:0;grid-row:1;margin-bottom:24px}
+.phone{position:absolute;right:8%;bottom:0;height:118%;aspect-ratio:1/1.86;
+  border:5px solid var(--ink);border-radius:9% / 4.8%;padding:3.5%;background:var(--paper);
+  transform:rotate(9deg);transform-origin:bottom right;box-shadow:14px 14px 0 var(--ink)}
+.phone img{display:block;width:100%;height:100%;object-fit:cover;object-position:top;border-radius:6% / 3%}
+/* On a phone, only when there is room for it above the slogan. */
+@media (max-width:859px) and (min-height:760px){.head{padding-top:0}.stage{display:block}}
 .links{grid-area:links;display:grid;align-content:end;background:var(--paper)}
 .row+.row{border-top:var(--b) solid var(--ink)}
 /* The 2–9 table, ruled like the sheet. Pressing a product sends a diagonal wave of ink out
@@ -89,7 +99,11 @@ h1{font-size:clamp(3rem,13.5vw,8.5rem);line-height:.86;letter-spacing:-.045em}
   .row.main b{display:block}
   .row.main .go{grid-column:2;grid-row:1;width:32px;height:32px}
   .row.main .i:first-child{grid-row:1}
-  h1{font-size:clamp(4.5rem,8.4vw,9rem)}
+  /* Three lines, sized to the column and kept short on a low window, so the phone has room. */
+  .head{padding-top:0;container-type:inline-size}
+  h1{font-size:min(12cqw,9rem,15vh)}
+  h1 br{display:inline}
+  .stage{display:block}
 }
 @media (prefers-reduced-motion:reduce){.go{transition:none}.table i,.table .w i,.table .pre i,.table .g1 i{transition:none;transform:none}}
 </style>
@@ -98,7 +112,7 @@ h1{font-size:clamp(3rem,13.5vw,8.5rem);line-height:.86;letter-spacing:-.045em}
 <!-- Icons inlined per link: globe and arrows from lucide (ISC), store marks from Simple Icons (CC0). -->
 <div class="sheet">
   <a class="mark" href="/" aria-label="SlashFacts">/ FACTS</a>
-  <div class="head"><h1>How are your tables doin’?</h1></div>
+  <div class="head"><h1>How are <br>your tables <br>doin’?</h1><div class="stage"><div class="phone"><img src="/play-shot.webp" width="600" height="1200" alt="SlashFacts on a phone: 9 × 2, answered with one stroke from 1 to 8." decoding="async"></div></div></div>
   <nav class="links" aria-label="Get SlashFacts">
     <div class="table" id="table" data-heads="on" aria-hidden="true"></div>
       <a data-p="web" class="row main" href="/play"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg><span>Play <b>on the web</b></span><svg class="i go" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
