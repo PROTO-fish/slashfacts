@@ -52,5 +52,6 @@ records why the separate Vite web app was dropped.
 Live at **https://slashfacts.proto.fish**, served from the Expo app's web export.
 `railpack.json` installs only the mobile and core workspaces and runs
 `npm run -w apps/mobile build:web`; `railway.json` starts `node apps/mobile/server.mjs`, which
-binds `$PORT`, serves `apps/mobile/dist`, falls back to `index.html` for client routes, and
-marks hashed assets immutable.
+binds `$PORT`, serves `apps/mobile/dist` and marks hashed assets immutable. `/` is the landing
+page (`public/landing.html`, static); the app is at `/play`, and every other unknown path falls
+back to the app's `index.html`.

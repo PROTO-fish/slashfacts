@@ -2,7 +2,7 @@
   "name": "SlashFacts",
   "short_name": "/FACTS",
   "description": "Multiplication tables 2-9. Slash the answer.",
-  "start_url": "/",
+  "start_url": "/play",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",

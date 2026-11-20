@@ -77,6 +77,7 @@ Those name the previous Vite web app, removed in favour of the Expo web build (s
 | Path | What |
 |---|---|
 | `app.json` | Expo config: name, bundle ids (`fish.proto.slashfacts`), icons, splash, plugins, Android permissions (release asks for `VIBRATE` only) |
+| `public/landing.html` | The landing page served at `/` (static, no JavaScript). The app lives at `/play`; `server.mjs` maps `/` to it. Fonts in `public/fonts/` are a subset of Archivo Black; `public/og.png` (a copy of the store feature graphic) is its link-preview image. |
 | `plugins/withDebugInternet.js` | Re-adds `INTERNET` to the debug manifest only, so debug builds reach Metro while release stays offline |
 | `plugins/withSceneLifecycle.js` | Adopts the iOS UIScene life cycle (Expo's `EXExpoAppSceneDelegate`), without which iOS 27 SDK builds stop at launch |
 | `eas.json` | EAS Build profiles (development / preview / production) |

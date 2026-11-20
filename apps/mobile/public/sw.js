@@ -5,8 +5,8 @@
  */
 // v2: the build moved to Expo's web export. A new name makes activate() drop the old build's
 // cached files instead of keeping them forever.
-const CACHE = 'slashfacts-v2';
-const SHELL = ['/', '/index.html', '/icon-180.png', '/manifest.webmanifest'];
+const CACHE = 'slashfacts-v3';
+const SHELL = ['/play', '/index.html', '/icon-180.png', '/manifest.webmanifest'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(SHELL)).then(() => self.skipWaiting()));
@@ -29,8 +29,10 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
       fetch(request)
         .then((response) => {
-          const copy = response.clone();
-          void caches.open(CACHE).then((cache) => cache.put('/index.html', copy));
+          if (new URL(request.url).pathname !== '/') {
+            const copy = response.clone();
+            void caches.open(CACHE).then((cache) => cache.put('/index.html', copy));
+          }
           return response;
         })
         .catch(() => caches.match('/index.html').then((hit) => hit ?? Response.error())),
