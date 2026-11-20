@@ -69,6 +69,7 @@ get `INTERNET` back through `plugins/withDebugInternet.js`, so they can still lo
 | Asset | License |
 |---|---|
 | Archivo typeface: the static TTF instances in `apps/mobile/assets/fonts/` | SIL OFL 1.1, © The Archivo Project Authors. `OFL.txt` ships next to them, and the website serves it at `/fonts/OFL.txt`. |
+| Promo videos and store images (`promo/`, `apps/mobile/scripts/store-assets/`) | Original work by the publisher, GPL-3.0. Their music and sound effects are synthesised by the scripts in `promo/music/`, with no samples. The video tool, fframes, is MIT and isn't shipped in the app. |
 | App icon and brand mark (`/×`) | Original work by the publisher, GPL-3.0 with the rest of the project |
 | PROTO/fish mark (`>_`, `components/Mark.tsx`) | The publisher's own logo, drawn from `logo-mark.svg` on proto.fish |
 
