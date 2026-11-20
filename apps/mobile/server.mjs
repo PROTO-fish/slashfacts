@@ -19,6 +19,7 @@ const TYPES = {
   '.svg': 'image/svg+xml',
   '.png': 'image/png',
   '.ttf': 'font/ttf',
+  '.woff2': 'font/woff2',
   '.ico': 'image/x-icon',
   '.txt': 'text/plain; charset=utf-8',
 };
@@ -49,7 +50,8 @@ function cacheControl(requested, ext) {
 createServer((req, res) => {
   const url = new URL(req.url ?? '/', 'http://localhost');
   const requested = normalize(decodeURIComponent(url.pathname)).replace(/^(\.\.[/\\])+/, '');
-  let filePath = join(ROOT, requested);
+  // `/` is the landing page; the app is at /play, and any other unknown path falls back to it.
+  let filePath = join(ROOT, requested === '/' ? 'landing.html' : requested);
 
   if (!filePath.startsWith(ROOT)) {
     res.writeHead(403).end('Forbidden');
