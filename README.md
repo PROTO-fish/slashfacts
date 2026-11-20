@@ -22,7 +22,7 @@
 </p>
 
 <p align="center">
-  <img src="fastlane/metadata/android/en-US/images/featureGraphic.png" alt="SlashFacts: times tables, answered with one stroke. A stroke drawn from 1 to 8 answers 9 × 2." width="720" />
+  <img src="apps/mobile/public/og.png" alt="/ FACTS. How are your tables doin’? No account, no ads, no tracking, no colors. A phone shows 9 × 2 answered with one stroke from 1 to 8." width="720" />
 </p>
 
 ---
