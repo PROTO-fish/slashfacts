@@ -82,7 +82,7 @@ Those name the previous Vite web app, removed in favour of the Expo web build (s
 | `plugins/withDebugInternet.js` | Re-adds `INTERNET` to the debug manifest only, so debug builds reach Metro while release stays offline |
 | `plugins/withSceneLifecycle.js` | Adopts the iOS UIScene life cycle (Expo's `EXExpoAppSceneDelegate`), without which iOS 27 SDK builds stop at launch |
 | `eas.json` | EAS Build profiles (development / preview / production) |
-| `scripts/store-assets/` | Captioned store images: `generate.mjs` puts the raw app captures (`captures/`) in a phone with a caption, for Google Play (into `fastlane/metadata/android/`), iPhone 6.9" and iPad 13" (into the ignored `out/`) |
+| `scripts/store-assets/` | Captioned store images: `generate.mjs` puts the raw app captures in a device with a caption: `captures/android/` for Google Play (into `fastlane/metadata/android/`), `captures/iphone/` and `captures/ipad/` (iOS Simulator, iPhone 6.9" and iPad 13") for the App Store (into the ignored `out/`) |
 | `scripts/sync-build-numbers.mjs` | Derives `versionCode` / `buildNumber` in `app.json` from its version; run by the release workflow |
 | `metro.config.js` | Monorepo resolution + `.js` import fallback (retried extensionless, so `.web.ts` files win in the web build) — touch with care |
 | `server.mjs` | Dependency-free static server for `dist/`, used on Railway |

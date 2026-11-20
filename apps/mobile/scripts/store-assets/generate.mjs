@@ -1,5 +1,6 @@
-// Generates the captioned store images from the raw app captures in captures/. Run from
-// apps/mobile:
+// Generates the captioned store images from the raw app captures in captures/: Android
+// captures for Google Play, iOS Simulator captures (iPhone 6.9", iPad 13") for the App
+// Store, which wants each device's real screens. Run from apps/mobile:
 //
 //   node scripts/store-assets/generate.mjs
 //
@@ -24,20 +25,23 @@ const OUT = join(HERE, 'out');
 const CHROME =
   process.env.CHROME ?? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 
-/** [capture, caption (one line per entry), tilt direction], in store order. */
-const SHOTS = [
-  [3, ['How are', 'your tables', 'doin’?'], -1],
-  [2, ['See it.', 'Remember it.', 'Slash it.'], 1],
-  [1, ['Pick your', 'tables,', '2 to 9.'], -1],
-  [4, ['Every fact,', 'at a glance.'], 1],
-  [5, ['No account.', 'No ads.', 'No colors.'], -1],
+/** The captions, one line per entry, in store order. */
+const CAPTIONS = [
+  ['How are', 'your tables', 'doin’?'],
+  ['See it.', 'Remember it.', 'Slash it.'],
+  ['Pick your', 'tables,', '2 to 9.'],
+  ['Every fact,', 'at a glance.'],
+  ['No account.', 'No ads.', 'No colors.'],
 ];
+/** The App Store set ends on the session summary: the About screen shows web addresses,
+ *  which App Store images must not. */
+const IOS_CAPTURES = ['stroke', 'question', 'tables', 'facts', 'summary'];
 
-/** [output folder, width, height]: Play phone, iPhone 6.9", iPad 13". */
-const SIZES = [
-  [join(PLAY, 'phoneScreenshots'), 1080, 2160],
-  [join(OUT, 'iphone-6.9'), 1320, 2868],
-  [join(OUT, 'ipad-13'), 2064, 2752],
+/** [captures folder, capture names in caption order, output folder, width, height, device]. */
+const SETS = [
+  ['android', ['3', '2', '1', '4', '5'], join(PLAY, 'phoneScreenshots'), 1080, 2160, 'phone'],
+  ['iphone', IOS_CAPTURES, join(OUT, 'iphone-6.9'), 1320, 2868, 'phone'],
+  ['ipad', IOS_CAPTURES, join(OUT, 'ipad-13'), 2064, 2752, 'tablet'],
 ];
 
 const tmp = mkdtempSync(join(tmpdir(), 'store-assets-'));
@@ -67,25 +71,30 @@ function render(html, w, h, out) {
   );
 }
 
-function shot(capture, caption, tilt, w, h) {
+function shot(src, caption, tilt, w, h, device) {
   const u = w / 100;
-  const tablet = w / h > 0.6;
-  // A phone is drawn at 1:2. On a tablet it's sized by the height, on a phone by the width.
-  const [fs, pw, top] = tablet ? [8 * u, (0.8 * h) / 2, 0.29 * h] : [10.5 * u, 0.8 * w, 0.285 * h];
-  const border = Math.max(6, tablet ? 0.7 * u : 1.1 * u);
-  const src = pathToFileURL(join(CAPTURES, `${capture}.png`)).href;
+  const tablet = device === 'tablet';
+  // The device takes 80% of a phone canvas's width and runs off its bottom edge; a tablet
+  // is narrower, so the whole iPad fits under the caption.
+  const [fs, pw, top] = tablet ? [7 * u, 0.72 * w, 0.25 * h] : [10.5 * u, 0.8 * w, 0.285 * h];
+  const border = Math.max(6, tablet ? 0.6 * u : 1.1 * u);
+  const pad = tablet ? [pw * 0.025, pw * 0.025] : [pw * 0.04, pw * 0.035];
+  const radius = tablet ? [pw * 0.05, pw * 0.025] : [pw * 0.1, pw * 0.055];
+  const shadow = tablet ? 0.035 : 0.055;
   return `${base(w, h)}
 .c{position:absolute;left:${7 * u}px;top:${0.075 * h}px;font-size:${fs}px;line-height:.9;letter-spacing:-.035em;word-spacing:.1em}
-.ph{position:absolute;left:${(w - pw) / 2}px;top:${top}px;width:${pw}px;border:${border}px solid #000;border-radius:${pw * 0.1}px;padding:${pw * 0.04}px ${pw * 0.035}px;background:#fff;transform:rotate(${4 * tilt}deg);box-shadow:${pw * 0.055}px ${pw * 0.055}px 0 #000}
-.ph img{display:block;width:100%;border-radius:${pw * 0.055}px}
+.ph{position:absolute;left:${(w - pw) / 2}px;top:${top}px;width:${pw}px;border:${border}px solid #000;border-radius:${radius[0]}px;padding:${pad[0]}px ${pad[1]}px;background:#fff;transform:rotate(${(tablet ? 2 : 4) * tilt}deg);box-shadow:${pw * shadow}px ${pw * shadow}px 0 #000}
+.ph img{display:block;width:100%;border-radius:${radius[1]}px}
 </style><div class=c>${caption.join('<br>')}</div><div class=ph><img src="${src}"></div>`;
 }
 
-for (const [dir, w, h] of SIZES) {
+for (const [folder, names, dir, w, h, device] of SETS) {
   mkdirSync(dir, { recursive: true });
-  SHOTS.forEach(([capture, caption, tilt], i) =>
-    render(shot(capture, caption, tilt, w, h), w, h, join(dir, `${i + 1}.png`)),
-  );
+  names.forEach((name, i) => {
+    const src = pathToFileURL(join(CAPTURES, folder, `${name}.png`)).href;
+    const tilt = i % 2 === 0 ? -1 : 1;
+    render(shot(src, CAPTIONS[i], tilt, w, h, device), w, h, join(dir, `${i + 1}.png`));
+  });
 }
 
 // Play feature graphic, 1024 × 500: the slogan and the 9 × 2 capture.
@@ -97,7 +106,7 @@ const feature = `${base(1024, 500)}
 .ph img{display:block;width:100%;border-radius:18px}
 </style><div class=m>/ FACTS</div><div class=s>How are<br>your tables<br>doin’?</div>
 <div class=tag>No account · No ads · No tracking · No colors</div>
-<div class=ph><img src="${pathToFileURL(join(CAPTURES, '3.png')).href}"></div>`;
+<div class=ph><img src="${pathToFileURL(join(CAPTURES, 'android', '3.png')).href}"></div>`;
 render(feature, 1024, 500, join(PLAY, 'featureGraphic.png'));
 
 rmSync(tmp, { recursive: true, force: true });
