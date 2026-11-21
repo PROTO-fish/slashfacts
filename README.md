@@ -36,9 +36,9 @@ The whole app runs on that one gesture, and it keeps the focus on remembering th
 than on working the screen.
 
 <p align="center">
-  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" alt="Choosing the tables to practise, ×2 to ×9" width="240" />
-  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" alt="Answering 9 × 2 with one stroke from 1 to 8" width="240" />
-  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" alt="The FACTS map: progress per table and the facts to practise next" width="240" />
+  <img src="apps/mobile/scripts/store-assets/captures/android/1.png" alt="Choosing the tables to practise, ×2 to ×9" width="240" />
+  <img src="apps/mobile/scripts/store-assets/captures/android/3.png" alt="Answering 9 × 2 with one stroke from 1 to 8" width="240" />
+  <img src="apps/mobile/scripts/store-assets/captures/android/4.png" alt="The FACTS map: progress per table and the facts to practise next" width="240" />
 </p>
 
 ## Know it or don't
