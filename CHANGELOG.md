@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.2.0](https://github.com/PROTO-fish/slashfacts/compare/v1.1.1...v1.2.0) (2026-11-21)
+
+
+### Features
+
+* **web:** add a landing page at / and move the app to /play ([#62](https://github.com/PROTO-fish/slashfacts/issues/62)) ([50593dd](https://github.com/PROTO-fish/slashfacts/commit/50593dd61ccb223875fce09b2e71d532b582512c)), closes [#61](https://github.com/PROTO-fish/slashfacts/issues/61)
+* **web:** fill the landing's link column with the 2-9 table ([#71](https://github.com/PROTO-fish/slashfacts/issues/71)) ([5f8b16e](https://github.com/PROTO-fish/slashfacts/commit/5f8b16e404e9295b6794fc431e300e4e1a639acd)), closes [#70](https://github.com/PROTO-fish/slashfacts/issues/70)
+* **web:** put the visitor's own store first on the landing ([#73](https://github.com/PROTO-fish/slashfacts/issues/73)) ([61d9488](https://github.com/PROTO-fish/slashfacts/commit/61d94889293b965bbcb8d31163a397ceb82f37a6)), closes [#72](https://github.com/PROTO-fish/slashfacts/issues/72)
+* **web:** show the app on the landing, above the slogan ([#79](https://github.com/PROTO-fish/slashfacts/issues/79)) ([ef971f5](https://github.com/PROTO-fish/slashfacts/commit/ef971f59d1cb54d3185215c0327d31b3fd9bbab5)), closes [#78](https://github.com/PROTO-fish/slashfacts/issues/78)
+
+
+### Bug Fixes
+
+* **web:** give the landing a black-and-white link preview ([#75](https://github.com/PROTO-fish/slashfacts/issues/75)) ([1e4db27](https://github.com/PROTO-fish/slashfacts/commit/1e4db279b1e0671391675b14e2d18451450b574d)), closes [#74](https://github.com/PROTO-fish/slashfacts/issues/74)
+* **web:** inline the landing icons so they survive back navigation ([#65](https://github.com/PROTO-fish/slashfacts/issues/65)) ([b16e287](https://github.com/PROTO-fish/slashfacts/commit/b16e287c49da166a558e67eb394785a3ee2b3ab0)), closes [#64](https://github.com/PROTO-fish/slashfacts/issues/64)
+* **web:** show the stores' own marks on the landing page ([#67](https://github.com/PROTO-fish/slashfacts/issues/67)) ([0041df8](https://github.com/PROTO-fish/slashfacts/commit/0041df886dac2df49383cf957e6b7d079e385b90)), closes [#66](https://github.com/PROTO-fish/slashfacts/issues/66)
+
+
+### Performance Improvements
+
+* **web:** precompress the site's text files with brotli and gzip ([#69](https://github.com/PROTO-fish/slashfacts/issues/69)) ([163e245](https://github.com/PROTO-fish/slashfacts/commit/163e245f677dbc3e8d1fc9c2b5046f773a9a9977)), closes [#68](https://github.com/PROTO-fish/slashfacts/issues/68)
+
 ## [1.1.1](https://github.com/PROTO-fish/slashfacts/compare/v1.1.0...v1.1.1) (2026-11-13)
 
 
