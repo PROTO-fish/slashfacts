@@ -9,8 +9,19 @@
   See → remember → slash → next.
 </p>
 
+**SlashFacts** is a free times-tables trainer for Android, iOS and the web. Practise
+remembering the answer, not calculating it.
+
 <p align="center">
   <a href="https://slashfacts.proto.fish">Play on the web</a> ·
+  <a href="https://apps.apple.com/us/app/slashfacts-times-tables/id6834372742">App Store</a> ·
+  <a href="https://play.google.com/store/apps/details?id=fish.proto.slashfacts">Google Play</a> ·
+  <a href="https://f-droid.org/packages/fish.proto.slashfacts/">F-Droid</a>
+</p>
+
+The web version is also installable as a PWA.
+
+<p align="center">
   <a href="docs/design.md">How it works</a> ·
   <a href="CONTRIBUTING.md">Contribute</a>
 </p>
@@ -27,43 +38,38 @@
 
 ---
 
-**SlashFacts** is a times-tables trainer. There are no buttons to tap and no cartoon
-rewards. A question appears, and you answer by **drawing one line through the digits
-of the result**. For `7 × 8`, one flick from **5** to **6** on the pad, and the next question
-is already there.
+## Answer with a stroke
 
-The whole app runs on that one gesture, and it keeps the focus on remembering the fact rather
-than on working the screen.
+A question appears, and you answer by **drawing one line through the digits of the
+result**. For `7 × 8 = 56`, draw from **5** to **6** on the pad. The stroke is read by
+where it *starts*, *ends* and *turns*; digits passed straight through are ignored.
+A single tap works for a one-digit answer.
 
 <p align="center">
-  <img src="apps/mobile/scripts/store-assets/captures/android/1.png" alt="Choosing the tables to practise, ×2 to ×9" width="240" />
-  <img src="apps/mobile/scripts/store-assets/captures/android/3.png" alt="Answering 9 × 2 with one stroke from 1 to 8" width="240" />
-  <img src="apps/mobile/scripts/store-assets/captures/android/4.png" alt="The FACTS map: progress per table and the facts to practise next" width="240" />
+  <img src="docs/images/tables.png" alt="Pick your tables, 2 to 9: choosing the tables to practise" width="240" />
+  <img src="docs/images/slash-the-answer.png" alt="Slash the answer: one stroke from 1 to 8 answers 9 × 2 = 18" width="240" />
+  <img src="docs/images/progress.png" alt="Every fact, at a glance: table progress, accuracy and response times" width="240" />
 </p>
 
-## Know it or don't
+## Practise recall
 
-A multiplication fact is either something you know or something you work out, and SlashFacts
-only cares about the first. Each question gives you **6 seconds**: enough to read it and draw
-the answer, too little to count on your fingers. The app isn't asking you to calculate. It
-asks you to **spit the answer out**.
+Choose the tables you want to practise, from **2 to 9**. Each question gives you
+**6 seconds** to remember the answer and draw it. The aim is to know the fact without
+working it out.
 
-The look follows the same idea. Everything is **black and white**, with a brutalist layout,
-heavy type and no decoration, because the verdict is binary too. There's no "almost" and no
-partial credit. Either you know it, or you don't yet.
+- **Practise what needs work.** Each round of 10 leans on facts you get wrong or answer slowly.
+- **Try again after a miss.** The answer is shown, then the same fact returns until you
+  answer correctly. Repeating the answer just shown does not earn a tick.
+- **One tick per fact.** The **FACTS** map ticks a fact once it has been answered right
+  *first time*, at least once. That tick stays; it is not a speed rating.
+- **Feel each answer.** Haptic feedback on Android and iOS.
 
-## Why it works
+## Simple on purpose
 
-- **✏️ One gesture, zero friction.** A stroke is read by where it *starts*, *ends* and
-  *turns*, so a fast, sloppy flick still counts. A single tap works too.
-- **🎯 It chases what you miss.** Every round of 10 leans on the facts you get wrong or
-  answer slowly.
-- **🔁 A missed fact comes straight back.** The answer is shown, then the same question
-  returns until it is answered right. Getting it right after seeing the answer doesn't
-  count as knowing it.
-- **✅ One tick per fact.** The **FACTS** map ticks a fact once it has been answered right
-  *first time*. Anyone can read it at a glance and explain the rule in one sentence.
-- **📳 Feels physical.** Haptic feedback on every answer (Android and iOS).
+The aim is the simplest possible app for practising these facts. Every element is there
+for a use: the clock sets the pace, the pad takes the answer, and the map shows what has
+been answered right first time. Black and white, heavy type, no decoration or cartoon
+rewards. There is no partial credit: either the answer is right, or it needs more practice.
 
 ## Private by design
 
@@ -71,11 +77,9 @@ No account, no server-side data, no analytics, no ads, no third-party SDKs. Prog
 stored on the device and nowhere else. On Android the app asks for exactly one permission,
 `VIBRATE`. See the [privacy policy](apps/mobile/public/privacy.html).
 
-## Get it
-
-[Web ↗](https://slashfacts.proto.fish) · [App Store ↗](https://apps.apple.com/us/app/slashfacts-times-tables/id6834372742) · [Google Play ↗](https://play.google.com/store/apps/details?id=fish.proto.slashfacts) · [F-Droid ↗](https://f-droid.org/packages/fish.proto.slashfacts/)
-
-The web version is also installable as a PWA.
+<p align="center">
+  <img src="docs/images/about.png" alt="No account. No ads. No colors: supplied artwork showing the about screen in version 1.0.0" width="240" />
+</p>
 
 ## Run it locally
 
@@ -91,9 +95,9 @@ For the native app, run `cd apps/mobile && npx expo start` and open it in Expo G
 
 ## Under the hood
 
-A small monorepo: one pure TypeScript engine, `packages/core`, drives one Expo app that runs
-on Android, iOS and the web. It holds the facts, the adaptive scheduler and the gesture reader,
-has zero dependencies, and is fully tested.
+One Expo / React Native app runs on Android, iOS and the web. Its pure TypeScript core,
+`packages/core`, holds the facts, adaptive scheduler and gesture reader, with no dependencies.
+The code is free software: fork it and adapt it to your needs under the license below.
 
 - 📐 [**Design rules**](docs/design.md): how a stroke becomes digits, why the 1 and 10
   tables are out, why a round's score is not a level.
@@ -103,9 +107,14 @@ has zero dependencies, and is fully tested.
 
 ## Contributing
 
-Bug reports and ideas are welcome: open an issue. Pull requests come after, once a maintainer
-asks for one in the issue; see [`CONTRIBUTING.md`](CONTRIBUTING.md). Every commit needs a
-`Signed-off-by` line (`git commit -s`), certifying the [Developer Certificate of Origin](https://developercertificate.org/).
+For an upstream change, **start with an issue**: explain the need, why the change helps,
+and how it fits the app's purpose and simplicity. For a bug, include steps to reproduce it
+and what you expected. A discussion does not guarantee that a change will be integrated.
+**Open a pull request only when a maintainer asks for one in the issue**; see
+[`CONTRIBUTING.md`](CONTRIBUTING.md).
+
+Every commit needs a `Signed-off-by` line (`git commit -s`), certifying the
+[Developer Certificate of Origin](https://developercertificate.org/).
 
 ## License
 
