@@ -38,12 +38,21 @@ The web version is also installable as a PWA.
 
 ---
 
-## Answer with a stroke
+## How to play
 
-A question appears, and you answer by **drawing one line through the digits of the
-result**. For `7 × 8 = 56`, draw from **5** to **6** on the pad. The stroke is read by
-where it *starts*, *ends* and *turns*; digits passed straight through are ignored.
-A single tap works for a one-digit answer.
+Choose tables **2–9** and recall each answer within **6 seconds**. Draw through its
+digits: for `7 × 8 = 56`, stroke from **5** to **6**. Only starts, ends and turns
+count; digits crossed straight through are ignored. Tap for a one-digit answer.
+
+- **Rounds of 10** favour facts you miss or answer slowly.
+- **After a miss**, the answer is shown and the same fact returns until correct.
+  Repeating the shown answer earns no tick.
+- **FACTS** gives a permanent tick for answering right *first time*, at least once;
+  it is not a speed rating.
+- Android and iOS provide **haptic feedback**.
+
+Black and white, heavy type, no decoration or cartoon rewards. No partial credit:
+an answer is right or needs more practice.
 
 <p align="center">
   <img src="docs/images/tables.png" alt="Pick your tables, 2 to 9: choosing the tables to practise" width="240" />
@@ -51,31 +60,12 @@ A single tap works for a one-digit answer.
   <img src="docs/images/progress.png" alt="Every fact, at a glance: table progress, accuracy and response times" width="240" />
 </p>
 
-## Practise recall
-
-Choose the tables you want to practise, from **2 to 9**. Each question gives you
-**6 seconds** to remember the answer and draw it. The aim is to know the fact without
-working it out.
-
-- **Practise what needs work.** Each round of 10 leans on facts you get wrong or answer slowly.
-- **Try again after a miss.** The answer is shown, then the same fact returns until you
-  answer correctly. Repeating the answer just shown does not earn a tick.
-- **One tick per fact.** The **FACTS** map ticks a fact once it has been answered right
-  *first time*, at least once. That tick stays; it is not a speed rating.
-- **Feel each answer.** Haptic feedback on Android and iOS.
-
-## Simple on purpose
-
-The aim is the simplest possible app for practising these facts. Every element is there
-for a use: the clock sets the pace, the pad takes the answer, and the map shows what has
-been answered right first time. Black and white, heavy type, no decoration or cartoon
-rewards. There is no partial credit: either the answer is right, or it needs more practice.
-
 ## Private by design
 
-No account, no server-side data, no analytics, no ads, no third-party SDKs. Progress is
-stored on the device and nowhere else. On Android the app asks for exactly one permission,
-`VIBRATE`. See the [privacy policy](apps/mobile/public/privacy.html).
+No accounts, analytics or ads; no analytics, advertising or crash-reporting SDKs.
+Progress stays on your device, not on a server. Website hosting may keep standard
+request logs, such as IP addresses. The Android **release** requests only `VIBRATE`.
+See the [privacy policy](apps/mobile/public/privacy.html).
 
 <p align="center">
   <img src="docs/images/about.png" alt="No account. No ads. No colors: supplied artwork showing the about screen in version 1.0.0" width="240" />
@@ -95,9 +85,9 @@ For the native app, run `cd apps/mobile && npx expo start` and open it in Expo G
 
 ## Under the hood
 
-One Expo / React Native app runs on Android, iOS and the web. Its pure TypeScript core,
-`packages/core`, holds the facts, adaptive scheduler and gesture reader, with no dependencies.
-The code is free software: fork it and adapt it to your needs under the license below.
+One Expo / React Native app serves all three platforms. The pure, dependency-free
+TypeScript engine in `packages/core` owns facts, adaptive scheduling and gesture
+reading. Fork and adapt the free software under its license.
 
 - 📐 [**Design rules**](docs/design.md): how a stroke becomes digits, why the 1 and 10
   tables are out, why a round's score is not a level.
@@ -107,13 +97,12 @@ The code is free software: fork it and adapt it to your needs under the license 
 
 ## Contributing
 
-For an upstream change, **start with an issue**: explain the need, why the change helps,
-and how it fits the app's purpose and simplicity. For a bug, include steps to reproduce it
-and what you expected. A discussion does not guarantee that a change will be integrated.
-**Open a pull request only when a maintainer asks for one in the issue**; see
-[`CONTRIBUTING.md`](CONTRIBUTING.md).
+**Start with an issue** describing the need, benefit and fit with the app's purpose
+and simplicity. For bugs, include reproduction steps and expected behaviour.
+Discussion does not guarantee integration. **Open a pull request only when a
+maintainer asks in the issue**; see [CONTRIBUTING.md](CONTRIBUTING.md).
 
-Every commit needs a `Signed-off-by` line (`git commit -s`), certifying the
+Sign off every commit (`git commit -s`) to certify the
 [Developer Certificate of Origin](https://developercertificate.org/).
 
 ## License
