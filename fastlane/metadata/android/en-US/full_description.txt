@@ -1,9 +1,7 @@
-<p>SlashFacts is a multiplication-tables trainer (2 to 9) built around a single gesture: you answer by drawing one continuous stroke through the digits of the result. No buttons, no rewards, no screens between attempts — <b>see → remember → slash → next</b>.</p>
-<ul>
-<li>Pick the tables to practise, and each round adapts to the facts you keep missing or answer slowly.</li>
-<li>A missed fact shows its answer and comes straight back until it is answered right.</li>
-<li>The Facts map ticks every fact answered right first time — one mark anyone can read at a glance.</li>
-<li>Haptic feedback on every answer, fully usable offline.</li>
-</ul>
-<p>Made for everyone: no account, no network access, no analytics, no ads. Everything stays on the device.</p>
-<p>Made by PROTO/fish · https://proto.fish</p>
+How are your times tables doing?
+
+Choose the multiplication tables you want to practise, from 2 to 9, then slash through the digits of your answer. For 56, swipe from 5 to 6.
+
+Don’t know the answer? It appears so you can try again. The ones you haven’t learned yet will come back more often.
+
+SlashFacts is free and works offline, with no ads or account to create. No data is collected. Your progress stays on your device.
