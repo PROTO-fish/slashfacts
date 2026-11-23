@@ -18,7 +18,8 @@ npm workspaces monorepo (`package.json`: `packages/*`, `apps/*`).
 | `promo/` | The promo videos, made in Rust with fframes (not part of the app or its build): the main cut (9:16 and 16:9) and the 16:9 pop-art cut, plus the scripts that synthesise their music. See `promo/README.md`. |
 | `README.md` | Public landing page: what the app is, web and store download links, how to run it. |
 | `docs/design.md` | Product rules and design rationale — read before changing behaviour. |
-| `docs/architecture.md` | Code layout, storage, mobile, deployment. |
+| `docs/architecture.md` | Code layout, storage, mobile, deployment (including the OVH site runbook). |
+| `.github/workflows/site-deploy.yml`, `apps/mobile/scripts/stage-site.mjs` | Manual release and rollback of the standalone `slashfacts.app` landing, separate from Railway and app releases. |
 | `AGENTS.md` | Branching, worktrees, commits, versioning. |
 | `CONTRIBUTING.md` | Contribution rules: issue first, pull request only on request, DCO sign-off. |
 | `CHANGELOG.md` | Release notes, written by release-please from the commit history — don't edit by hand. |

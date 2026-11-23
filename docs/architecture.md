@@ -48,3 +48,53 @@ and runs `npm run -w apps/mobile build:web`, exporting to `apps/mobile/dist`.
 The dependency-free server binds to `$PORT` (default 3000), marks hashed assets
 immutable and serves existing files directly. `/` serves the landing page;
 `/play` opens the app. Unknown paths fall back to the app's `index.html`.
+
+### Standalone landing on OVH
+
+https://slashfacts.app serves only the landing page and its linked assets and
+privacy page. It reuses `apps/mobile/public/landing.html`, with the Play button
+pointing to https://slashfacts.proto.fish/play and link previews pointing to
+`slashfacts.app`. The Expo app, manifest and service worker stay on Railway.
+
+Before the first deployment, confirm the domain's document root in OVH and
+check the corresponding directory as seen by the SFTP login. In GitHub
+**Settings → Environments → slashfacts / production**, configure:
+
+| Kind | Name | Value |
+|---|---|---|
+| Secret | `OVH_SFTP_HOST` | SFTP hostname, without a protocol or port (SSH port 22) |
+| Secret | `OVH_SFTP_USER` | SFTP login with write access to the site |
+| Secret | `OVH_SFTP_PASSWORD` | SFTP password |
+| Variable | `OVH_SITE_ROOT` | Confirmed, existing document root, absolute in the SFTP session or relative to its starting directory; omit the trailing slash. No default. |
+| Secret | `OVH_SFTP_KNOWN_HOSTS` | OpenSSH known_hosts entry (or entries) for the exact SFTP host, with the key verified independently against OVH before saving. Do not learn it during deployment. |
+
+Keep the environment's `main` and `site-*` deployment rules. The workflow itself
+must be dispatched from `main` even for a rollback. A repo ruleset, if present,
+must allow the workflow token to **create** `site-*` tags; avoid moving or deleting
+published tags.
+
+1. **Release:** In **Actions → Site deploy → Run workflow**, select `main` and
+   leave the tag input blank. It creates an annotated `site-YYYY-MM-DD` tag
+   in UTC, using `.2`, `.3`, etc. if taken, at the exact dispatch commit. It
+   deploys that tag in the same run: a tag pushed with the workflow token
+   does not trigger a second workflow.
+2. **Rollback or retry:** Dispatch from `main` with the exact existing
+   `site-*` tag. The workflow deploys the tagged snapshot without minting
+   another tag. Use a previously successful tag for rollback; a tag can
+   exist even if its deployment failed.
+
+Deployments do not overlap. Wait for the current run before dispatching another
+one; GitHub may replace a pending run with a newer dispatch. The uploader
+overwrites staged paths without deleting unrelated remote files. If obsolete
+files are served, review and remove them separately; rollback won't remove
+them. Uploads are not atomic: a failed run can leave partial changes. The job
+passes only if public GETs for `/` and every staged asset return matching
+bytes. If verification fails, check the document root and caching before
+retrying or rolling back.
+
+To inspect the artifact locally without uploading anything, run from the repo
+root (the output directory must not exist):
+
+```sh
+node apps/mobile/scripts/stage-site.mjs apps/mobile/public "$(mktemp -d)/site"
+```
