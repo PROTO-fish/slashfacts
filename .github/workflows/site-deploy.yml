@@ -1,0 +1,161 @@
+name: Site deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing site-* tag to redeploy (leave blank to release main)"
+        type: string
+        required: false
+
+permissions: {}
+
+defaults:
+  run:
+    shell: bash
+
+concurrency:
+  group: site-deploy
+  cancel-in-progress: false
+
+jobs:
+  mint:
+    if: github.ref == 'refs/heads/main' && inputs.tag == ''
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      tag: ${{ steps.tag.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.sha }}
+
+      - name: Create a site tag
+        id: tag
+        run: |
+          base="site-$(date -u +%F)"
+          refs="$(git ls-remote --refs --tags origin "refs/tags/$base" "refs/tags/$base.*")"
+          tag_refs="$(cut -f2 <<< "$refs")"
+          tag="$base"
+          suffix=2
+          while grep -qFx "refs/tags/$tag" <<< "$tag_refs"; do
+            tag="$base.$suffix"
+            suffix=$((suffix + 1))
+          done
+
+          git -c user.name='github-actions[bot]' \
+              -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
+              tag -a "$tag" "$GITHUB_SHA" -m "Site release $tag"
+          git push origin "refs/tags/$tag:refs/tags/$tag"
+          printf 'tag=%s\n' "$tag" >> "$GITHUB_OUTPUT"
+
+  deploy:
+    needs: mint
+    # Rollbacks skip mint; releases deploy only after the tag push succeeds.
+    if: >-
+      ${{ !cancelled() && github.ref == 'refs/heads/main' &&
+          (needs.mint.result == 'success' || (needs.mint.result == 'skipped' && inputs.tag != '')) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    environment:
+      name: "slashfacts / production"
+      url: https://slashfacts.app
+    steps:
+      - name: Validate the selected tag
+        env:
+          TAG: ${{ inputs.tag || needs.mint.outputs.tag }}
+        run: |
+          if [[ "$TAG" != site-?* || "$TAG" == */* ]] || ! git check-ref-format "refs/tags/$TAG"; then
+            echo "::error::Expected a site-* tag (for example, site-2026-01-31 or site-2026-01-31.2)."
+            exit 1
+          fi
+
+      # Run the staging tool from the dispatch SHA, not from a rollback snapshot.
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - uses: actions/checkout@v5
+        with:
+          ref: refs/tags/${{ inputs.tag || needs.mint.outputs.tag }}
+          path: snapshot
+          persist-credentials: false
+
+      - name: Verify the new tag targets this run
+        if: inputs.tag == ''
+        run: test "$(git -C snapshot rev-parse HEAD)" = "$GITHUB_SHA"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Stage the standalone landing
+        run: node apps/mobile/scripts/stage-site.mjs snapshot/apps/mobile/public "$RUNNER_TEMP/site"
+
+      - name: Install lftp
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+
+      - name: Upload to OVH over SFTP
+        env:
+          OVH_SFTP_HOST: ${{ secrets.OVH_SFTP_HOST }}
+          OVH_SFTP_USER: ${{ secrets.OVH_SFTP_USER }}
+          LFTP_PASSWORD: ${{ secrets.OVH_SFTP_PASSWORD }}
+          OVH_SITE_ROOT: ${{ vars.OVH_SITE_ROOT }}
+          OVH_SFTP_KNOWN_HOSTS: ${{ secrets.OVH_SFTP_KNOWN_HOSTS }}
+        run: |
+          export LC_ALL=C
+          if [[ ! "$OVH_SFTP_HOST" =~ ^[A-Za-z0-9][A-Za-z0-9.-]*$ ||
+                ! "$OVH_SFTP_USER" =~ ^[A-Za-z0-9_][A-Za-z0-9_.-]*$ ||
+                -z "$LFTP_PASSWORD" ]]; then
+            echo "::error::Configure the OVH SFTP secrets (hostname only, default SSH port)."
+            exit 1
+          fi
+          if [[ ! "$OVH_SITE_ROOT" =~ ^/?[A-Za-z0-9_][A-Za-z0-9_.-]*(/[A-Za-z0-9_][A-Za-z0-9_.-]*)*$ ]]; then
+            echo "::error::Set OVH_SITE_ROOT to the confirmed SFTP document root, not the login root."
+            exit 1
+          fi
+
+          install -d -m 700 ~/.ssh
+          known_hosts="$HOME/.ssh/slashfacts_known_hosts"
+          printf '%s\n' "$OVH_SFTP_KNOWN_HOSTS" > "$known_hosts"
+          chmod 600 "$known_hosts"
+          if ! ssh-keygen -F "$OVH_SFTP_HOST" -f "$known_hosts" >/dev/null; then
+            echo "::error::Set OVH_SFTP_KNOWN_HOSTS to the independently verified host key for OVH_SFTP_HOST."
+            exit 1
+          fi
+
+          cd "$RUNNER_TEMP/site"
+          lftp --norc -c "
+            set cmd:fail-exit yes
+            set sftp:auto-confirm no
+            set sftp:connect-program 'ssh -a -x -F /dev/null -o StrictHostKeyChecking=yes -o UserKnownHostsFile=~/.ssh/slashfacts_known_hosts -o GlobalKnownHostsFile=/dev/null'
+            set net:max-retries 2
+            set net:timeout 30
+            open --env-password -u ${OVH_SFTP_USER} sftp://${OVH_SFTP_HOST}
+            cd ${OVH_SITE_ROOT}
+            mirror --reverse --transfer-all --overwrite --no-perms . .
+            exit 0
+          "
+
+      - name: Compare public GET responses to the staged files
+        env:
+          SITE_URL: https://slashfacts.app
+        run: |
+          cd "$RUNNER_TEMP/site"
+          served="$(mktemp)"
+          trap 'rm -f "$served"' EXIT
+          files="$(find . -type f | sort)"
+          while IFS= read -r file; do
+            path="${file#./}"
+            if [[ "$path" == index.html ]]; then path=""; fi
+            if ! status="$(curl --silent --show-error --fail --retry 3 --max-time 30 \
+                  -H 'Cache-Control: no-cache' --output "$served" --write-out '%{http_code}' "$SITE_URL/$path")" ||
+                [[ "$status" != 200 ]] || ! cmp -s "$file" "$served"; then
+              echo "::error::$SITE_URL/$path did not serve the staged bytes with HTTP 200."
+              exit 1
+            fi
+          done <<< "$files"
