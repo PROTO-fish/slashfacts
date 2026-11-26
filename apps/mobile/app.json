@@ -2,7 +2,7 @@
   "expo": {
     "name": "SlashFacts",
     "slug": "slashfacts",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -11,14 +11,14 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "fish.proto.slashfacts",
-      "buildNumber": "10200",
+      "buildNumber": "10201",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
       "package": "fish.proto.slashfacts",
-      "versionCode": 10200,
+      "versionCode": 10201,
       "adaptiveIcon": {
         "backgroundColor": "#ffffff",
         "foregroundImage": "./assets/android-icon-foreground.png",
