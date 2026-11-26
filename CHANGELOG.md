@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/PROTO-fish/slashfacts/compare/v1.2.0...v1.2.1) (2026-11-26)
+
+
+### Bug Fixes
+
+* **home:** fit the table grid on short windows ([#89](https://github.com/PROTO-fish/slashfacts/issues/89)) ([4ea8f0a](https://github.com/PROTO-fish/slashfacts/commit/4ea8f0af4ae935cbcef62c1587d9743eab91522c)), closes [#88](https://github.com/PROTO-fish/slashfacts/issues/88)
+
 ## [1.2.0](https://github.com/PROTO-fish/slashfacts/compare/v1.1.1...v1.2.0) (2026-11-21)
 
 
