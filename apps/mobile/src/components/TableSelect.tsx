@@ -14,7 +14,12 @@ interface Props {
   /** The tables currently being worked on. Never empty. */
   selected: readonly number[];
   onSelect: (tables: number[]) => void;
+  /** The most height the grid may take. Rows grow shorter to fit, never narrower. */
+  maxHeight?: number;
 }
+
+/** The shortest a row gets on a cramped screen: still an easy target for a thumb. */
+const MIN_ROW_HEIGHT = 56;
 
 /**
  * Native port of apps/web/src/components/TableSelect.tsx. What am I practising? — the only
@@ -25,7 +30,7 @@ interface Props {
  * line crosses counts, pass-throughs included) — this must never be switched to
  * `strokeDigits()`.
  */
-export function TableSelect({ selected, onSelect }: Props) {
+export function TableSelect({ selected, onSelect, maxHeight }: Props) {
   const palette = usePalette();
   const { metrics, scale } = useBreakpoint();
   const styles = useScaledStyles(sheet);
@@ -108,8 +113,10 @@ export function TableSelect({ selected, onSelect }: Props) {
   // A phone's widths are whole points and stay exact.
   const spare = scale === 1 ? 0 : 1;
   const colWidth = size.w > 0 ? Math.floor((size.w - metrics.gap - spare) / 2) : 150 * scale;
-  // .select .row { aspect-ratio: 2/1 }
-  const rowHeight = colWidth / 2;
+  // .select .row { aspect-ratio: 2/1 }, unless the four rows and their gaps would not fit
+  // the height Home has left: then the rows flatten, keeping their full width.
+  const fitHeight = maxHeight !== undefined ? (maxHeight - 3 * metrics.gap) / 4 : Infinity;
+  const rowHeight = Math.max(MIN_ROW_HEIGHT * scale, Math.min(colWidth / 2, fitHeight));
   // .select .row { font-size: clamp(1.8rem, 9vw, 3.2rem) } — scaled off the row's own size.
   const digitFontSize = Math.min(48 * scale, Math.max(28 * scale, rowHeight * 0.55));
 
